@@ -11,17 +11,25 @@ const minZoomLevel = 1;
 const maxZoomLevel = 200;
 
 
-const sunSprite = new Image();
-const mercurySprite = new Image();
-const venusSprite = new Image();
-const earthSprite = new Image();
-const marsSprite = new Image();
-const jupiterSprite = new Image();
-const saturnSprite = new Image();
-const uranusSprite = new Image();
-const neptuneSprite = new Image();
+class Planet {
+	constructor(sprite, radius) {
+		this.sprite = sprite;
+		this.radius = radius;
+	}
+}
 
-const earthSize = 1;
+// Planet sizes are in Earth radii
+// TODO: put these in an array, with string attributes as their names
+const sun = new Planet(new Image(), 109);
+const mercury = new Planet(new Image(), 0.382);
+const venus = new Planet(new Image(), 0.95);
+const earth = new Planet(new Image(), 1);
+const moon = new Planet(new Image, 0.27);
+const mars = new Planet(new Image(), 0.53);
+const jupiter = new Planet(new Image(), 11);
+const saturn = new Planet(new Image(), 9.5);
+const uranus = new Planet(new Image(), 4);
+const neptune = new Planet(new Image(), 3.9);
 
 
 function init()
@@ -37,7 +45,7 @@ function init()
 	errorMessage.style.display = "none";
 
 	// Load in sprites
-	earthSprite.src = "assets/earth.png";
+	earth.sprite.src = "assets/earth.png";
 
 	currZoomLevel = 10;
 	window.addEventListener("wheel", onScroll);
@@ -47,6 +55,7 @@ function init()
 	//draw();
 }
 
+// TODO: curve zoom levels
 function onScroll(event)
 {
 	// Scrolling up
@@ -80,10 +89,10 @@ function draw()
 	canvas.width = window.innerWidth;
 	canvas.height = window.innerHeight;
 
-	var size = earthSize * currZoomLevel;
+	var size = earth.radius * currZoomLevel;
 	console.log(size);
 
-	ctx.drawImage(earthSprite, canvas.width/2 - size/2, canvas.height/2 - size/2, size, size);
+	ctx.drawImage(earth.sprite, canvas.width/2 - size/2, canvas.height/2 - size/2, size, size);
 
 }
 

@@ -6,7 +6,7 @@ var ctx;				// Canvas rendering context
 var container;			// <div> HTML tag
 var errorMessage;
 
-var updateCanvas = true;
+var updateCanvas = false;
 
 // Controls
 var mouseDown = false;
@@ -15,31 +15,40 @@ var lastMouseY = 0;
 
 var currZoomLevel;
 const minZoomLevel = 1;
-const maxZoomLevel = 200;
+const maxZoomLevel = 20000;
 
-var xOffset = 0;
-var yOffset = 0;
+var xOffset = 500;
+var yOffset = 500;
+
+const maxWidthDistance = 14960000000; //km
+var kmPerPixel = maxWidthDistance /  window.innerWidth;
 
 
 class Planet {
-	constructor(sprite, diameter) {
-		this.sprite = sprite;
+	constructor(name, spritePath, diameter, distance) {
+		this.name = name;
+		this.sprite = new Image();
+		this.sprite.src = spritePath;
 		this.diameter = diameter;
+		this.distance = distance;
+		this.x = this.distance;
+		this.y = 0;
 	}
 }
 
-// Planet sizes are in Earth diameters
-// TODO: put these in an array, with string attributes as their names
-const sun = new Planet(new Image(), 109);
-const mercury = new Planet(new Image(), 0.382);
-const venus = new Planet(new Image(), 0.95);
-const earth = new Planet(new Image(), 1);
-const moon = new Planet(new Image, 0.27);
-const mars = new Planet(new Image(), 0.53);
-const jupiter = new Planet(new Image(), 11);
-const saturn = new Planet(new Image(), 9.5);
-const uranus = new Planet(new Image(), 4);
-const neptune = new Planet(new Image(), 3.9);
+var planets = [];
+
+// Planet sizes are measured in km
+planets.push(new Planet("Sun", "assets/sun.png", 1391016, 0));
+planets.push(new Planet("Mercury", "assets/mercury.png", 4879, 57909050));
+planets.push(new Planet("Venus", "assets/venus.png", 12104, 0));
+planets.push(new Planet("Earth", "assets/earth.png", 12742, 0));
+planets.push(new Planet("Moon", "assets/moon.png", 3474, 0));
+planets.push(new Planet("Mars", "assets/mars.png", 6779, 0));
+planets.push(new Planet("Jupiter", "assets/jupiter.png", 139822, 0));
+planets.push(new Planet("Saturn", "assets/saturn.png", 116464, 0));
+planets.push(new Planet("Uranus", "assets/uranus.png", 50724, 0));
+planets.push(new Planet("Neptune", "assets/neptune.png", 49244, 0));
 
 
 function init()
@@ -53,15 +62,6 @@ function init()
 
 	errorMessage = document.getElementById("errormessage");
 	errorMessage.style.display = "none";
-
-	// Load in sprites
-	earth.sprite.src = "assets/earth.png";
-	earth.x = 0;
-	earth.y = 0;
-
-	moon.sprite.src = "assets/moon.png";
-	moon.x = 30.17;
-	moon.y = 0;
 
 	currZoomLevel = 10;
 	window.addEventListener("wheel", onScroll);
@@ -82,7 +82,7 @@ function onScroll(event)
 		console.log("Scrolling up");
 		if (currZoomLevel < maxZoomLevel)
 		{
-			currZoomLevel++;
+			currZoomLevel+=20;
 			updateCanvas = true;
 		}
 
@@ -93,7 +93,7 @@ function onScroll(event)
 		console.log("Scrolling down");
 		if (currZoomLevel > minZoomLevel)
 		{
-			currZoomLevel--;
+			currZoomLevel-=20;
 			updateCanvas = true;
 		}
 	}
@@ -135,14 +135,14 @@ function draw()
 	canvas.width = window.innerWidth;
 	canvas.height = window.innerHeight;
 
-	var size = earth.diameter * currZoomLevel;
+	for (var planet of planets)
+	{
+		var size = (planet.diameter / kmPerPixel) * currZoomLevel;
+		if (size < 2)
+			size = 2;
+		ctx.drawImage(planet.sprite, ((planet.x / kmPerPixel) * currZoomLevel) - size/2 + xOffset, ((planet.y / kmPerPixel) * currZoomLevel) - size/2 + yOffset, size, size);
 
-	ctx.drawImage(earth.sprite, (earth.x * currZoomLevel) - size/2 + xOffset, (earth.y * currZoomLevel) - size/2 + yOffset, size, size);
-
-	size = moon.diameter * currZoomLevel;
-
-	ctx.drawImage(moon.sprite, (moon.x * currZoomLevel) - size/2 + xOffset, (moon.y * currZoomLevel) - size/2 + yOffset, size, size);
-
+	}
 }
 
 

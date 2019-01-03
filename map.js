@@ -6,19 +6,29 @@ var ctx;				// Canvas rendering context
 var container;			// <div> HTML tag
 var errorMessage;
 
+var updateCanvas = true;
+
+// Controls
+var mouseDown = false;
+var lastMouseX = 0;
+var lastMouseY = 0;
+
 var currZoomLevel;
 const minZoomLevel = 1;
 const maxZoomLevel = 200;
 
+var xOffset = 0;
+var yOffset = 0;
+
 
 class Planet {
-	constructor(sprite, radius) {
+	constructor(sprite, diameter) {
 		this.sprite = sprite;
-		this.radius = radius;
+		this.diameter = diameter;
 	}
 }
 
-// Planet sizes are in Earth radii
+// Planet sizes are in Earth diameters
 // TODO: put these in an array, with string attributes as their names
 const sun = new Planet(new Image(), 109);
 const mercury = new Planet(new Image(), 0.382);
@@ -46,13 +56,21 @@ function init()
 
 	// Load in sprites
 	earth.sprite.src = "assets/earth.png";
+	earth.x = 0;
+	earth.y = 0;
+
+	moon.sprite.src = "assets/moon.png";
+	moon.x = 30.17;
+	moon.y = 0;
 
 	currZoomLevel = 10;
 	window.addEventListener("wheel", onScroll);
+	window.addEventListener("mouseup", onMouseUp);
+	window.addEventListener("mousedown", onMouseDown);
+	window.addEventListener("mousemove", onMouseMove);
 		
 	// Start rendering the map
-	setInterval(draw, 1000);
-	//draw();
+	setInterval(draw, 10);
 }
 
 // TODO: curve zoom levels
@@ -65,7 +83,7 @@ function onScroll(event)
 		if (currZoomLevel < maxZoomLevel)
 		{
 			currZoomLevel++;
-			draw();
+			updateCanvas = true;
 		}
 
 	}
@@ -76,23 +94,54 @@ function onScroll(event)
 		if (currZoomLevel > minZoomLevel)
 		{
 			currZoomLevel--;
-			draw();
+			updateCanvas = true;
 		}
+	}
+}
+
+// Click-and-drag
+function onMouseDown(event)
+{
+	mouseDown = true;
+	lastMouseX = event.clientX;
+	lastMouseY = event.clientY;
+}
+function onMouseUp()
+{
+	mouseDown = false;
+}
+function onMouseMove(event)
+{
+	if (mouseDown)
+	{
+		xOffset += (event.clientX - lastMouseX);
+		yOffset += (event.clientY - lastMouseY);
+		lastMouseX = event.clientX;
+		lastMouseY = event.clientY;
+		updateCanvas = true;
+		console.log("dragging");
 	}
 }
 
 // Draw the map
 function draw()
 {
+	if (!updateCanvas) return;
+
+	updateCanvas = false;
+
 	console.log("Draw");
 
 	canvas.width = window.innerWidth;
 	canvas.height = window.innerHeight;
 
-	var size = earth.radius * currZoomLevel;
-	console.log(size);
+	var size = earth.diameter * currZoomLevel;
 
-	ctx.drawImage(earth.sprite, canvas.width/2 - size/2, canvas.height/2 - size/2, size, size);
+	ctx.drawImage(earth.sprite, (earth.x * currZoomLevel) - size/2 + xOffset, (earth.y * currZoomLevel) - size/2 + yOffset, size, size);
+
+	size = moon.diameter * currZoomLevel;
+
+	ctx.drawImage(moon.sprite, (moon.x * currZoomLevel) - size/2 + xOffset, (moon.y * currZoomLevel) - size/2 + yOffset, size, size);
 
 }
 

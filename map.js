@@ -15,11 +15,11 @@ var lastMouseX = 0;
 var lastMouseY = 0;
 
 // Zooming, scaling, panning variables
-var currZoomLevel;
+var currZoomLevel = 27;
 const minZoomLevel = 1;
 const maxZoomLevel = 50;
 var zoomMultipliers = [];
-var xCoord = 0;
+var xCoord = -149598023; // Start at Earth
 var yCoord = 0;
 const maxWidthDistance = 14960000000; //km
 var kmPerPixel = maxWidthDistance /  window.innerWidth;
@@ -48,6 +48,18 @@ class Planet {
 }
 
 var planets = [];
+
+function getPlanet(name)
+{
+	for (var planet of planets)
+	{
+		if (planet.name == name)
+		{
+			return planet;
+		}
+	}
+	return null;
+}
 
 // Planet sizes are measured in km
 planets.push(new Planet("Sun", null, "assets/sun.png", 1391016, 0));
@@ -79,7 +91,6 @@ planets.push(new Planet("Neptune", "Sun", "assets/neptune.png", 49244, 450000000
 function init()
 {
 	// Initialize the canvas
-	console.log("Initializing canvas...");
 	canvas = document.getElementById("mapcanvas");
 	canvas.width = window.innerWidth;
 	canvas.height = window.innerHeight;
@@ -88,7 +99,6 @@ function init()
 	errorMessage = document.getElementById("errormessage");
 	errorMessage.style.display = "none";
 
-	currZoomLevel = 10;
 
 	// Set up zoom curve
 	for (var i = minZoomLevel; i <= maxZoomLevel; i++)
@@ -96,38 +106,46 @@ function init()
 		zoomMultipliers[i] = Math.pow(2, i/2) / Math.pow(2, 1/2);
 	}
 
-	// Set up input
+	// Set up event listeners for input and window resize
 	window.addEventListener("wheel", onScroll);
 	window.addEventListener("mouseup", onMouseUp);
 	window.addEventListener("mousedown", onMouseDown);
 	window.addEventListener("mousemove", onMouseMove);
+	window.addEventListener("resize", onWindowResize);
 		
 	// Start rendering the map
 	setInterval(draw, 10);
 }
 
+// Zoom in and aout
 function onScroll(event)
 {
+	// Convert the mouse coords to global map coords
+	var initialX = (event.clientX - halfScreenWidth) / (zoomMultipliers[currZoomLevel] / kmPerPixel) - xCoord;
+	var initialY = (event.clientY - halfScreenHeight) / (zoomMultipliers[currZoomLevel] / kmPerPixel) - yCoord;
+
 	// Scrolling up
 	if (event.deltaY < 0)
 	{
 		if (currZoomLevel < maxZoomLevel)
-		{
-			
 			currZoomLevel++;
-			updateCanvas = true;
-		}
-
 	}
 	// Scrolling down
 	else
 	{
 		if (currZoomLevel > minZoomLevel)
-		{
 			currZoomLevel--;
-			updateCanvas = true;
-		}
 	}
+
+	var finalX = (event.clientX - halfScreenWidth) / (zoomMultipliers[currZoomLevel] / kmPerPixel) - xCoord;
+	var finalY = (event.clientY - halfScreenHeight) / (zoomMultipliers[currZoomLevel] / kmPerPixel) - yCoord;
+
+	// Adjust the offset so that the coord under the cursor stays the same
+	// This is what makes it so you don't just zoom straight in and out, but instead it moves with the mouse
+	xCoord -= initialX - finalX;
+	yCoord -= initialY - finalY;
+
+	updateCanvas = true;
 }
 
 // Click-and-drag
@@ -154,28 +172,33 @@ function onMouseMove(event)
 	}
 }
 
-// Draw the map
-function draw()
+// Window resize
+function onWindowResize()
 {
-	if (!updateCanvas) return;
-
-	updateCanvas = false;
-
+	console.log("Window resize");
 	canvas.width = window.innerWidth;
 	canvas.height = window.innerHeight;
 	halfScreenWidth = window.innerWidth/2
 	halfScreenHeight = window.innerHeight/2;
+	kmPerPixel = maxWidthDistance /  window.innerWidth;
+	updateCanvas = true;
+}
+
+// Draw the map
+function draw()
+{
+	// Only draw when changes are necessary
+	if (!updateCanvas) return;
+
+	updateCanvas = false;
+
+	ctx.clearRect(0, 0, canvas.width, canvas.height);
 
 	ctx.strokeStyle = "gray";
 	ctx.fillStyle = "white";
 
 	var zoom = zoomMultipliers[currZoomLevel];
 	var scaleFactor = zoom / kmPerPixel;
-
-	var ex = 0;
-	var ey = 0;
-	var sx = 0;
-	var sy = 0;
 
 	for (var planet of planets)
 	{
@@ -200,20 +223,8 @@ function draw()
 	ctx.fillText("Y: " + Math.floor(yCoord), 100, 160);
 	ctx.fillText("Scale factor: " + scaleFactor, 100, 180);
 	ctx.fillText("1 pixel = " + Math.floor(kmPerPixel/zoom) + " km", 100, 200);
-
 }
 
-function getPlanet(name)
-{
-	for (var planet of planets)
-	{
-		if (planet.name == name)
-		{
-			return planet;
-		}
-	}
-	return null;
-}
 
 
 

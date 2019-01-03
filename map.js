@@ -5,7 +5,8 @@ var canvas; 			// <canvas> HTML tag
 var ctx;				// Canvas rendering context
 var container;			// <div> HTML tag
 var errorMessage;
-
+var halfScreenWidth = window.innerWidth/2;
+var halfScreenHeight = window.innerHeight/2;
 var updateCanvas = true;
 
 // Controls
@@ -13,26 +14,23 @@ var mouseDown = false;
 var lastMouseX = 0;
 var lastMouseY = 0;
 
+// Zooming, scaling, panning variables
 var currZoomLevel;
 const minZoomLevel = 1;
 const maxZoomLevel = 1000;
 var zoomMultipliers = [];
-
-var xOffset = 0;
-var yOffset = 0;
-
+var xCoord = 0;
+var yCoord = 0;
 const maxWidthDistance = 14960000000; //km
 var kmPerPixel = maxWidthDistance /  window.innerWidth;
+const minPlanetSize = 3; // Minimum number of pixels that a planet takes up
+const tau = Math.PI * 2;
 
 
 class Planet {
 	constructor(name, parentName, spritePath, diameter, distance) {
 		this.name = name;
 		this.parent = getPlanet(parentName);
-		if (this.parent != null)
-			console.log(this.name + "s parent is " + this.parent.name);
-		else
-			console.log(this.name + " has no parent");
 		this.sprite = new Image();
 		this.sprite.src = spritePath;
 		this.diameter = diameter;
@@ -93,7 +91,6 @@ function init()
 	setInterval(draw, 10);
 }
 
-// TODO: curve zoom levels
 function onScroll(event)
 {
 	// Scrolling up
@@ -134,8 +131,8 @@ function onMouseMove(event)
 	if (mouseDown)
 	{
 		var zoom = zoomMultipliers[currZoomLevel];
-		xOffset += zoom * (event.clientX - lastMouseX);
-		yOffset += zoom * (event.clientY - lastMouseY);
+		xCoord += (event.clientX - lastMouseX) * kmPerPixel / zoom;
+		yCoord += (event.clientY - lastMouseY) * kmPerPixel / zoom;
 		lastMouseX = event.clientX;
 		lastMouseY = event.clientY;
 		updateCanvas = true;
@@ -151,10 +148,14 @@ function draw()
 
 	canvas.width = window.innerWidth;
 	canvas.height = window.innerHeight;
+	halfScreenWidth = window.innerWidth/2
+	halfScreenHeight = window.innerHeight/2;
+
 	ctx.strokeStyle = "gray";
 	ctx.fillStyle = "white";
 
 	var zoom = zoomMultipliers[currZoomLevel];
+	var scaleFactor = zoom / kmPerPixel;
 
 	var ex = 0;
 	var ey = 0;
@@ -164,37 +165,28 @@ function draw()
 	for (var planet of planets)
 	{
 		// Draw the planet
-		var size = (planet.diameter / kmPerPixel) * zoom;
-		if (size < 4)
-			size = 4;
-		ctx.drawImage(planet.sprite, ((planet.x / kmPerPixel) * zoom) - size/2 + (xOffset / zoom), ((planet.y / kmPerPixel) * zoom) - size/2 + (yOffset / zoom), size, size);
+		var size = planet.diameter * scaleFactor;
+		if (size < minPlanetSize)
+			size = minPlanetSize;
+		ctx.drawImage(planet.sprite, (planet.x + xCoord) * scaleFactor - size/2 + halfScreenWidth, (planet.y + yCoord) * scaleFactor - size/2 + halfScreenHeight, size, size);
 
 		// Draw the orbit
-		var parentX;
-		var parentY;
-		if (planet.parent != null)
+		if (planet.name != "Sun")
 		{
-			parentX = planet.parent.x;
-			parentY = planet.parent.y;
+			ctx.beginPath();
+			ctx.arc((planet.parent.x + xCoord) * scaleFactor + halfScreenWidth, (planet.parent.y + yCoord) * scaleFactor + halfScreenHeight, planet.distance * scaleFactor, 0, tau);
+			ctx.stroke();
 		}
-		else
-		{
-			parentX = 0;
-			parentY = 0;
-		}
-		ctx.beginPath();
-		ctx.arc(((parentX / kmPerPixel) * zoom) + xOffset/zoom, ((parentY / kmPerPixel) * zoom) + yOffset/zoom, ((planet.distance / kmPerPixel) * zoom), 0, 2*Math.PI);
-		ctx.stroke();
 
 		if (planet.name == "Earth")
 		{
-			ex = ((planet.x / kmPerPixel) * zoom);
-			ey = ((planet.y / kmPerPixel) * zoom);
+			ex = planet.x * scaleFactor;
+			ey = planet.y * scaleFactor;
 		}
 		else if (planet.name == "Sun")
 		{
-			sx = ((planet.x / kmPerPixel) * zoom);
-			sy = ((planet.y / kmPerPixel) * zoom);
+			sx = planet.x * scaleFactor;
+			sy = planet.y * scaleFactor;
 		}
 
 	}
@@ -203,9 +195,11 @@ function draw()
 	ctx.fillText("Zoom multiplier: " + zoom, 100, 120);
 	ctx.fillText("Earth: " + Math.floor(ex) + "," + Math.floor(ey), 100, 150);
 	ctx.fillText("Sun: " + Math.floor(sx) + "," + Math.floor(sy), 100, 170);
-	ctx.fillText("Offset: " + Math.floor(xOffset) + "," + Math.floor(yOffset), 100, 190);
-	ctx.fillText("Screen center: " + window.innerWidth/2 + "," + window.innerHeight/2, 100, 210);
-	ctx.fillText("Distance: " + (kmPerPixel*xOffset), 100, 230);
+	ctx.fillText("X: " + Math.floor(xCoord), 100, 190);
+	ctx.fillText("Y: " + Math.floor(yCoord), 100, 210);
+	ctx.fillText("Screen center: " + halfScreenWidth + "," + halfScreenHeight, 100, 230);
+	ctx.fillText("Distance: " + (kmPerPixel*xCoord), 100, 250);
+	ctx.fillText("Scale factor: " + scaleFactor, 100, 270);
 
 }
 

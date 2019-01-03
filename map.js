@@ -17,7 +17,7 @@ var lastMouseY = 0;
 // Zooming, scaling, panning variables
 var currZoomLevel;
 const minZoomLevel = 1;
-const maxZoomLevel = 1000;
+const maxZoomLevel = 50;
 var zoomMultipliers = [];
 var xCoord = 0;
 var yCoord = 0;
@@ -51,14 +51,28 @@ var planets = [];
 
 // Planet sizes are measured in km
 planets.push(new Planet("Sun", null, "assets/sun.png", 1391016, 0));
+
 planets.push(new Planet("Mercury", "Sun", "assets/mercury.png", 4879, 57909050));
+
 planets.push(new Planet("Venus", "Sun", "assets/venus.png", 12104, 108208000));
+
 planets.push(new Planet("Earth", "Sun", "assets/earth.png", 12742, 149598023));
 planets.push(new Planet("Moon", "Earth", "assets/moon.png", 3474, 384400));
+
 planets.push(new Planet("Mars", "Sun", "assets/mars.png", 6779, 227939200));
+planets.push(new Planet("Phobos", "Mars", "assets/phobos.png", 11, 9376));
+planets.push(new Planet("Deimos", "Mars", "assets/deimos.png", 6.2, 23463));
+
 planets.push(new Planet("Jupiter", "Sun", "assets/jupiter.png", 139822, 778570000));
+planets.push(new Planet("Io", "Jupiter", "assets/io.png", 1821, 421700));
+planets.push(new Planet("Europa", "Jupiter", "assets/europa.png", 1560.8, 670900));
+planets.push(new Planet("Ganymede", "Jupiter", "assets/ganymede.png", 2634.1, 1070400));
+planets.push(new Planet("Callisto", "Jupiter", "assets/callisto.png", 2410.3, 1882700));
+
 planets.push(new Planet("Saturn", "Sun", "assets/saturn.png", 116464, 1433530000));
+
 planets.push(new Planet("Uranus", "Sun", "assets/uranus.png", 50724, 2875040000));
+
 planets.push(new Planet("Neptune", "Sun", "assets/neptune.png", 49244, 4500000000));
 
 
@@ -76,9 +90,10 @@ function init()
 
 	currZoomLevel = 10;
 
-	for (var i = 1; i <= 1000; i++)
+	// Set up zoom curve
+	for (var i = minZoomLevel; i <= maxZoomLevel; i++)
 	{
-		zoomMultipliers[i] = i*i/2;
+		zoomMultipliers[i] = Math.pow(2, i/2) / Math.pow(2, 1/2);
 	}
 
 	// Set up input
@@ -177,29 +192,14 @@ function draw()
 			ctx.arc((planet.parent.x + xCoord) * scaleFactor + halfScreenWidth, (planet.parent.y + yCoord) * scaleFactor + halfScreenHeight, planet.distance * scaleFactor, 0, tau);
 			ctx.stroke();
 		}
-
-		if (planet.name == "Earth")
-		{
-			ex = planet.x * scaleFactor;
-			ey = planet.y * scaleFactor;
-		}
-		else if (planet.name == "Sun")
-		{
-			sx = planet.x * scaleFactor;
-			sy = planet.y * scaleFactor;
-		}
-
 	}
 
 	ctx.fillText("Zoom level: " + currZoomLevel, 100, 100);
 	ctx.fillText("Zoom multiplier: " + zoom, 100, 120);
-	ctx.fillText("Earth: " + Math.floor(ex) + "," + Math.floor(ey), 100, 150);
-	ctx.fillText("Sun: " + Math.floor(sx) + "," + Math.floor(sy), 100, 170);
-	ctx.fillText("X: " + Math.floor(xCoord), 100, 190);
-	ctx.fillText("Y: " + Math.floor(yCoord), 100, 210);
-	ctx.fillText("Screen center: " + halfScreenWidth + "," + halfScreenHeight, 100, 230);
-	ctx.fillText("Distance: " + (kmPerPixel*xCoord), 100, 250);
-	ctx.fillText("Scale factor: " + scaleFactor, 100, 270);
+	ctx.fillText("X: " + Math.floor(xCoord), 100, 140);
+	ctx.fillText("Y: " + Math.floor(yCoord), 100, 160);
+	ctx.fillText("Scale factor: " + scaleFactor, 100, 180);
+	ctx.fillText("1 pixel = " + Math.floor(kmPerPixel/zoom) + " km", 100, 200);
 
 }
 

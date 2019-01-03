@@ -5,14 +5,25 @@ var canvas; 			// <canvas> HTML tag
 var ctx;				// Canvas rendering context
 var container;			// <div> HTML tag
 var errorMessage;
+var optionsPanel;
+var infoPanel;
 var halfScreenWidth = window.innerWidth/2;
 var halfScreenHeight = window.innerHeight/2;
 var updateCanvas = true;
 
 // Controls
 var mouseDown = false;
+var draggingPanel = false;
+var currentPanel;
+var panelX;
+var panelY;
 var lastMouseX = 0;
 var lastMouseY = 0;
+
+// Options
+var showOrbits = true;
+var showLabels = true;
+var showDebug = false;
 
 // Zooming, scaling, panning variables
 var currZoomLevel = 27;
@@ -96,8 +107,18 @@ function init()
 	canvas.height = window.innerHeight;
 	ctx = canvas.getContext('2d');
 
+	// Set up menus
 	errorMessage = document.getElementById("errormessage");
 	errorMessage.style.display = "none";
+	optionsPanel = document.getElementById("options");
+	optionsPanel.style.top = (window.innerHeight*0.1) + "px";
+	optionsPanel.style.left = (window.innerWidth*0.7) + "px";
+	infoPanel = document.getElementById("info");
+	infoPanel.style.top = (window.innerHeight*0.5) + "px";
+	infoPanel.style.left = (window.innerWidth*0.1) + "px";
+	showOrbits = document.getElementById("orbitsCheck").checked;
+	showLabels = document.getElementById("labelsCheck").checked;
+	showDebug = document.getElementById("debugCheck").checked;
 
 
 	// Set up zoom curve
@@ -152,23 +173,50 @@ function onScroll(event)
 function onMouseDown(event)
 {
 	mouseDown = true;
-	lastMouseX = event.clientX;
-	lastMouseY = event.clientY;
+
+	//console.log(event.target);
+
+	if (event.target == canvas)
+	{
+		lastMouseX = event.clientX;
+		lastMouseY = event.clientY;
+	}
+	else
+	{
+		// Start dragging a panel
+		// Keep track of where in the div it was clicked so it can be dropped smoothly
+		draggingPanel = true;
+		currentPanel = event.target;
+		var rect = currentPanel.getBoundingClientRect();
+		panelX = rect.left - event.clientX;
+		panelY = rect.top - event.clientY;
+	}
 }
 function onMouseUp()
 {
 	mouseDown = false;
+	draggingPanel = false;
 }
 function onMouseMove(event)
 {
 	if (mouseDown)
 	{
-		var zoom = zoomMultipliers[currZoomLevel];
-		xCoord += (event.clientX - lastMouseX) * kmPerPixel / zoom;
-		yCoord += (event.clientY - lastMouseY) * kmPerPixel / zoom;
-		lastMouseX = event.clientX;
-		lastMouseY = event.clientY;
-		updateCanvas = true;
+		if (draggingPanel)
+		{
+			// Move the panel that is currently being dragged
+			currentPanel.style.left = event.clientX + panelX + "px";
+			currentPanel.style.top = event.clientY + panelY + "px";
+		}
+		else
+		{
+			// Pan around the map
+			var zoom = zoomMultipliers[currZoomLevel];
+			xCoord += (event.clientX - lastMouseX) * kmPerPixel / zoom;
+			yCoord += (event.clientY - lastMouseY) * kmPerPixel / zoom;
+			lastMouseX = event.clientX;
+			lastMouseY = event.clientY;
+			updateCanvas = true;
+		}
 	}
 }
 
@@ -196,6 +244,8 @@ function draw()
 
 	ctx.strokeStyle = "gray";
 	ctx.fillStyle = "white";
+	ctx.font = "20px Courier New";
+	
 
 	var zoom = zoomMultipliers[currZoomLevel];
 	var scaleFactor = zoom / kmPerPixel;
@@ -209,21 +259,43 @@ function draw()
 		ctx.drawImage(planet.sprite, (planet.x + xCoord) * scaleFactor - size/2 + halfScreenWidth, (planet.y + yCoord) * scaleFactor - size/2 + halfScreenHeight, size, size);
 
 		// Draw the orbit
-		if (planet.name != "Sun")
+		if (showOrbits)
 		{
-			ctx.beginPath();
-			ctx.arc((planet.parent.x + xCoord) * scaleFactor + halfScreenWidth, (planet.parent.y + yCoord) * scaleFactor + halfScreenHeight, planet.distance * scaleFactor, 0, tau);
-			ctx.stroke();
+			if (planet.name != "Sun")
+			{
+				ctx.beginPath();
+				ctx.arc((planet.parent.x + xCoord) * scaleFactor + halfScreenWidth, (planet.parent.y + yCoord) * scaleFactor + halfScreenHeight, planet.distance * scaleFactor, 0, tau);
+				ctx.stroke();
+			}
 		}
 	}
 
-	ctx.fillText("Zoom level: " + currZoomLevel, 100, 100);
-	ctx.fillText("Zoom multiplier: " + zoom, 100, 120);
-	ctx.fillText("X: " + Math.floor(xCoord), 100, 140);
-	ctx.fillText("Y: " + Math.floor(yCoord), 100, 160);
-	ctx.fillText("Scale factor: " + scaleFactor, 100, 180);
-	ctx.fillText("1 pixel = " + Math.floor(kmPerPixel/zoom) + " km", 100, 200);
+	if (showDebug)
+	{
+		ctx.textAlign = "left";
+		ctx.fillText("Zoom level: " + currZoomLevel, 100, 100);
+		ctx.fillText("Zoom multiplier: " + zoom, 100, 120);
+		ctx.fillText("X: " + Math.floor(xCoord), 100, 140);
+		ctx.fillText("Y: " + Math.floor(yCoord), 100, 160);
+		ctx.fillText("Scale factor: " + scaleFactor, 100, 180);
+	}
+	ctx.textAlign = "center";
+	ctx.fillText("1 pixel = " + Math.floor(kmPerPixel/zoom) + " km", halfScreenWidth, window.innerHeight*0.95);
 }
+
+function onCheck(event)
+{
+	console.log(event.target);
+	if (event.target.id == "orbitsCheck")
+		showOrbits = event.target.checked;
+	else if (event.target.id == "labelsCheck")
+		showLabels = event.target.checked;
+	else if (event.target.id == "debugCheck")
+		showDebug = event.target.checked;
+
+	updateCanvas = true;
+}
+
 
 
 

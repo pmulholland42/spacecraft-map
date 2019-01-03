@@ -5,6 +5,7 @@ body, html
 	height:100%;
 	background-color: black;
 	overflow: hidden;
+	font-family: 'Courier New', Courier, monospace;
 }
 
 canvas
@@ -23,11 +24,29 @@ canvas
 {
 	color: white;
 	margin: auto;
-	font-family: 'Courier New', Courier, monospace;
 	position: absolute;
 	left: 50%;
 	-webkit-transform: translateX(-50%);
 	transform: translateX(-50%);
 }
 
+.panel
+{
+	border-radius: 10px;
+    margin: auto;
+    padding: 10px;
+	position: absolute;
+	background-color: white;
+	overflow-y: auto;
+	user-select: none;
+	-moz-user-select: none;
+	-ms-user-select: none;
+	-webkit-user-select: none;
+}
+
+.panel-header
+{
+	text-align: center; 
+	padding-bottom: 5px;
+}
 

@@ -11,6 +11,19 @@
     <body onload="init()">
 		<!--Canvas for rendering the map-->
         <canvas id="mapcanvas"></canvas>
+
         <p id="errormessage">Javascript is required to use this page</p>
+
+        <!--Options panel-->
+        <div id="options" class="panel">
+            <h3 class="panel-header">Options</h3>
+            <input id="orbitsCheck" type="checkbox" onchange="onCheck(event)" checked> Show orbits<br/>
+            <input id="labelsCheck" type="checkbox" onchange="onCheck(event)" checked> Show labels<br/>
+            <input id="debugCheck" type="checkbox" onchange="onCheck(event)"> Show debug info<br/>
+        </div>
+        <div id="info" class="panel">
+            <h3 class="panel-header">Info</h3>
+            <p>Planet name:</p>
+        </div>
     </body>
 </html>

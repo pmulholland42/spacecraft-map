@@ -39,13 +39,14 @@ const tau = Math.PI * 2;
 
 
 class Planet {
-	constructor(name, parentName, spritePath, diameter, distance) {
+	constructor(name, parentName, spritePath, diameter, distance, type) {
 		this.name = name;
 		this.parent = getPlanet(parentName);
 		this.sprite = new Image();
 		this.sprite.src = spritePath;
 		this.diameter = diameter;
 		this.distance = distance;
+		this.type = type;
 		if (this.parent != null)
 		{
 			this.x = this.parent.x + distance;
@@ -73,30 +74,30 @@ function getPlanet(name)
 }
 
 // Planet sizes are measured in km
-planets.push(new Planet("Sun", null, "assets/sun.png", 1391016, 0));
+planets.push(new Planet("Sun", null, "assets/sun.png", 1391016, 0, "star"));
 
-planets.push(new Planet("Mercury", "Sun", "assets/mercury.png", 4879, 57909050));
+planets.push(new Planet("Mercury", "Sun", "assets/mercury.png", 4879, 57909050, "planet"));
 
-planets.push(new Planet("Venus", "Sun", "assets/venus.png", 12104, 108208000));
+planets.push(new Planet("Venus", "Sun", "assets/venus.png", 12104, 108208000, "planet"));
 
-planets.push(new Planet("Earth", "Sun", "assets/earth.png", 12742, 149598023));
-planets.push(new Planet("Moon", "Earth", "assets/moon.png", 3474, 384400));
+planets.push(new Planet("Earth", "Sun", "assets/earth.png", 12742, 149598023, "planet"));
+planets.push(new Planet("Moon", "Earth", "assets/moon.png", 3474, 384400, "moon"));
 
-planets.push(new Planet("Mars", "Sun", "assets/mars.png", 6779, 227939200));
-planets.push(new Planet("Phobos", "Mars", "assets/phobos.png", 11, 9376));
-planets.push(new Planet("Deimos", "Mars", "assets/deimos.png", 6.2, 23463));
+planets.push(new Planet("Mars", "Sun", "assets/mars.png", 6779, 227939200, "planet"));
+planets.push(new Planet("Phobos", "Mars", "assets/phobos.png", 11, 9376, "moon"));
+planets.push(new Planet("Deimos", "Mars", "assets/deimos.png", 6.2, 23463, "moon"));
 
-planets.push(new Planet("Jupiter", "Sun", "assets/jupiter.png", 139822, 778570000));
-planets.push(new Planet("Io", "Jupiter", "assets/io.png", 1821, 421700));
-planets.push(new Planet("Europa", "Jupiter", "assets/europa.png", 1560.8, 670900));
-planets.push(new Planet("Ganymede", "Jupiter", "assets/ganymede.png", 2634.1, 1070400));
-planets.push(new Planet("Callisto", "Jupiter", "assets/callisto.png", 2410.3, 1882700));
+planets.push(new Planet("Jupiter", "Sun", "assets/jupiter.png", 139822, 778570000, "planet"));
+planets.push(new Planet("Io", "Jupiter", "assets/io.png", 1821, 421700, "moon"));
+planets.push(new Planet("Europa", "Jupiter", "assets/europa.png", 1560.8, 670900, "moon"));
+planets.push(new Planet("Ganymede", "Jupiter", "assets/ganymede.png", 2634.1, 1070400, "moon"));
+planets.push(new Planet("Callisto", "Jupiter", "assets/callisto.png", 2410.3, 1882700, "moon"));
 
-planets.push(new Planet("Saturn", "Sun", "assets/saturn.png", 116464, 1433530000));
+planets.push(new Planet("Saturn", "Sun", "assets/saturn.png", 116464, 1433530000, "planet"));
 
-planets.push(new Planet("Uranus", "Sun", "assets/uranus.png", 50724, 2875040000));
+planets.push(new Planet("Uranus", "Sun", "assets/uranus.png", 50724, 2875040000, "planet"));
 
-planets.push(new Planet("Neptune", "Sun", "assets/neptune.png", 49244, 4500000000));
+planets.push(new Planet("Neptune", "Sun", "assets/neptune.png", 49244, 4500000000, "planet"));
 
 
 function init()
@@ -256,7 +257,25 @@ function draw()
 		var size = planet.diameter * scaleFactor;
 		if (size < minPlanetSize)
 			size = minPlanetSize;
-		ctx.drawImage(planet.sprite, (planet.x + xCoord) * scaleFactor - size/2 + halfScreenWidth, (planet.y + yCoord) * scaleFactor - size/2 + halfScreenHeight, size, size);
+		var screenX = (planet.x + xCoord) * scaleFactor - size/2 + halfScreenWidth;
+		var screenY = (planet.y + yCoord) * scaleFactor - size/2 + halfScreenHeight;
+		ctx.drawImage(planet.sprite, screenX, screenY, size, size);
+
+		// Draw the label
+		if (showLabels)
+		{
+			
+			if (planet.type == "planet" || planet.type == "star")
+			{
+				ctx.textAlign = "center";
+				ctx.fillText(planet.name, screenX + size/2, screenY - 20);
+			}
+			else
+			{
+				ctx.textAlign = "left";
+				ctx.fillText(planet.name, screenX + size + 2, screenY + size/2);
+			}
+		}
 
 		// Draw the orbit
 		if (showOrbits)

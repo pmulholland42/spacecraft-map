@@ -7,6 +7,7 @@ var container;			// <div> HTML tag
 var errorMessage;
 var optionsPanel;
 var infoPanel;
+var timePanel;
 var halfScreenWidth = window.innerWidth/2;
 var halfScreenHeight = window.innerHeight/2;
 var updateCanvas = true;
@@ -36,6 +37,12 @@ const maxWidthDistance = 14960000000; //km
 var kmPerPixel = maxWidthDistance /  window.innerWidth;
 const minPlanetSize = 3; // Minimum number of pixels that a planet takes up
 const tau = Math.PI * 2;
+
+// Time
+const dateOptions = { year: 'numeric', month: 'long', day: 'numeric', hour: "2-digit", minute: "2-digit" };
+var displayedTime = new Date();
+var timeDirection = 0; // -1, 0, or 1 for backwards, stopped, or forwards
+var timerInterval;
 
 
 class Planet {
@@ -111,18 +118,25 @@ function init()
 	// Set up menus
 	errorMessage = document.getElementById("errormessage");
 	errorMessage.style.display = "none";
+
 	optionsPanel = document.getElementById("options");
 	optionsPanel.style.top = (window.innerHeight*0.1) + "px";
 	optionsPanel.style.left = (window.innerWidth*0.7) + "px";
+
 	infoPanel = document.getElementById("info");
 	infoPanel.style.top = (window.innerHeight*0.5) + "px";
 	infoPanel.style.left = (window.innerWidth*0.1) + "px";
+
+	timePanel = document.getElementById("timeline");
+	timePanel.style.top = (window.innerHeight*0.85) + "px";
+	timePanel.style.left = (window.innerWidth*0.4) + "px";
+
 	showOrbits = document.getElementById("orbitsCheck").checked;
 	showLabels = document.getElementById("labelsCheck").checked;
 	showDebug = document.getElementById("debugCheck").checked;
 
-
 	// Set up zoom curve
+	// This needs to be tweaked
 	for (var i = minZoomLevel; i <= maxZoomLevel; i++)
 	{
 		zoomMultipliers[i] = Math.pow(2, i/2) / Math.pow(2, 1/2);
@@ -245,14 +259,30 @@ function draw()
 
 	ctx.strokeStyle = "gray";
 	ctx.fillStyle = "white";
-	ctx.font = "20px Courier New";
+	ctx.font = "24px Courier New";
 	
-
 	var zoom = zoomMultipliers[currZoomLevel];
 	var scaleFactor = zoom / kmPerPixel;
 
 	for (var planet of planets)
 	{
+
+		if (planet.name == "Earth")
+		{
+			//var now = new Date();
+			var start = new Date(displayedTime.getFullYear(), 0, 0);
+			var diff = displayedTime - start;
+			var oneDay = 1000 * 60 * 60 * 24;
+			var day = Math.floor(diff / oneDay);
+			console.log('Day of year: ' + day);
+			var percentOfYear = day/365;
+			var radiansAngle = tau * percentOfYear;
+			var circleX = Math.cos(radiansAngle);
+			var circleY = Math.sin(radiansAngle);
+			planet.x = circleX * planet.distance;
+			planet.y = circleY * planet.distance;
+		}
+
 		// Draw the planet
 		var size = planet.diameter * scaleFactor;
 		if (size < minPlanetSize)
@@ -289,6 +319,7 @@ function draw()
 		}
 	}
 
+	// Debug info
 	if (showDebug)
 	{
 		ctx.textAlign = "left";
@@ -298,8 +329,12 @@ function draw()
 		ctx.fillText("Y: " + Math.floor(yCoord), 100, 160);
 		ctx.fillText("Scale factor: " + scaleFactor, 100, 180);
 	}
+
+	// On-screen text
 	ctx.textAlign = "center";
-	ctx.fillText("1 pixel = " + Math.floor(kmPerPixel/zoom) + " km", halfScreenWidth, window.innerHeight*0.95);
+	ctx.fillStyle = "rgba(0, 255, 0, 1)";
+	ctx.fillText("1 pixel = " + Math.floor(kmPerPixel/zoom) + " km", halfScreenWidth, window.innerHeight*0.05);
+	ctx.fillText("Time: " + displayedTime.toLocaleDateString("en-US",  dateOptions), halfScreenWidth, window.innerHeight*0.95);
 }
 
 function onCheck(event)
@@ -314,6 +349,44 @@ function onCheck(event)
 
 	updateCanvas = true;
 }
+
+function fastForwardTime()
+{
+	if (timeDirection != 1)
+	{
+		clearInterval(timerInterval);
+		timerInterval = setInterval(function() {
+			displayedTime.setDate(displayedTime.getDate() + 1); 
+			updateCanvas = true;
+		}, 50);
+	}
+}
+
+function reverseTime()
+{
+	if (timeDirection != -1)
+	{
+		clearInterval(timerInterval);
+		timerInterval = setInterval(function() {
+			displayedTime.setDate(displayedTime.getDate() - 1); 
+			updateCanvas = true;
+		}, 50);
+	}
+}
+
+function pauseTime()
+{
+	clearInterval(timerInterval);
+}
+
+function resetTime()
+{
+	clearInterval(timerInterval);
+	displayedTime = new Date();
+	updateCanvas = true;
+}
+
+
 
 
 

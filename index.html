@@ -19,11 +19,18 @@
             <h3 class="panel-header">Options</h3>
             <input id="orbitsCheck" type="checkbox" onchange="onCheck(event)" checked> Show orbits<br/>
             <input id="labelsCheck" type="checkbox" onchange="onCheck(event)" checked> Show labels<br/>
+            <input id="backgroundCheck" type="checkbox"> Show background stars <br/>
             <input id="debugCheck" type="checkbox" onchange="onCheck(event)"> Show debug info<br/>
         </div>
         <div id="info" class="panel">
             <h3 class="panel-header">Info</h3>
             <p>Planet name:</p>
+        </div>
+        <div id="timeline" class="panel">
+            <button id="resetTimeButton" type="button" class="timeButton" onclick="resetTime()">Current Time</button> 
+            <button id="reverseTimeButton" type="button" class="timeButton" onclick="reverseTime()">&lt&lt</button> 
+            <button id="pauseTimeButton" type="button" class="timeButton" onclick="pauseTime()">||</button> 
+            <button id="forwardTimeButton" type="button" class="timeButton" onclick="fastForwardTime()">&gt&gt</button> 
         </div>
     </body>
 </html>

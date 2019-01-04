@@ -11,6 +11,7 @@ var planetLabel;
 var halfScreenWidth = window.innerWidth/2;
 var halfScreenHeight = window.innerHeight/2;
 var updateCanvas = true;
+const noObjectSelected = "No object selected";
 
 // Controls
 var mouseDown = false;
@@ -38,10 +39,10 @@ var xCoord = 0; // The coordinates of the center of the screen
 var yCoord = 0;
 const maxWidthDistance = 14960000000; // When zoomed out all the way, how much distance (km) should the width of the screen take up?
 var kmPerPixel = maxWidthDistance /  window.innerWidth; // Kilometers per pixel when zoomed out all the way
-const minPlanetSize = 3; // Minimum number of pixels that a planet takes up
-const minHitboxSize = 5; // Min number of pixels that can be clicked to select a planet
+const minPlanetSize = 2; // Minimum number of pixels that a planet takes up
+const minHitboxSize = 10; // Min number of pixels that can be clicked to select a planet
 const tau = Math.PI * 2;
-var currentPlanet = "Earth"; // The planet currently selected
+var currentPlanet = null; // The planet currently selected
 
 // Time
 const dateOptions = { year: 'numeric', month: 'long', day: 'numeric', hour: "2-digit", minute: "2-digit" };
@@ -138,7 +139,7 @@ function init()
 	timePanel.style.left = (window.innerWidth*0.4) + "px";
 
 	planetLabel = document.getElementById("planetlabel");
-	planetLabel.textContent = currentPlanet;
+	planetLabel.textContent = noObjectSelected;
 
 	showOrbits = document.getElementById("orbitsCheck").checked;
 	showLabels = document.getElementById("labelsCheck").checked;
@@ -223,7 +224,8 @@ function draw()
 		ctx.fillText("X: " + Math.floor(xCoord), 100, 140);
 		ctx.fillText("Y: " + Math.floor(yCoord), 100, 160);
 		ctx.fillText("Scale factor: " + scaleFactor, 100, 180);
-		ctx.fillText("Selected: " + currentPlanet, 100, 200);
+		if (currentPlanet != null)
+			ctx.fillText("Selected: " + currentPlanet.name, 100, 200);
 	}
 
 	// On-screen text
@@ -250,8 +252,8 @@ function onClick(event)
 
 			if (Math.abs(screenX - event.clientX) < size/2 && Math.abs(screenY - event.clientY) < size/2)
 			{
-				currentPlanet = planet.name;
-				planetLabel.textContent = currentPlanet;
+				currentPlanet = planet;
+				planetLabel.textContent = currentPlanet.name;
 				updatePlanetPositions();
 				updateCanvas = true;
 				break;
@@ -350,6 +352,15 @@ function onMouseMove(event)
 	}
 }
 
+document.onkeydown = function onKeyDown(event)
+{
+	if (event.keyCode == 27) // Escape
+	{
+		currentPlanet = null;
+		planetLabel.textContent = noObjectSelected;
+	}
+}
+
 // Options checkboxes
 function onCheck(event)
 {
@@ -435,7 +446,7 @@ function updatePlanetPositions()
 			planet.y = planet.parent.y + circleY * planet.distance;
 		}
 
-		if (keepPlanetCentered && planet.name == currentPlanet)
+		if (keepPlanetCentered && planet == currentPlanet)
 		{
 			xCoord = -planet.x;
 			yCoord = -planet.y;

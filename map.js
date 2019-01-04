@@ -1,13 +1,13 @@
 'use strict';
 
 // Page variables
-var canvas; 			// <canvas> HTML tag
+var canvas; 			// <canvas> element
 var ctx;				// Canvas rendering context
-var container;			// <div> HTML tag
 var errorMessage;
 var optionsPanel;
 var infoPanel;
 var timePanel;
+var planetLabel;
 var halfScreenWidth = window.innerWidth/2;
 var halfScreenHeight = window.innerHeight/2;
 var updateCanvas = true;
@@ -25,18 +25,23 @@ var lastMouseY = 0;
 var showOrbits = true;
 var showLabels = true;
 var showDebug = false;
+var keepPlanetCentered = false;
 
 // Zooming, scaling, panning variables
-var currZoomLevel = 27;
+var currZoomLevel = 10;
 const minZoomLevel = 1;
 const maxZoomLevel = 50;
 var zoomMultipliers = [];
-var xCoord = -149598023; // Start at Earth
+var zoom; // The zoom factor
+var scaleFactor; // The zoom factor x kmPerPixel
+var xCoord = 0; // The coordinates of the center of the screen
 var yCoord = 0;
-const maxWidthDistance = 14960000000; //km
-var kmPerPixel = maxWidthDistance /  window.innerWidth;
+const maxWidthDistance = 14960000000; // When zoomed out all the way, how much distance (km) should the width of the screen take up?
+var kmPerPixel = maxWidthDistance /  window.innerWidth; // Kilometers per pixel when zoomed out all the way
 const minPlanetSize = 3; // Minimum number of pixels that a planet takes up
+const minHitboxSize = 5; // Min number of pixels that can be clicked to select a planet
 const tau = Math.PI * 2;
+var currentPlanet = "Earth"; // The planet currently selected
 
 // Time
 const dateOptions = { year: 'numeric', month: 'long', day: 'numeric', hour: "2-digit", minute: "2-digit" };
@@ -131,9 +136,13 @@ function init()
 	timePanel.style.top = (window.innerHeight*0.85) + "px";
 	timePanel.style.left = (window.innerWidth*0.4) + "px";
 
+	planetLabel = document.getElementById("planetlabel");
+	planetLabel.textContent = currentPlanet;
+
 	showOrbits = document.getElementById("orbitsCheck").checked;
 	showLabels = document.getElementById("labelsCheck").checked;
 	showDebug = document.getElementById("debugCheck").checked;
+	keepPlanetCentered = document.getElementById("focusCheck").checked;
 
 	// Set up zoom curve
 	// This needs to be tweaked
@@ -141,111 +150,21 @@ function init()
 	{
 		zoomMultipliers[i] = Math.pow(2, i/2) / Math.pow(2, 1/2);
 	}
+	zoom = zoomMultipliers[currZoomLevel];
+	scaleFactor = zoom / kmPerPixel;
 
 	// Set up event listeners for input and window resize
 	window.addEventListener("wheel", onScroll);
 	window.addEventListener("mouseup", onMouseUp);
 	window.addEventListener("mousedown", onMouseDown);
 	window.addEventListener("mousemove", onMouseMove);
+	window.addEventListener("click", onClick);
 	window.addEventListener("resize", onWindowResize);
 		
 	// Start rendering the map
 	setInterval(draw, 10);
 }
 
-// Zoom in and aout
-function onScroll(event)
-{
-	// Convert the mouse coords to global map coords
-	var initialX = (event.clientX - halfScreenWidth) / (zoomMultipliers[currZoomLevel] / kmPerPixel) - xCoord;
-	var initialY = (event.clientY - halfScreenHeight) / (zoomMultipliers[currZoomLevel] / kmPerPixel) - yCoord;
-
-	// Scrolling up
-	if (event.deltaY < 0)
-	{
-		if (currZoomLevel < maxZoomLevel)
-			currZoomLevel++;
-	}
-	// Scrolling down
-	else
-	{
-		if (currZoomLevel > minZoomLevel)
-			currZoomLevel--;
-	}
-
-	var finalX = (event.clientX - halfScreenWidth) / (zoomMultipliers[currZoomLevel] / kmPerPixel) - xCoord;
-	var finalY = (event.clientY - halfScreenHeight) / (zoomMultipliers[currZoomLevel] / kmPerPixel) - yCoord;
-
-	// Adjust the offset so that the coord under the cursor stays the same
-	// This is what makes it so you don't just zoom straight in and out, but instead it moves with the mouse
-	xCoord -= initialX - finalX;
-	yCoord -= initialY - finalY;
-
-	updateCanvas = true;
-}
-
-// Click-and-drag
-function onMouseDown(event)
-{
-	mouseDown = true;
-
-	//console.log(event.target);
-
-	if (event.target == canvas)
-	{
-		lastMouseX = event.clientX;
-		lastMouseY = event.clientY;
-	}
-	else
-	{
-		// Start dragging a panel
-		// Keep track of where in the div it was clicked so it can be dropped smoothly
-		draggingPanel = true;
-		currentPanel = event.target;
-		var rect = currentPanel.getBoundingClientRect();
-		panelX = rect.left - event.clientX;
-		panelY = rect.top - event.clientY;
-	}
-}
-function onMouseUp()
-{
-	mouseDown = false;
-	draggingPanel = false;
-}
-function onMouseMove(event)
-{
-	if (mouseDown)
-	{
-		if (draggingPanel)
-		{
-			// Move the panel that is currently being dragged
-			currentPanel.style.left = event.clientX + panelX + "px";
-			currentPanel.style.top = event.clientY + panelY + "px";
-		}
-		else
-		{
-			// Pan around the map
-			var zoom = zoomMultipliers[currZoomLevel];
-			xCoord += (event.clientX - lastMouseX) * kmPerPixel / zoom;
-			yCoord += (event.clientY - lastMouseY) * kmPerPixel / zoom;
-			lastMouseX = event.clientX;
-			lastMouseY = event.clientY;
-			updateCanvas = true;
-		}
-	}
-}
-
-// Window resize
-function onWindowResize()
-{
-	console.log("Window resize");
-	canvas.width = window.innerWidth;
-	canvas.height = window.innerHeight;
-	halfScreenWidth = window.innerWidth/2
-	halfScreenHeight = window.innerHeight/2;
-	kmPerPixel = maxWidthDistance /  window.innerWidth;
-	updateCanvas = true;
-}
 
 // Draw the map
 function draw()
@@ -254,35 +173,13 @@ function draw()
 	if (!updateCanvas) return;
 
 	updateCanvas = false;
-
 	ctx.clearRect(0, 0, canvas.width, canvas.height);
-
 	ctx.strokeStyle = "gray";
 	ctx.fillStyle = "white";
 	ctx.font = "24px Courier New";
 	
-	var zoom = zoomMultipliers[currZoomLevel];
-	var scaleFactor = zoom / kmPerPixel;
-
 	for (var planet of planets)
 	{
-
-		if (planet.name == "Earth")
-		{
-			//var now = new Date();
-			var start = new Date(displayedTime.getFullYear(), 0, 0);
-			var diff = displayedTime - start;
-			var oneDay = 1000 * 60 * 60 * 24;
-			var day = Math.floor(diff / oneDay);
-			console.log('Day of year: ' + day);
-			var percentOfYear = day/365;
-			var radiansAngle = tau * percentOfYear;
-			var circleX = Math.cos(radiansAngle);
-			var circleY = Math.sin(radiansAngle);
-			planet.x = circleX * planet.distance;
-			planet.y = circleY * planet.distance;
-		}
-
 		// Draw the planet
 		var size = planet.diameter * scaleFactor;
 		if (size < minPlanetSize)
@@ -328,6 +225,7 @@ function draw()
 		ctx.fillText("X: " + Math.floor(xCoord), 100, 140);
 		ctx.fillText("Y: " + Math.floor(yCoord), 100, 160);
 		ctx.fillText("Scale factor: " + scaleFactor, 100, 180);
+		ctx.fillText("Selected: " + currentPlanet, 100, 200);
 	}
 
 	// On-screen text
@@ -337,18 +235,152 @@ function draw()
 	ctx.fillText("Time: " + displayedTime.toLocaleDateString("en-US",  dateOptions), halfScreenWidth, window.innerHeight*0.95);
 }
 
+// Click to select planets
+function onClick(event)
+{
+	// Check if the user clicked on the canvas or a menu
+	if (event.target == canvas)
+	{
+		// Get the planet that was clicked
+		for (var planet of planets)
+		{
+			var screenX = (planet.x + xCoord) * scaleFactor + halfScreenWidth;
+			var screenY = (planet.y + yCoord) * scaleFactor + halfScreenHeight;
+			var size = planet.diameter * scaleFactor;
+			if (size < minHitboxSize)
+				size = minHitboxSize;	
+
+			if (Math.abs(screenX - event.clientX) < size/2 && Math.abs(screenY - event.clientY) < size/2)
+			{
+				currentPlanet = planet.name;
+				planetLabel.textContent = currentPlanet;
+				updatePlanetPositions();
+				updateCanvas = true;
+				break;
+			}
+		}
+	}
+}
+
+// Zoom in and out
+function onScroll(event)
+{
+	// Convert the mouse coords to global map coords
+	var initialX = (event.clientX - halfScreenWidth) / (zoomMultipliers[currZoomLevel] / kmPerPixel) - xCoord;
+	var initialY = (event.clientY - halfScreenHeight) / (zoomMultipliers[currZoomLevel] / kmPerPixel) - yCoord;
+
+	// Scrolling up
+	if (event.deltaY < 0)
+	{
+		if (currZoomLevel < maxZoomLevel)
+		{
+			currZoomLevel++;
+			zoom = zoomMultipliers[currZoomLevel];
+			scaleFactor = zoom / kmPerPixel;
+		}
+	}
+	// Scrolling down
+	else
+	{
+		if (currZoomLevel > minZoomLevel)
+		{
+			currZoomLevel--;
+			zoom = zoomMultipliers[currZoomLevel];
+			scaleFactor = zoom / kmPerPixel;
+		}
+	}
+
+	var finalX = (event.clientX - halfScreenWidth) / (zoomMultipliers[currZoomLevel] / kmPerPixel) - xCoord;
+	var finalY = (event.clientY - halfScreenHeight) / (zoomMultipliers[currZoomLevel] / kmPerPixel) - yCoord;
+
+	if (!keepPlanetCentered || currentPlanet == null)
+	{
+		// Adjust the offset so that the coord under the cursor stays the same
+		// This is what makes it so you don't just zoom straight in and out, but instead it moves with the mouse
+		xCoord -= initialX - finalX;
+		yCoord -= initialY - finalY;
+	}
+
+	updateCanvas = true;
+}
+
+// Click-and-drag
+function onMouseDown(event)
+{
+	mouseDown = true;
+
+	if (event.target == canvas)
+	{
+		lastMouseX = event.clientX;
+		lastMouseY = event.clientY;
+	}
+	else
+	{
+		// Start dragging a panel
+		// Keep track of where in the div it was clicked so it can be dropped smoothly
+		draggingPanel = true;
+		currentPanel = event.target;
+		var rect = currentPanel.getBoundingClientRect();
+		panelX = rect.left - event.clientX;
+		panelY = rect.top - event.clientY;
+	}
+}
+function onMouseUp()
+{
+	mouseDown = false;
+	draggingPanel = false;
+}
+function onMouseMove(event)
+{
+	if (mouseDown)
+	{
+		if (draggingPanel)
+		{
+			// Move the panel that is currently being dragged
+			currentPanel.style.left = event.clientX + panelX + "px";
+			currentPanel.style.top = event.clientY + panelY + "px";
+		}
+		else if (!keepPlanetCentered || currentPlanet == null)
+		{
+			// Pan around the map
+			xCoord += (event.clientX - lastMouseX) * kmPerPixel / zoom;
+			yCoord += (event.clientY - lastMouseY) * kmPerPixel / zoom;
+			lastMouseX = event.clientX;
+			lastMouseY = event.clientY;
+			updateCanvas = true;
+		}
+	}
+}
+
+// Options checkboxes
 function onCheck(event)
 {
-	console.log(event.target);
 	if (event.target.id == "orbitsCheck")
 		showOrbits = event.target.checked;
 	else if (event.target.id == "labelsCheck")
 		showLabels = event.target.checked;
 	else if (event.target.id == "debugCheck")
 		showDebug = event.target.checked;
-
+	else if (event.target.id == "focusCheck")
+	{
+		keepPlanetCentered = event.target.checked;
+		updatePlanetPositions();
+	}
 	updateCanvas = true;
 }
+
+// Window resize
+function onWindowResize()
+{
+	canvas.width = window.innerWidth;
+	canvas.height = window.innerHeight;
+	halfScreenWidth = window.innerWidth/2
+	halfScreenHeight = window.innerHeight/2;
+	kmPerPixel = maxWidthDistance /  window.innerWidth;
+	scaleFactor = zoom / kmPerPixel;
+	updateCanvas = true;
+}
+
 
 function fastForwardTime()
 {
@@ -357,33 +389,60 @@ function fastForwardTime()
 		clearInterval(timerInterval);
 		timerInterval = setInterval(function() {
 			displayedTime.setDate(displayedTime.getDate() + 1); 
+			updatePlanetPositions();
 			updateCanvas = true;
 		}, 50);
 	}
 }
-
 function reverseTime()
 {
 	if (timeDirection != -1)
 	{
 		clearInterval(timerInterval);
 		timerInterval = setInterval(function() {
-			displayedTime.setDate(displayedTime.getDate() - 1); 
+			displayedTime.setDate(displayedTime.getDate() - 1);
+			updatePlanetPositions();
 			updateCanvas = true;
 		}, 50);
 	}
 }
-
 function pauseTime()
 {
 	clearInterval(timerInterval);
 }
-
 function resetTime()
 {
 	clearInterval(timerInterval);
 	displayedTime = new Date();
+	updatePlanetPositions();
 	updateCanvas = true;
+}
+
+function updatePlanetPositions()
+{
+	for (var planet of planets)
+	{
+		if (planet.name == "Earth")
+		{
+			//var now = new Date();
+			var start = new Date(displayedTime.getFullYear(), 0, 0);
+			var diff = displayedTime - start;
+			var oneDay = 1000 * 60 * 60 * 24;
+			var day = Math.floor(diff / oneDay);
+			var percentOfYear = day/365;
+			var radiansAngle = tau * percentOfYear;
+			var circleX = Math.cos(radiansAngle);
+			var circleY = Math.sin(radiansAngle);
+			planet.x = circleX * planet.distance;
+			planet.y = circleY * planet.distance;
+		}
+
+		if (keepPlanetCentered && planet.name == currentPlanet)
+		{
+			xCoord = -planet.x;
+			yCoord = -planet.y;
+		}
+	}
 }
 
 

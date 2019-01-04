@@ -51,13 +51,14 @@ var timerInterval;
 
 
 class Planet {
-	constructor(name, parentName, spritePath, diameter, distance, type) {
+	constructor(name, parentName, spritePath, diameter, distance, period, type) {
 		this.name = name;
 		this.parent = getPlanet(parentName);
 		this.sprite = new Image();
 		this.sprite.src = spritePath;
 		this.diameter = diameter;
 		this.distance = distance;
+		this.period = period;
 		this.type = type;
 		if (this.parent != null)
 		{
@@ -86,30 +87,30 @@ function getPlanet(name)
 }
 
 // Planet sizes are measured in km
-planets.push(new Planet("Sun", null, "assets/sun.png", 1391016, 0, "star"));
+planets.push(new Planet("Sun", null, "assets/sun.png", 1391016, 0, 0, "star"));
 
-planets.push(new Planet("Mercury", "Sun", "assets/mercury.png", 4879, 57909050, "planet"));
+planets.push(new Planet("Mercury", "Sun", "assets/mercury.png", 4879, 57909050, 87.969, "planet"));
 
-planets.push(new Planet("Venus", "Sun", "assets/venus.png", 12104, 108208000, "planet"));
+planets.push(new Planet("Venus", "Sun", "assets/venus.png", 12104, 108208000, 224.701, "planet"));
 
-planets.push(new Planet("Earth", "Sun", "assets/earth.png", 12742, 149598023, "planet"));
-planets.push(new Planet("Moon", "Earth", "assets/moon.png", 3474, 384400, "moon"));
+planets.push(new Planet("Earth", "Sun", "assets/earth.png", 12742, 149598023, 365.256363004, "planet"));
+planets.push(new Planet("Moon", "Earth", "assets/moon.png", 3474, 384400, 27.321661, "moon"));
 
-planets.push(new Planet("Mars", "Sun", "assets/mars.png", 6779, 227939200, "planet"));
-planets.push(new Planet("Phobos", "Mars", "assets/phobos.png", 11, 9376, "moon"));
-planets.push(new Planet("Deimos", "Mars", "assets/deimos.png", 6.2, 23463, "moon"));
+planets.push(new Planet("Mars", "Sun", "assets/mars.png", 6779, 227939200, 686.971, "planet"));
+planets.push(new Planet("Phobos", "Mars", "assets/phobos.png", 11, 9376, 0.31891023, "moon"));
+planets.push(new Planet("Deimos", "Mars", "assets/deimos.png", 6.2, 23463, 1.263, "moon"));
 
-planets.push(new Planet("Jupiter", "Sun", "assets/jupiter.png", 139822, 778570000, "planet"));
-planets.push(new Planet("Io", "Jupiter", "assets/io.png", 1821, 421700, "moon"));
-planets.push(new Planet("Europa", "Jupiter", "assets/europa.png", 1560.8, 670900, "moon"));
-planets.push(new Planet("Ganymede", "Jupiter", "assets/ganymede.png", 2634.1, 1070400, "moon"));
-planets.push(new Planet("Callisto", "Jupiter", "assets/callisto.png", 2410.3, 1882700, "moon"));
+planets.push(new Planet("Jupiter", "Sun", "assets/jupiter.png", 139822, 778570000, 4332.59, "planet"));
+planets.push(new Planet("Io", "Jupiter", "assets/io.png", 1821, 421700, 1.769137786, "moon"));
+planets.push(new Planet("Europa", "Jupiter", "assets/europa.png", 1560.8, 670900, 3.551181, "moon"));
+planets.push(new Planet("Ganymede", "Jupiter", "assets/ganymede.png", 2634.1, 1070400, 7.15455296, "moon"));
+planets.push(new Planet("Callisto", "Jupiter", "assets/callisto.png", 2410.3, 1882700, 16.6890184, "moon"));
 
-planets.push(new Planet("Saturn", "Sun", "assets/saturn.png", 116464, 1433530000, "planet"));
+planets.push(new Planet("Saturn", "Sun", "assets/saturn.png", 116464, 1433530000, 10759.22, "planet"));
 
-planets.push(new Planet("Uranus", "Sun", "assets/uranus.png", 50724, 2875040000, "planet"));
+planets.push(new Planet("Uranus", "Sun", "assets/uranus.png", 50724, 2875040000, 30688.5, "planet"));
 
-planets.push(new Planet("Neptune", "Sun", "assets/neptune.png", 49244, 4500000000, "planet"));
+planets.push(new Planet("Neptune", "Sun", "assets/neptune.png", 49244, 4500000000, 60182, "planet"));
 
 
 function init()
@@ -182,7 +183,7 @@ function draw()
 	{
 		// Draw the planet
 		var size = planet.diameter * scaleFactor;
-		if (size < minPlanetSize)
+		if (size < minPlanetSize && (planet.type == "planet" || planet.type == "star"))
 			size = minPlanetSize;
 		var screenX = (planet.x + xCoord) * scaleFactor - size/2 + halfScreenWidth;
 		var screenY = (planet.y + yCoord) * scaleFactor - size/2 + halfScreenHeight;
@@ -205,14 +206,11 @@ function draw()
 		}
 
 		// Draw the orbit
-		if (showOrbits)
+		if (showOrbits && planet.name != "Sun" && (planet.parent.name != "Sun" || size <= minPlanetSize))
 		{
-			if (planet.name != "Sun")
-			{
-				ctx.beginPath();
-				ctx.arc((planet.parent.x + xCoord) * scaleFactor + halfScreenWidth, (planet.parent.y + yCoord) * scaleFactor + halfScreenHeight, planet.distance * scaleFactor, 0, tau);
-				ctx.stroke();
-			}
+			ctx.beginPath();
+			ctx.arc((planet.parent.x + xCoord) * scaleFactor + halfScreenWidth, (planet.parent.y + yCoord) * scaleFactor + halfScreenHeight, planet.distance * scaleFactor, 0, tau);
+			ctx.stroke();
 		}
 	}
 
@@ -422,19 +420,19 @@ function updatePlanetPositions()
 {
 	for (var planet of planets)
 	{
-		if (planet.name == "Earth")
+
+		if (planet.type != "star")
 		{
-			//var now = new Date();
-			var start = new Date(displayedTime.getFullYear(), 0, 0);
+			var start = new Date(new Date().getFullYear(), 0, 0);
 			var diff = displayedTime - start;
 			var oneDay = 1000 * 60 * 60 * 24;
 			var day = Math.floor(diff / oneDay);
-			var percentOfYear = day/365;
+			var percentOfYear = day/planet.period;
 			var radiansAngle = tau * percentOfYear;
 			var circleX = Math.cos(radiansAngle);
 			var circleY = Math.sin(radiansAngle);
-			planet.x = circleX * planet.distance;
-			planet.y = circleY * planet.distance;
+			planet.x = planet.parent.x + circleX * planet.distance;
+			planet.y = planet.parent.y + circleY * planet.distance;
 		}
 
 		if (keepPlanetCentered && planet.name == currentPlanet)

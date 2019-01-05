@@ -34,6 +34,7 @@ const minZoomLevel = 1;
 const maxZoomLevel = 50;
 var zoomMultipliers = [];
 var zoom; // The zoom factor
+const zoomMultiplierMoonThreshold = 256;
 var scaleFactor; // The zoom factor x kmPerPixel
 var xCoord = 0; // The coordinates of the center of the screen
 var yCoord = 0;
@@ -119,7 +120,7 @@ planets.push(new Planet("Venus", "Sun", "assets/venus.png", 12104, 108208000, 22
 planets.push(new Planet("Earth", "Sun", "assets/earth.png", 12742, 149598023, 365.256363004, 0.0167086, 358.617, "planet"));
 planets.push(new Planet("Moon", "Earth", "assets/moon.png", 3474, 384400, 27.321661, 0.0549, 0, "moon"));
 
-planets.push(new Planet("Mars", "Sun", "assets/mars.png", 6779, 227939200, 686.971, 0.0934, 0, "planet"));
+planets.push(new Planet("Mars", "Sun", "assets/mars.png", 6779, 227939200, 686.971, 0.0934, 19.387, "planet"));
 planets.push(new Planet("Phobos", "Mars", "assets/phobos.png", 11, 9376, 0.31891023, 0.0151, 0, "moon"));
 planets.push(new Planet("Deimos", "Mars", "assets/deimos.png", 6.2, 23463, 1.263, 0.00033, 0, "moon"));
 
@@ -185,6 +186,7 @@ function init()
 	window.addEventListener("resize", onWindowResize);
 		
 	// Start rendering the map
+	updatePlanetPositions();
 	setInterval(draw, 10);
 }
 
@@ -199,22 +201,21 @@ function draw()
 	ctx.clearRect(0, 0, canvas.width, canvas.height);
 	ctx.strokeStyle = "rgb(50, 50, 50)";
 	ctx.fillStyle = "white";
-	ctx.font = "24px Courier New";
 	
 	for (var planet of planets)
 	{
 		// Draw the planet
 		var size = planet.diameter * scaleFactor;
-		if (size < minPlanetSize && (planet.type == "planet" || planet.type == "star"))
+		if (size < minPlanetSize && (planet.type == "planet" || planet.type == "star" || zoom >= zoomMultiplierMoonThreshold))
 			size = minPlanetSize;
 		var screenX = (planet.x + xCoord) * scaleFactor - size/2 + halfScreenWidth;
 		var screenY = (planet.y + yCoord) * scaleFactor - size/2 + halfScreenHeight;
 		ctx.drawImage(planet.sprite, screenX, screenY, size, size);
 
 		// Draw the label
-		if (showLabels)
+		if (showLabels && (zoom >= zoomMultiplierMoonThreshold || planet.type != "moon"))
 		{
-			
+			ctx.font = "18px Courier New";
 			if (planet.type == "planet" || planet.type == "star")
 			{
 				ctx.textAlign = "center";
@@ -228,9 +229,9 @@ function draw()
 		}
 
 		// Draw the orbit
-		if (showOrbits && planet.name != "Sun" && (planet.parent.name != "Sun" || size <= minPlanetSize))
+		if (showOrbits && planet.name != "Sun" && ((planet.type == "planet" && size <= minPlanetSize) || (planet.type == "moon" && zoom >= zoomMultiplierMoonThreshold)))
 		{	
-			var x = (planet.parent.x - planet.distanceFromCenterToFocus + xCoord) * scaleFactor + halfScreenWidth;
+			var x = (planet.parent.x + planet.distanceFromCenterToFocus + xCoord) * scaleFactor + halfScreenWidth;
 			var y = (planet.parent.y + yCoord) * scaleFactor + halfScreenHeight;
 			var radiusX = planet.semiMajorAxis * scaleFactor;
 			var radiusY = planet.semiMinorAxis * scaleFactor;
@@ -241,6 +242,7 @@ function draw()
 	}
 
 	// Debug info
+	ctx.font = "24px Courier New";
 	if (showDebug)
 	{
 		ctx.textAlign = "left";
@@ -465,43 +467,34 @@ function updatePlanetPositions()
 
 		if (planet.type != "star")
 		{
+			// Calculate how far this object is into its orbit
+			// 'Year' here refers to the period of the object - ie. one year for Earth, 27 days for the moon, etc.
 			var msSinceEpoch = displayedTime - epoch;
 			var daysSinceEpoch = Math.floor(msSinceEpoch / oneDay);
 			var daysIntoYear = daysSinceEpoch % planet.period;
 			var percentOfYear = daysIntoYear / planet.period;
 
-			var meanAnomaly = (planet.meanAnomalyAtEpoch + percentOfYear * tau) % tau; // an angle that is zero at periapsis and increases at a constant rate of 2 PI radians per orbit
-			planet.meanAnomaly = meanAnomaly;
-			// Use Newton's method to find the eccentric anomaly	
-			var eccentricAnomaly = meanAnomaly;
+			// Mean anomaly is an angle that is zero at periapsis and increases at a constant rate of 2 PI radians per orbit
+			planet.meanAnomaly = (planet.meanAnomalyAtEpoch + percentOfYear * tau) % tau; 
+			// Use Newton's method to find the eccentric anomaly from the mean anomaly
+			planet.eccentricAnomaly = planet.meanAnomaly;
 			var i = 0;
 			while (i < 5)
 			{
-				var delta = (eccentricAnomaly - planet.eccentricity * Math.sin(eccentricAnomaly) - meanAnomaly)/(1 - planet.eccentricity * Math.cos(eccentricAnomaly));
-				eccentricAnomaly -= delta;
+				// TODO: check correctness
+				var delta = (planet.eccentricAnomaly - planet.eccentricity * Math.sin(planet.eccentricAnomaly) - planet.meanAnomaly)/(1 - planet.eccentricity * Math.cos(planet.eccentricAnomaly));
+				planet.eccentricAnomaly -= delta;
 				i++;
 			}
-			planet.eccentricAnomaly = eccentricAnomaly;
-			var trueAnomaly = 2 * Math.atan(Math.sqrt((1 + planet.eccentricity) / (1 - planet.eccentricity)) * Math.tan(eccentricAnomaly/2));
-
-			//trueAnomaly = Math.acos((Math.cos(eccentricAnomaly) - planet.eccentricity)/(1-planet.eccentricity*Math.cos(eccentricAnomaly))); // acos
-			planet.trueAnomaly = trueAnomaly;
-			var radius = planet.semiMajorAxis * (1 - planet.eccentricity * Math.cos(eccentricAnomaly));
-
-			//percentOfYear = daysSinceEpoch / planet.period;
-			var circleX = -Math.cos(planet.trueAnomaly);
-			var circleY = Math.sin(planet.trueAnomaly);
-
-			//var L = L0 + Ldot * tCenturiesFromJ2000 + b * Math.pow(tCenturiesFromJ2000, 2) + c * Math.cos(f * tCenturiesFromJ2000) + s * Math.sin(f * tCenturiesFromJ2000);
-
-			//var radius = (planet.semiMajorAxis + planet.semiMinorAxis) / 2;
-			//var angle = (planet.period * radius * radius) / (Math.PI * planet.semiMajorAxis * planet.semiMinorAxis * 2 * daysSinceEpoch); 
-			//circleX = -Math.cos(angle);
-			//circleY = Math.sin(angle);
+			// True anomaly is the angle from the parent object to this object
+			planet.trueAnomaly = 2 * Math.atan(Math.sqrt((1 + planet.eccentricity) / (1 - planet.eccentricity)) * Math.tan(planet.eccentricAnomaly/2));
+			// The radius is the distance from the parent object to this object
+			var radius = planet.semiMajorAxis * (1 - planet.eccentricity * Math.cos(planet.eccentricAnomaly));
 			
-
-			planet.x = planet.parent.x + circleX * radius;
-			planet.y = planet.parent.y + circleY * radius;
+			// The true anomaly and radius are the polar coordinates of the object
+			// Convert them to cartesian coords and add the parent's postion to get the actual coords of the object
+			planet.x = planet.parent.x - Math.cos(planet.trueAnomaly) * radius;
+			planet.y = planet.parent.y + Math.sin(planet.trueAnomaly) * radius;
 		}
 
 		if (keepPlanetCentered && planet == currentPlanet)

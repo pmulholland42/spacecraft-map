@@ -20,6 +20,11 @@ canvas
 	height: 100%;
 }
 
+a
+{
+	text-decoration: none;
+}
+
 #errormessage
 {
 	color: white;
@@ -47,11 +52,37 @@ canvas
 .panel-header
 {
 	text-align: center; 
-	padding-bottom: 5px;
+	padding-bottom: 10px;
+	display: inline;
 }
 
 .time-button
 {
     padding: 10px;
+}
+
+.grippy
+{
+	content: '....';
+	width: 10px;
+	height: 20px;
+	display: inline-block;
+	overflow: hidden;
+	line-height: 5px;
+	padding: 3px 4px;
+	padding-bottom: 10px;
+	cursor: move;
+	vertical-align: middle;
+	margin-top: -.7em;
+	margin-right: .3em;
+	font-size: 12px;
+	font-family: sans-serif;
+	letter-spacing: 2px;
+	color: #cccccc;
+	text-shadow: 1px 0 1px black;
+}
+.grippy::after
+{
+	content: '.. .. .. ..';
 }
 

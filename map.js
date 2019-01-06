@@ -8,10 +8,13 @@ var optionsPanel;
 var infoPanel;
 var timePanel;
 var planetLabel;
+var planetInfo;
+var wikiLink;
 var halfScreenWidth = window.innerWidth/2;
 var halfScreenHeight = window.innerHeight/2;
 var updateCanvas = true;
 const noObjectSelected = "No object selected";
+const wikiURL ="https://en.wikipedia.org/wiki/NAME_(TYPE)";
 
 // Controls
 var mouseDown = false;
@@ -41,7 +44,7 @@ var yCoord = 0;
 const maxWidthDistance = 14960000000; // When zoomed out all the way, how much distance (km) should the width of the screen take up?
 var kmPerPixel = maxWidthDistance /  window.innerWidth; // Kilometers per pixel when zoomed out all the way
 const minPlanetSize = 4; // Minimum number of pixels that a planet takes up
-const minHitboxSize = 10; // Min number of pixels that can be clicked to select a planet
+const minHitboxSize = 15; // Min number of pixels that can be clicked to select a planet
 const tau = Math.PI * 2;
 var currentPlanet = null; // The planet currently selected
 
@@ -89,6 +92,7 @@ class Planet {
 		this.meanAnomaly = 0;
 		this.eccentricAnomaly = 0;
 		this.trueAnomaly = 0;
+		this.distanceFromParent = 0;
 
 		this.type = type;
 		if (this.parent != null)
@@ -125,7 +129,7 @@ planets.push(new Planet("Mercury", "Sun", "assets/mercury.png", 4879, 57909050, 
 planets.push(new Planet("Venus", "Sun", "assets/venus.png", 12104, 108208000, 224.701, 0.006772, 76.680, 54.884, 50.115, "planet"));
 
 planets.push(new Planet("Earth", "Sun", "assets/earth.png", 12742, 149598023, 365.256363004, 0.0167086, -11.26064, 114.20783, 358.617, "planet"));
-planets.push(new Planet("Moon", "Earth", "assets/moon.png", 3474, 384400, 27.321661, 0.0549, 0, 0, 0, "moon"));
+planets.push(new Planet("Moon", "Earth", "assets/moon.png", 3474, 384400, 27.321661, 0.0549, 0, 0, 123, "moon"));
 
 planets.push(new Planet("Mars", "Sun", "assets/mars.png", 6779, 227939200, 686.971, 0.0934, 49.558, 286.502, 19.387, "planet"));
 planets.push(new Planet("Phobos", "Mars", "assets/phobos.png", 11, 9376, 0.31891023, 0.0151, 0, 0, 0, "moon"));
@@ -156,19 +160,21 @@ function init()
 	errorMessage.style.display = "none";
 
 	optionsPanel = document.getElementById("options");
-	optionsPanel.style.top = (window.innerHeight*0.1) + "px";
-	optionsPanel.style.left = (window.innerWidth*0.7) + "px";
+	optionsPanel.style.top = (window.innerHeight*0.05) + "px";
+	optionsPanel.style.left = (window.innerWidth*0.8) + "px";
 
 	infoPanel = document.getElementById("info");
-	infoPanel.style.top = (window.innerHeight*0.5) + "px";
-	infoPanel.style.left = (window.innerWidth*0.1) + "px";
+	infoPanel.style.top = (window.innerHeight*0.05) + "px";
+	infoPanel.style.left = (window.innerHeight*0.05) + "px";
 
 	timePanel = document.getElementById("timeline");
 	timePanel.style.top = (window.innerHeight*0.85) + "px";
 	timePanel.style.left = (window.innerWidth*0.4) + "px";
 
 	planetLabel = document.getElementById("planetlabel");
-	planetLabel.textContent = noObjectSelected;
+
+	planetInfo = document.getElementById("planetinfo");
+	wikiLink = document.getElementById("wikilink");
 
 	showOrbits = document.getElementById("orbitsCheck").checked;
 	showLabels = document.getElementById("labelsCheck").checked;
@@ -194,6 +200,7 @@ function init()
 		
 	// Start rendering the map
 	updatePlanetPositions();
+	updateInfoBox();
 	setInterval(draw, 10);
 }
 
@@ -357,8 +364,15 @@ function onMouseDown(event)
 	{
 		// Start dragging a panel
 		// Keep track of where in the div it was clicked so it can be dropped smoothly
-		draggingPanel = true;
 		currentPanel = event.target;
+		while (currentPanel.className != "panel")
+		{
+			console.log(currentPanel.className);
+			currentPanel = currentPanel.parentElement;
+		}
+
+
+		draggingPanel = true;
 		var rect = currentPanel.getBoundingClientRect();
 		panelX = rect.left - event.clientX;
 		panelY = rect.top - event.clientY;
@@ -396,7 +410,7 @@ document.onkeydown = function onKeyDown(event)
 	if (event.keyCode == 27) // Escape
 	{
 		currentPlanet = null;
-		planetLabel.textContent = noObjectSelected;
+		updateInfoBox();
 	}
 }
 
@@ -470,7 +484,6 @@ function updatePlanetPositions()
 {
 	for (var planet of planets)
 	{
-
 		if (planet.type != "star")
 		{
 			// Calculate how far this object is into its orbit
@@ -494,14 +507,17 @@ function updatePlanetPositions()
 			}
 			// True anomaly is the angle from the parent object to this object
 			planet.trueAnomaly = 2 * Math.atan(Math.sqrt((1 + planet.eccentricity) / (1 - planet.eccentricity)) * Math.tan(planet.eccentricAnomaly/2));
-			planet.trueAnomaly += planet.longitudeOfPeriapsis;
-			// The radius is the distance from the parent object to this object
-			var radius = planet.semiMajorAxis * (1 - planet.eccentricity * Math.cos(planet.eccentricAnomaly));
+			if (planet.trueAnomaly < 0)
+			{
+				planet.trueAnomaly = tau + planet.trueAnomaly;
+			}
+			// The radius = the distance from the parent object to this object
+			planet.distanceFromParent = planet.semiMajorAxis * (1 - planet.eccentricity * Math.cos(planet.eccentricAnomaly));
 			
 			// The true anomaly and radius are the polar coordinates of the object
-			// Convert them to cartesian coords and add the parent's postion to get the actual coords of the object
-			planet.x = planet.parent.x - Math.cos(planet.trueAnomaly) * radius;
-			planet.y = planet.parent.y + Math.sin(planet.trueAnomaly) * radius;
+			// Convert them to cartesian coords and add the parent's position to get the actual coords of the object
+			planet.x = planet.parent.x - Math.cos(planet.trueAnomaly + planet.longitudeOfPeriapsis) * planet.distanceFromParent;
+			planet.y = planet.parent.y + Math.sin(planet.trueAnomaly + planet.longitudeOfPeriapsis) * planet.distanceFromParent;
 		}
 
 		if (keepPlanetCentered && planet == currentPlanet)
@@ -510,6 +526,32 @@ function updatePlanetPositions()
 			yCoord = -planet.y;
 		}
 	}
+
+	updateInfoBox();
+}
+
+function updateInfoBox()
+{
+	var infoText = "";
+	if (currentPlanet != null)
+	{
+		if (currentPlanet.parent != null)
+		{
+			infoText += "Distance from " + currentPlanet.parent.name + ": " + Math.round(currentPlanet.distanceFromParent).toLocaleString() + " km\n";
+			infoText += "Period: " + currentPlanet.period + " days\n";
+			infoText += "Eccentricity: " + currentPlanet.eccentricity + "\n";
+			infoText += "Mean anomaly: " + (currentPlanet.meanAnomaly * 180 / Math.PI).toFixed(2) + "°\n"; 
+			infoText += "True anomaly: " + (currentPlanet.trueAnomaly * 180 / Math.PI).toFixed(2) + "°"; 
+		}
+		wikiLink.href = wikiURL.replace("NAME", currentPlanet.name).replace("TYPE", currentPlanet.type);
+		wikiLink.style.display = "";
+	}
+	else
+	{
+		planetLabel.textContent = noObjectSelected;
+		wikiLink.style.display = "none";
+	}
+	planetInfo.textContent = infoText;
 }
 
 

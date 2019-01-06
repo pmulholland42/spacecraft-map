@@ -16,15 +16,19 @@
 
         <!--Options panel-->
         <div id="options" class="panel">
-            <h3 class="panel-header">Options</h3>
+            <div class="grippy"></div>
+            <h3 class="panel-header">Options</h3><br/>
             <input id="orbitsCheck" type="checkbox" onchange="onCheck(event)" checked> Show orbits<br/>
             <input id="labelsCheck" type="checkbox" onchange="onCheck(event)" checked> Show labels<br/>
             <input id="backgroundCheck" type="checkbox"> Show background stars <br/>
             <input id="debugCheck" type="checkbox" onchange="onCheck(event)"> Show debug info<br/>
         </div>
         <div id="info" class="panel">
-            <h3 id="planetlabel" class="panel-header">No planet selected</h3>
-            <input id="focusCheck" type="checkbox" onchange="onCheck(event)" checked> Keep centered<br/>
+            <div class="grippy"></div>
+            <h3 id="planetlabel" class="panel-header">No planet selected</h3><br/>
+            <input id="focusCheck" type="checkbox" onchange="onCheck(event)" checked> Keep centered<br/><br/>
+            <a id="wikilink" href="https://en.wikipedia.org/wiki/Mercury_(planet)" target="_blank">Wikipedia</a>
+            <p id="planetinfo" style="white-space: pre-line"></p>
         </div>
         <div id="timeline" class="panel">
             <button id="resetTimeButton" type="button" class="timeButton" onclick="resetTime()">Current Time</button> 

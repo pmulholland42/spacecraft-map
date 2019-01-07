@@ -27,7 +27,7 @@ var lastMouseY = 0;
 
 // Options
 var showOrbits = true;
-var showLabels = true;
+var showLabels = false;
 var showDebug = false;
 var keepPlanetCentered = false;
 
@@ -42,6 +42,7 @@ var scaleFactor; // The zoom factor x kmPerPixel
 var xCoord = 0; // The coordinates of the center of the screen
 var yCoord = 0;
 const maxWidthDistance = 14960000000; // When zoomed out all the way, how much distance (km) should the width of the screen take up?
+const kmPerAU = 149597870;
 var kmPerPixel = maxWidthDistance /  window.innerWidth; // Kilometers per pixel when zoomed out all the way
 const minPlanetSize = 4; // Minimum number of pixels that a planet takes up
 const minHitboxSize = 15; // Min number of pixels that can be clicked to select a planet
@@ -51,6 +52,7 @@ var currentPlanet = null; // The planet currently selected
 // Time
 const epoch = Date.UTC(2000, 0, 1, 12, 0, 0); // J2000 epoch: January 1, 2000
 const oneDay = 86400000; // Number of milliseconds in one day
+const oneCentury = 1000*60*60*24*365.25*100; // Number of milliseconds in a century
 const dateOptions = { year: 'numeric', month: 'long', day: 'numeric', hour: "2-digit", minute: "2-digit" };
 var displayedTime = new Date();
 var timeDirection = 0; // -1, 0, or 1 for backwards, stopped, or forwards
@@ -59,51 +61,227 @@ var timerInterval;
 
 class Planet {
 	/**
-	 * @param {string} name - The name of the object
-	 * @param {string} parentName - The name of the object that this object orbits
-	 * @param {string} spritePath - The file path and name of the image for this object
-	 * @param {number} diameter - The diameter of the object, in kilometers
-	 * @param {number} semiMajorAxis - The semi-major axis of the object's orbit, in kilometers
-	 * @param {number} period - The period of the object's orbit, in days
-	 * @param {number} eccentricity - The eccentricity of the object's orbit. Should be between 0 and 1.
-	 * @param {number} longitudeOfAscendingNode - The angle from a reference direction to the direction of the ascending node, in degrees
-	 * @param {number} argumentOfPeriapsis - The angle from the body's ascending node to its periapsis, measured in the direction of motion, in degrees.
-	 * @param {number} meanAnomalyAtEpoch - The mean anomaly of the object's orbit at J2000, in degrees
-	 * @param {string} type - The type of object, eg. star, planet, or moon
+	 * @param {string} name The name of the object
+	 * @param {string} parentName The name of the object that this object orbits
+	 * @param {string} type The type of object, eg. star, planet, or moon
+	 * @param {string} spritePath The file path and name of the image for this object
+	 * @param {number} diameter The diameter of the object (km)
+	 * @param {Orbit} orbit The orbit of this object
 	 */
-	constructor(name, parentName, spritePath, diameter, semiMajorAxis, period, eccentricity, longitudeOfAscendingNode, argumentOfPeriapsis, meanAnomalyAtEpoch, type) {
+	constructor(name, parentName, type, spritePath, diameter, orbit) {
 		this.name = name;
 		this.parent = getPlanet(parentName);
+		this.type = type;
 		this.sprite = new Image();
 		this.sprite.src = spritePath;
 		this.diameter = diameter;
-		this.semiMajorAxis = semiMajorAxis;
-		this.period = period;
-		this.eccentricity = eccentricity;
-		this.semiMinorAxis = this.semiMajorAxis * Math.sqrt(1-Math.pow(this.eccentricity, 2)); // b = a * sqrt(1 - e^2)
-		this.distanceFromCenterToFocus = Math.sqrt(Math.pow(this.semiMajorAxis, 2) - Math.pow(this.semiMinorAxis, 2)); // c^2 = a^2 - b^2
-		this.meanMotion = tau / this.period;
+		this.orbit = orbit;
 
-		this.longitudeOfAscendingNode = longitudeOfAscendingNode * Math.PI / 180;
-		this.argumentOfPeriapsis = argumentOfPeriapsis * Math.PI / 180;
-		this.longitudeOfPeriapsis = this.longitudeOfAscendingNode + this.argumentOfPeriapsis;
-
-		this.meanAnomalyAtEpoch = meanAnomalyAtEpoch * Math.PI / 180;
-		this.meanAnomaly = 0;
-		this.eccentricAnomaly = 0;
-		this.trueAnomaly = 0;
-		this.distanceFromParent = 0;
-
-		this.type = type;
-		if (this.parent != null)
-		{
-			this.x = this.parent.x + semiMajorAxis;
-		}
-		else
-		{
-			this.x = 0;
-		}
+		this.x = 0;
 		this.y = 0;
+	}
+
+	/**
+	 * Sets the planet's coordinates to where they should be at a given time
+	 * @param {Date} time 
+	 */
+	setCoords(time)
+	{
+		// The radius = the distance from the parent object to this object
+		this.distanceFromParent = this.orbit.semiMajorAxis(time) * (1 - this.orbit.eccentricity(time) * Math.cos(toRadians(this.orbit.eccentricAnomaly(time)))) * kmPerAU;
+		var trueAnomaly = this.orbit.trueAnomaly(time);
+		var longitudeOfPeriapsis = this.orbit.longitudeOfPeriapsis(time);
+		var angle = toRadians(trueAnomaly + longitudeOfPeriapsis);
+		
+		// The true anomaly and radius are the polar coordinates of the object
+		// Convert them to cartesian coords and add the parent's position to get the actual coords of the object
+		this.x = this.parent.x + Math.cos(angle) * this.distanceFromParent;
+		this.y = this.parent.y - Math.sin(angle) * this.distanceFromParent;
+	}
+}
+
+class Orbit
+{
+	/**
+	 * 
+	 * @param {number} semiMajorAxis The semi-major axis of the orbit (AU)
+	 * @param {number} semiMajorAxisRate The rate of change of the semi-major axis (AU/century) 
+	 * @param {number} eccentricity The eccentricity of the orbit
+	 * @param {number} eccentricityRate The rate of change of the eccentricity per century
+	 * @param {number} inclination The inclination of the orbit (degrees)
+	 * @param {number} inclinationRate The rate of change of the inclination (degrees/century)
+	 * @param {number} meanLongitude The mean longitude of the object (degrees)
+	 * @param {number} meanLongitudeRate The rate of change of the mean longitude (degrees/century)
+	 * @param {number} longitudeOfPeriapsis The longitude of periapsis (degrees)
+	 * @param {number} longitudeOfPeriapsisRate The rate of change of the longitude of periapsis (degrees/century)
+	 * @param {number} longitudeOfAscendingNode The longitude of the ascending node (degrees/century)
+	 * @param {number} longitudeOfAscendingNodeRate The rate of change of the longitude of the ascending node (degrees/century)
+	 * @param {number} b Additional correction factor needed for Jupiter through Pluto
+	 * @param {number} c Additional correction factor needed for Jupiter through Pluto
+	 * @param {number} s Additional correction factor needed for Jupiter through Pluto
+	 * @param {number} f Additional correction factor needed for Jupiter through Pluto
+	 */
+	constructor(semiMajorAxis, semiMajorAxisRate, eccentricity, eccentricityRate, inclination, inclinationRate, meanLongitude, meanLongitudeRate, longitudeOfPeriapsis, longitudeOfPeriapsisRate, longitudeOfAscendingNode, longitudeOfAscendingNodeRate, b = 0, c = 0, s = 0, f = 0)
+	{
+		this.semiMajorAxisAtEpoch = semiMajorAxis;
+		this.semiMajorAxisRate = semiMajorAxisRate;
+
+		this.eccentricityAtEpoch = eccentricity;
+		this.eccentricityRate = eccentricityRate;
+
+		this.inclinationAtEpoch = inclination;
+		this.inclinationRate = inclinationRate;
+
+		this.meanLongitudeAtEpoch = meanLongitude;
+		this.meanLongitudeRate = meanLongitudeRate;
+
+		this.longitudeOfPeriapsisAtEpoch = longitudeOfPeriapsis;
+		this.longitudeOfPeriapsisRate = longitudeOfPeriapsisRate;
+
+		this.longitudeOfAscendingNodeAtEpoch = longitudeOfAscendingNode;
+		this.longitudeOfAscendingNodeRate = longitudeOfAscendingNodeRate;
+
+		this.b = b;
+		this.c = c;
+		this.s = s;
+		this.f = f;
+	}
+
+	/**
+	 * Returns the semi-major axis (AU) of this orbit at a given time
+	 * @param {Date} time 
+	 */
+	semiMajorAxis(time)
+	{
+		var centuriesSinceEpoch = (time - epoch) / oneCentury;
+		return this.semiMajorAxisAtEpoch + this.semiMajorAxisRate * centuriesSinceEpoch;
+	}
+
+	/**
+	 * Returns the semi-minor axis (AU) of this orbit at a given time
+	 * @param {Date} time 
+	 */
+	semiMinorAxis(time)
+	{
+		return this.semiMajorAxis(time) * Math.sqrt(1 - Math.pow(this.eccentricity(time), 2));
+	}
+
+	/**
+	 * Returns the distance (AU) from the center of the ellipse to the focus
+	 * @param {Date} time 
+	 */
+	distanceFromCenterToFocus(time)
+	{
+		return Math.sqrt(Math.pow(this.semiMajorAxis(time), 2) - Math.pow(this.semiMinorAxis(time), 2)); // c^2 = a^2 - b^2
+	}
+
+	/**
+	 * Returns the eccentricity of this orbit at a given time
+	 * @param {Date} time 
+	 */
+	eccentricity(time)
+	{
+		var centuriesSinceEpoch = (time - epoch) / oneCentury;
+		return this.eccentricityAtEpoch + this.eccentricityRate * centuriesSinceEpoch;
+	}
+
+	/**
+	 * Returns the inclination (degrees) of this orbit at a given time
+	 * @param {Date} time 
+	 */
+	inclination(time)
+	{
+		var centuriesSinceEpoch = (time - epoch) / oneCentury;
+		return this.inclinationAtEpoch + this.inclinationRate * centuriesSinceEpoch;
+	}
+
+	/**
+	 * Returns the mean longitude (degrees) of this orbit at a given time
+	 * @param {Date} time 
+	 */
+	meanLongitude(time)
+	{
+		var centuriesSinceEpoch = (time - epoch) / oneCentury;
+		return this.meanLongitudeAtEpoch + this.meanLongitudeRate * centuriesSinceEpoch;
+	}
+
+	/**
+	 * Returns the longitude of periapsis (degrees) of this orbit at a given time
+	 * @param {Date} time 
+	 */
+	longitudeOfPeriapsis(time)
+	{
+		var centuriesSinceEpoch = (time - epoch) / oneCentury;
+		return this.longitudeOfPeriapsisAtEpoch + this.longitudeOfPeriapsisRate * centuriesSinceEpoch;
+	}
+
+	/**
+	 * Returns the longitude of the ascending node (degrees) of this orbit at a given time
+	 * @param {Date} time 
+	 */
+	longitudeOfAscendingNode(time)
+	{
+		var centuriesSinceEpoch = (time - epoch) / oneCentury;
+		return this.longitudeOfAscendingNodeAtEpoch + this.longitudeOfAscendingNodeRate * centuriesSinceEpoch;
+	}
+
+	/**
+	 * Returns the longitude of periapsis (degrees) of this orbit at a given time
+	 * @param {Date} time 
+	 */
+	argumentOfPeriapsis(time)
+	{
+		return this.longitudeOfPeriapsis(time) - this.longitudeOfAscendingNode(time);
+	}
+
+	/**
+	 * Returns the mean anomaly (degrees) of the object at a given time
+	 * @param {Date} time 
+	 */
+	meanAnomaly(time)
+	{
+		var centuriesSinceEpoch = (time - epoch) / oneCentury;
+		var meanAnomaly = this.meanLongitude(time) - this.longitudeOfPeriapsis(time);
+		// Correction factor needed for outer planets
+		meanAnomaly += this.b * Math.pow(centuriesSinceEpoch, 2) + this.c * Math.cos(toRadians(this.f * centuriesSinceEpoch)) + this.s * Math.sin(toRadians(this.f * centuriesSinceEpoch));
+		return meanAnomaly;
+	}
+
+	/**
+	 * Returns the eccentric anomaly (degrees) of the object at a given time
+	 * @param {Date} time 
+	 */
+	eccentricAnomaly(time)
+	{
+		var meanAnomaly = this.meanAnomaly(time);
+		var eccentricity = this.eccentricity(time);
+		var eccentricAnomaly = meanAnomaly;
+
+		for (var i = 0; i < 5; i++)
+		{
+			var delta = (eccentricAnomaly - eccentricity * Math.sin(toRadians(eccentricAnomaly)) - meanAnomaly)/(1 - eccentricity * Math.cos(toRadians(eccentricAnomaly)));
+			eccentricAnomaly -= delta;
+		}
+
+		return eccentricAnomaly;
+	}
+
+	/**
+	 * Returns the true anomaly (degrees) of the object at a given time
+	 * @param {Date} time 
+	 */
+	trueAnomaly(time)
+	{
+		var eccentricAnomaly = this.eccentricAnomaly(time);
+
+		var trueAnomaly = toDegrees(2 * Math.atan(Math.sqrt((1 + this.eccentricity(time)) / (1 - this.eccentricity(time))) * Math.tan(toRadians(eccentricAnomaly/2))));
+
+		if (trueAnomaly < 0)
+		{
+			trueAnomaly += 360;
+		}
+
+		return trueAnomaly;
 	}
 }
 
@@ -121,8 +299,15 @@ function getPlanet(name)
 	return null;
 }
 
-// Planet sizes are measured in km
-planets.push(new Planet("Sun", null, "assets/sun.png", 1391016, 0, 0, 0, 0, 0, 0, "star"));
+var sun = new Planet("The Sun", null, "star", "assets/sun.png", 1391016, new Orbit(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0));
+planets.push(sun);
+var mercury = new Planet("Mercury", "The Sun", "planet", "assets/mercury.png", 4879,
+	new Orbit(0.38709843, 0, 0.20563661, 0.00002123, 7.00559432, -0.00590158, 252.25166724, 149472.67486623, 77.45771895, 0.15940013, 48.33961819, -0.12214182));
+
+planets.push(mercury);
+
+
+/*planets.push(new Planet("Sun", null, "assets/sun.png", 1391016, 0, 0, 0, 0, 0, 0, "star"));
 
 planets.push(new Planet("Mercury", "Sun", "assets/mercury.png", 4879, 57909050, 87.969, 0.205630, 48.331, 29.124, 174.796, "planet"));
 
@@ -145,7 +330,7 @@ planets.push(new Planet("Saturn", "Sun", "assets/saturn.png", 116464, 1433530000
 
 planets.push(new Planet("Uranus", "Sun", "assets/uranus.png", 50724, 2875040000, 30688.5, 0.046381, 74.006, 96.998857, 142.2386, "planet"));
 
-planets.push(new Planet("Neptune", "Sun", "assets/neptune.png", 49244, 4500000000, 60182, 0.009456, 131.784, 276.336, 256.228, "planet"));
+planets.push(new Planet("Neptune", "Sun", "assets/neptune.png", 49244, 4500000000, 60182, 0.009456, 131.784, 276.336, 256.228, "planet"));*/
 
 function init()
 {
@@ -243,16 +428,17 @@ function draw()
 		}
 
 		// Draw the orbit
-		if (showOrbits && planet.name != "Sun" && ((planet.type == "planet" && size <= minPlanetSize) || (planet.type == "moon" && zoom >= zoomMultiplierMoonThreshold)))
-		{	
-			var x = (planet.parent.x - xCoord - planet.distanceFromCenterToFocus * Math.cos(planet.longitudeOfPeriapsis)) * scaleFactor + halfScreenWidth;
-			var y = (planet.parent.y - yCoord + planet.distanceFromCenterToFocus * Math.sin(planet.longitudeOfPeriapsis)) * scaleFactor + halfScreenHeight;
+		/*if (showOrbits && planet.name != "Sun" && ((planet.type == "planet" && size <= minPlanetSize) || (planet.type == "moon" && zoom >= zoomMultiplierMoonThreshold)))
+		{
+
+			var x = (planet.parent.x - xCoord - planet.orbit.distanceFromCenterToFocus() * Math.cos(planet.longitudeOfPeriapsis)) * scaleFactor + halfScreenWidth;
+			var y = (planet.parent.y - yCoord + planet.orbit.distanceFromCenterToFocus() * Math.sin(planet.longitudeOfPeriapsis)) * scaleFactor + halfScreenHeight;
 			var radiusX = planet.semiMajorAxis * scaleFactor;
 			var radiusY = planet.semiMinorAxis * scaleFactor;
 			ctx.beginPath();
 			ctx.ellipse(x, y, radiusX, radiusY, -planet.longitudeOfPeriapsis, 0, tau);
 			ctx.stroke();
-		}
+		}*/
 	}
 
 	// Debug info
@@ -272,6 +458,11 @@ function draw()
 			ctx.fillText("Eccentric Anomaly: " + currentPlanet.eccentricAnomaly, 100, 240);
 			ctx.fillText("True Anomaly: " + currentPlanet.trueAnomaly, 100, 260);
 		}
+		ctx.fillText("x: " + mercury.x, 100, 300);
+		ctx.fillText("y: " + mercury.y, 100, 320);
+		ctx.fillText("mean: " + mercury.orbit.meanAnomaly(new Date(displayedTime)) % 360, 100, 340);
+		ctx.fillText("eccentric: " + mercury.orbit.eccentricAnomaly(new Date(displayedTime)) % 360, 100, 360);
+		ctx.fillText("true: " + mercury.orbit.trueAnomaly(new Date(displayedTime)) % 360, 100, 380);
 	}
 
 	// On-screen text
@@ -367,7 +558,6 @@ function onMouseDown(event)
 		currentPanel = event.target;
 		while (currentPanel.className != "panel")
 		{
-			console.log(currentPanel.className);
 			currentPanel = currentPanel.parentElement;
 		}
 
@@ -488,38 +678,7 @@ function updatePlanetPositions()
 	{
 		if (planet.type != "star")
 		{
-			// Calculate how far this object is into its orbit
-			// 'Year' here refers to the period of the object - ie. one year for Earth, 27 days for the moon, etc.
-			var msSinceEpoch = displayedTime - epoch;
-			var daysSinceEpoch = Math.floor(msSinceEpoch / oneDay);
-			var daysIntoYear = daysSinceEpoch % planet.period;
-			var percentOfYear = daysIntoYear / planet.period;
-
-			// Mean anomaly is an angle that is zero at periapsis and increases at a constant rate of 2 PI radians per orbit
-			planet.meanAnomaly = (planet.meanAnomalyAtEpoch + percentOfYear * tau) % tau; 
-			// Use Newton's method to find the eccentric anomaly from the mean anomaly
-			planet.eccentricAnomaly = planet.meanAnomaly;
-			var i = 0;
-			while (i < 5)
-			{
-				// TODO: check correctness
-				var delta = (planet.eccentricAnomaly - planet.eccentricity * Math.sin(planet.eccentricAnomaly) - planet.meanAnomaly)/(1 - planet.eccentricity * Math.cos(planet.eccentricAnomaly));
-				planet.eccentricAnomaly -= delta;
-				i++;
-			}
-			// True anomaly is the angle from the parent object to this object
-			planet.trueAnomaly = 2 * Math.atan(Math.sqrt((1 + planet.eccentricity) / (1 - planet.eccentricity)) * Math.tan(planet.eccentricAnomaly/2));
-			if (planet.trueAnomaly < 0)
-			{
-				planet.trueAnomaly = tau + planet.trueAnomaly;
-			}
-			// The radius = the distance from the parent object to this object
-			planet.distanceFromParent = planet.semiMajorAxis * (1 - planet.eccentricity * Math.cos(planet.eccentricAnomaly));
-			
-			// The true anomaly and radius are the polar coordinates of the object
-			// Convert them to cartesian coords and add the parent's position to get the actual coords of the object
-			planet.x = planet.parent.x + Math.cos(planet.trueAnomaly + planet.longitudeOfPeriapsis) * planet.distanceFromParent;
-			planet.y = planet.parent.y - Math.sin(planet.trueAnomaly + planet.longitudeOfPeriapsis) * planet.distanceFromParent;
+			planet.setCoords(new Date(displayedTime));
 		}
 
 		if (keepPlanetCentered && planet == currentPlanet)
@@ -556,6 +715,15 @@ function updateInfoBox()
 	planetInfo.textContent = infoText;
 }
 
+function toRadians(angle)
+{
+	return angle * (Math.PI / 180);
+}
+
+function toDegrees(angle)
+{
+	return angle * (180 / Math.PI);
+}
 
 
 

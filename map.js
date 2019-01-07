@@ -179,7 +179,7 @@ function init()
 	showOrbits = document.getElementById("orbitsCheck").checked;
 	showLabels = document.getElementById("labelsCheck").checked;
 	showDebug = document.getElementById("debugCheck").checked;
-	keepPlanetCentered = document.getElementById("focusCheck").checked;
+	document.getElementById("focusCheck").checked = false;
 
 	// Set up zoom curve
 	// This needs to be tweaked
@@ -222,8 +222,8 @@ function draw()
 		var size = planet.diameter * scaleFactor;
 		if (size < minPlanetSize && (planet.type == "planet" || planet.type == "star" || zoom >= zoomMultiplierMoonThreshold))
 			size = minPlanetSize;
-		var screenX = (planet.x + xCoord) * scaleFactor - size/2 + halfScreenWidth;
-		var screenY = (planet.y + yCoord) * scaleFactor - size/2 + halfScreenHeight;
+		var screenX = (planet.x - xCoord) * scaleFactor - size/2 + halfScreenWidth;
+		var screenY = (planet.y - yCoord) * scaleFactor - size/2 + halfScreenHeight;
 		ctx.drawImage(planet.sprite, screenX, screenY, size, size);
 
 		// Draw the label
@@ -245,9 +245,9 @@ function draw()
 		// Draw the orbit
 		if (showOrbits && planet.name != "Sun" && ((planet.type == "planet" && size <= minPlanetSize) || (planet.type == "moon" && zoom >= zoomMultiplierMoonThreshold)))
 		{	
-			var x = (planet.parent.x + xCoord + planet.distanceFromCenterToFocus * Math.cos(planet.longitudeOfPeriapsis)) * scaleFactor + halfScreenWidth;
-			var y = (planet.parent.y + yCoord - planet.distanceFromCenterToFocus * Math.sin(planet.longitudeOfPeriapsis)) * scaleFactor + halfScreenHeight;
-			var radiusX = planet.semiMajorAxis * scaleFactor; //+ planet.distanceFromCenterToFocus * Math.cos(planet.longitudeOfPeriapsis);
+			var x = (planet.parent.x - xCoord - planet.distanceFromCenterToFocus * Math.cos(planet.longitudeOfPeriapsis)) * scaleFactor + halfScreenWidth;
+			var y = (planet.parent.y - yCoord + planet.distanceFromCenterToFocus * Math.sin(planet.longitudeOfPeriapsis)) * scaleFactor + halfScreenHeight;
+			var radiusX = planet.semiMajorAxis * scaleFactor;
 			var radiusY = planet.semiMinorAxis * scaleFactor;
 			ctx.beginPath();
 			ctx.ellipse(x, y, radiusX, radiusY, -planet.longitudeOfPeriapsis, 0, tau);
@@ -290,8 +290,8 @@ function onClick(event)
 		// Get the planet that was clicked
 		for (var planet of planets)
 		{
-			var screenX = (planet.x + xCoord) * scaleFactor + halfScreenWidth;
-			var screenY = (planet.y + yCoord) * scaleFactor + halfScreenHeight;
+			var screenX = (planet.x - xCoord) * scaleFactor + halfScreenWidth;
+			var screenY = (planet.y - yCoord) * scaleFactor + halfScreenHeight;
 			var size = planet.diameter * scaleFactor;
 			if (size < minHitboxSize)
 				size = minHitboxSize;	
@@ -343,8 +343,8 @@ function onScroll(event)
 	{
 		// Adjust the offset so that the coord under the cursor stays the same
 		// This is what makes it so you don't just zoom straight in and out, but instead it moves with the mouse
-		xCoord -= initialX - finalX;
-		yCoord -= initialY - finalY;
+		xCoord += initialX - finalX;
+		yCoord += initialY - finalY;
 	}
 
 	updateCanvas = true;
@@ -396,8 +396,8 @@ function onMouseMove(event)
 		else if (!keepPlanetCentered || currentPlanet == null)
 		{
 			// Pan around the map
-			xCoord += (event.clientX - lastMouseX) * kmPerPixel / zoom;
-			yCoord += (event.clientY - lastMouseY) * kmPerPixel / zoom;
+			xCoord += (lastMouseX - event.clientX) * kmPerPixel / zoom;
+			yCoord += (lastMouseY - event.clientY) * kmPerPixel / zoom;
 			lastMouseX = event.clientX;
 			lastMouseY = event.clientY;
 			updateCanvas = true;
@@ -410,6 +410,8 @@ document.onkeydown = function onKeyDown(event)
 	if (event.keyCode == 27) // Escape
 	{
 		currentPlanet = null;
+		document.getElementById("focusCheck").checked = false;
+		keepPlanetCentered = false;
 		updateInfoBox();
 	}
 }
@@ -516,14 +518,14 @@ function updatePlanetPositions()
 			
 			// The true anomaly and radius are the polar coordinates of the object
 			// Convert them to cartesian coords and add the parent's position to get the actual coords of the object
-			planet.x = planet.parent.x - Math.cos(planet.trueAnomaly + planet.longitudeOfPeriapsis) * planet.distanceFromParent;
-			planet.y = planet.parent.y + Math.sin(planet.trueAnomaly + planet.longitudeOfPeriapsis) * planet.distanceFromParent;
+			planet.x = planet.parent.x + Math.cos(planet.trueAnomaly + planet.longitudeOfPeriapsis) * planet.distanceFromParent;
+			planet.y = planet.parent.y - Math.sin(planet.trueAnomaly + planet.longitudeOfPeriapsis) * planet.distanceFromParent;
 		}
 
 		if (keepPlanetCentered && planet == currentPlanet)
 		{
-			xCoord = -planet.x;
-			yCoord = -planet.y;
+			xCoord = planet.x;
+			yCoord = planet.y;
 		}
 	}
 

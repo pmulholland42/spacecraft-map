@@ -87,13 +87,11 @@ class Planet {
 	 */
 	setCoords(time)
 	{
-		// The radius = the distance from the parent object to this object
-		this.distanceFromParent = this.orbit.semiMajorAxis(time) * (1 - this.orbit.eccentricity(time) * Math.cos(toRadians(this.orbit.eccentricAnomaly(time)))) * kmPerAU;
-		var trueAnomaly = this.orbit.trueAnomaly(time);
-		var longitudeOfPeriapsis = this.orbit.longitudeOfPeriapsis(time);
-		var angle = toRadians(trueAnomaly + longitudeOfPeriapsis);
+		this.orbit.update(time);
+		this.distanceFromParent = this.orbit.semiMajorAxis * (1 - this.orbit.eccentricity * Math.cos(toRadians(this.orbit.eccentricAnomaly))) * kmPerAU;
+		var angle = toRadians(this.orbit.trueAnomaly + this.orbit.longitudeOfPeriapsis);
 		
-		// The true anomaly and radius are the polar coordinates of the object
+		// The distance and angle are the polar coordinates of the object relative to its parent
 		// Convert them to cartesian coords and add the parent's position to get the actual coords of the object
 		this.x = this.parent.x + Math.cos(angle) * this.distanceFromParent;
 		this.y = this.parent.y - Math.sin(angle) * this.distanceFromParent;
@@ -123,21 +121,27 @@ class Orbit
 	 */
 	constructor(semiMajorAxis, semiMajorAxisRate, eccentricity, eccentricityRate, inclination, inclinationRate, meanLongitude, meanLongitudeRate, longitudeOfPeriapsis, longitudeOfPeriapsisRate, longitudeOfAscendingNode, longitudeOfAscendingNodeRate, b = 0, c = 0, s = 0, f = 0)
 	{
+		this.semiMajorAxis = semiMajorAxis;
 		this.semiMajorAxisAtEpoch = semiMajorAxis;
 		this.semiMajorAxisRate = semiMajorAxisRate;
 
+		this.eccentricity = eccentricity;
 		this.eccentricityAtEpoch = eccentricity;
 		this.eccentricityRate = eccentricityRate;
 
+		this.inclination = inclination;
 		this.inclinationAtEpoch = inclination;
 		this.inclinationRate = inclinationRate;
 
+		this.meanLongitude = meanLongitude;
 		this.meanLongitudeAtEpoch = meanLongitude;
 		this.meanLongitudeRate = meanLongitudeRate;
 
+		this.longitudeOfPeriapsis = longitudeOfPeriapsis;
 		this.longitudeOfPeriapsisAtEpoch = longitudeOfPeriapsis;
 		this.longitudeOfPeriapsisRate = longitudeOfPeriapsisRate;
 
+		this.longitudeOfAscendingNode = longitudeOfAscendingNode;
 		this.longitudeOfAscendingNodeAtEpoch = longitudeOfAscendingNode;
 		this.longitudeOfAscendingNodeRate = longitudeOfAscendingNodeRate;
 
@@ -145,143 +149,47 @@ class Orbit
 		this.c = c;
 		this.s = s;
 		this.f = f;
+
+		this.semiMinorAxis = 0;
+		this.distanceFromCenterToFocus = 0;
+		this.argumentOfPeriapsis = 0;
+		this.meanAnomaly = 0;
+		this.eccentricAnomaly = 0;
+		this.trueAnomaly = 0;
 	}
 
 	/**
-	 * Returns the semi-major axis (AU) of this orbit at a given time
+	 * Updates the orbital parameters for a given time
 	 * @param {Date} time 
 	 */
-	semiMajorAxis(time)
+	update(time)
 	{
 		var centuriesSinceEpoch = (time - epoch) / oneCentury;
-		return this.semiMajorAxisAtEpoch + this.semiMajorAxisRate * centuriesSinceEpoch;
-	}
+		this.semiMajorAxis = this.semiMajorAxisAtEpoch + this.semiMajorAxisRate * centuriesSinceEpoch;
+		this.semiMinorAxis = this.semiMajorAxis * Math.sqrt(1 - Math.pow(this.eccentricity, 2));
+		this.distanceFromCenterToFocus = Math.sqrt(Math.pow(this.semiMajorAxis, 2) - Math.pow(this.semiMinorAxis, 2)); // c^2 = a^2 - b^2
+		this.eccentricity = this.eccentricityAtEpoch + this.eccentricityRate * centuriesSinceEpoch;
+		this.inclination = this.inclinationAtEpoch + this.inclinationRate * centuriesSinceEpoch;
+		this.meanLongitude = this.meanLongitudeAtEpoch + this.meanLongitudeRate * centuriesSinceEpoch;
+		this.longitudeOfPeriapsis = this.longitudeOfPeriapsisAtEpoch + this.longitudeOfPeriapsisRate * centuriesSinceEpoch;
+		this.longitudeOfAscendingNode = this.longitudeOfAscendingNodeAtEpoch + this.longitudeOfAscendingNodeRate * centuriesSinceEpoch;
+		this.argumentOfPeriapsis = this.longitudeOfPeriapsis - this.longitudeOfAscendingNode;
 
-	/**
-	 * Returns the semi-minor axis (AU) of this orbit at a given time
-	 * @param {Date} time 
-	 */
-	semiMinorAxis(time)
-	{
-		return this.semiMajorAxis(time) * Math.sqrt(1 - Math.pow(this.eccentricity(time), 2));
-	}
-
-	/**
-	 * Returns the distance (AU) from the center of the ellipse to the focus
-	 * @param {Date} time 
-	 */
-	distanceFromCenterToFocus(time)
-	{
-		return Math.sqrt(Math.pow(this.semiMajorAxis(time), 2) - Math.pow(this.semiMinorAxis(time), 2)); // c^2 = a^2 - b^2
-	}
-
-	/**
-	 * Returns the eccentricity of this orbit at a given time
-	 * @param {Date} time 
-	 */
-	eccentricity(time)
-	{
-		var centuriesSinceEpoch = (time - epoch) / oneCentury;
-		return this.eccentricityAtEpoch + this.eccentricityRate * centuriesSinceEpoch;
-	}
-
-	/**
-	 * Returns the inclination (degrees) of this orbit at a given time
-	 * @param {Date} time 
-	 */
-	inclination(time)
-	{
-		var centuriesSinceEpoch = (time - epoch) / oneCentury;
-		return this.inclinationAtEpoch + this.inclinationRate * centuriesSinceEpoch;
-	}
-
-	/**
-	 * Returns the mean longitude (degrees) of this orbit at a given time
-	 * @param {Date} time 
-	 */
-	meanLongitude(time)
-	{
-		var centuriesSinceEpoch = (time - epoch) / oneCentury;
-		return this.meanLongitudeAtEpoch + this.meanLongitudeRate * centuriesSinceEpoch;
-	}
-
-	/**
-	 * Returns the longitude of periapsis (degrees) of this orbit at a given time
-	 * @param {Date} time 
-	 */
-	longitudeOfPeriapsis(time)
-	{
-		var centuriesSinceEpoch = (time - epoch) / oneCentury;
-		return this.longitudeOfPeriapsisAtEpoch + this.longitudeOfPeriapsisRate * centuriesSinceEpoch;
-	}
-
-	/**
-	 * Returns the longitude of the ascending node (degrees) of this orbit at a given time
-	 * @param {Date} time 
-	 */
-	longitudeOfAscendingNode(time)
-	{
-		var centuriesSinceEpoch = (time - epoch) / oneCentury;
-		return this.longitudeOfAscendingNodeAtEpoch + this.longitudeOfAscendingNodeRate * centuriesSinceEpoch;
-	}
-
-	/**
-	 * Returns the longitude of periapsis (degrees) of this orbit at a given time
-	 * @param {Date} time 
-	 */
-	argumentOfPeriapsis(time)
-	{
-		return this.longitudeOfPeriapsis(time) - this.longitudeOfAscendingNode(time);
-	}
-
-	/**
-	 * Returns the mean anomaly (degrees) of the object at a given time
-	 * @param {Date} time 
-	 */
-	meanAnomaly(time)
-	{
-		var centuriesSinceEpoch = (time - epoch) / oneCentury;
-		var meanAnomaly = this.meanLongitude(time) - this.longitudeOfPeriapsis(time);
+		this.meanAnomaly = this.meanLongitude - this.longitudeOfPeriapsis;
 		// Correction factor needed for outer planets
-		meanAnomaly += this.b * Math.pow(centuriesSinceEpoch, 2) + this.c * Math.cos(toRadians(this.f * centuriesSinceEpoch)) + this.s * Math.sin(toRadians(this.f * centuriesSinceEpoch));
-		return meanAnomaly;
-	}
-
-	/**
-	 * Returns the eccentric anomaly (degrees) of the object at a given time
-	 * @param {Date} time 
-	 */
-	eccentricAnomaly(time)
-	{
-		var meanAnomaly = this.meanAnomaly(time);
-		var eccentricity = this.eccentricity(time);
-		var eccentricAnomaly = meanAnomaly;
-
+		this.meanAnomaly += this.b * Math.pow(centuriesSinceEpoch, 2) + this.c * Math.cos(toRadians(this.f * centuriesSinceEpoch)) + this.s * Math.sin(toRadians(this.f * centuriesSinceEpoch));
+	
+		// Use Newton's method to approximate the eccentric anomaly
+		this.eccentricAnomaly = this.meanAnomaly;
 		for (var i = 0; i < 5; i++)
 		{
-			var delta = (eccentricAnomaly - eccentricity * Math.sin(toRadians(eccentricAnomaly)) - meanAnomaly)/(1 - eccentricity * Math.cos(toRadians(eccentricAnomaly)));
-			eccentricAnomaly -= delta;
+			var delta = (this.eccentricAnomaly - this.eccentricity * Math.sin(toRadians(this.eccentricAnomaly)) - this.meanAnomaly)/(1 - this.eccentricity * Math.cos(toRadians(this.eccentricAnomaly)));
+			this.eccentricAnomaly -= delta;
 		}
 
-		return eccentricAnomaly;
-	}
-
-	/**
-	 * Returns the true anomaly (degrees) of the object at a given time
-	 * @param {Date} time 
-	 */
-	trueAnomaly(time)
-	{
-		var eccentricAnomaly = this.eccentricAnomaly(time);
-
-		var trueAnomaly = toDegrees(2 * Math.atan(Math.sqrt((1 + this.eccentricity(time)) / (1 - this.eccentricity(time))) * Math.tan(toRadians(eccentricAnomaly/2))));
-
-		if (trueAnomaly < 0)
-		{
-			trueAnomaly += 360;
-		}
-
-		return trueAnomaly;
+		this.trueAnomaly = toDegrees(2 * Math.atan(Math.sqrt((1 + this.eccentricity) / (1 - this.eccentricity)) * Math.tan(toRadians(this.eccentricAnomaly/2))));
+		if (this.trueAnomaly < 0)
+			this.trueAnomaly += 360;
 	}
 }
 

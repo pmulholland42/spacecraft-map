@@ -310,6 +310,7 @@ function init()
 	// Set up event listeners for input and window resize
 	window.addEventListener("wheel", onScroll);
 	window.addEventListener("mouseup", onMouseUp);
+	window.addEventListener("dblclick", onScroll);
 	window.addEventListener("mousedown", onMouseDown);
 	window.addEventListener("mousemove", onMouseMove);
 	window.addEventListener("click", onClick);
@@ -366,7 +367,7 @@ function draw()
 			var y = (planet.parent.y - yCoord + planet.orbit.distanceFromCenterToFocus * kmPerAU * Math.sin(toRadians(planet.orbit.longitudeOfPeriapsis))) * scaleFactor + halfScreenHeight;
 			var radiusX = planet.orbit.semiMajorAxis * scaleFactor * kmPerAU;
 			var radiusY = planet.orbit.semiMinorAxis * scaleFactor * kmPerAU;
-			var rotation = toRadians(planet.orbit.longitudeOfPeriapsis);
+			var rotation = toRadians(-planet.orbit.longitudeOfPeriapsis);
 			ctx.beginPath();
 			ctx.ellipse(x, y, radiusX, radiusY, rotation, 0, tau);
 			ctx.stroke();
@@ -439,7 +440,7 @@ function onScroll(event)
 	var initialY = (event.clientY - halfScreenHeight) / (zoomMultipliers[currZoomLevel] / kmPerPixel) - yCoord;
 
 	// Scrolling up
-	if (event.deltaY < 0)
+	if (!event.deltaY || event.deltaY < 0)
 	{
 		if (currZoomLevel < maxZoomLevel)
 		{

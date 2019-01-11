@@ -102,17 +102,17 @@ class Orbit
 {
 	/**
 	 * 
-	 * @param {number} semiMajorAxis The semi-major axis of the orbit (AU)
+	 * @param {number} semiMajorAxis The semi-major axis of the orbit at the epoch (AU)
 	 * @param {number} semiMajorAxisRate The rate of change of the semi-major axis (AU/century) 
-	 * @param {number} eccentricity The eccentricity of the orbit
+	 * @param {number} eccentricity The eccentricity of the orbit at the epoch
 	 * @param {number} eccentricityRate The rate of change of the eccentricity per century
-	 * @param {number} inclination The inclination of the orbit (degrees)
+	 * @param {number} inclination The inclination of the orbit at the epoch (degrees)
 	 * @param {number} inclinationRate The rate of change of the inclination (degrees/century)
-	 * @param {number} meanLongitude The mean longitude of the object (degrees)
+	 * @param {number} meanLongitude The mean longitude of the object at the epoch (degrees)
 	 * @param {number} meanLongitudeRate The rate of change of the mean longitude (degrees/century)
-	 * @param {number} longitudeOfPeriapsis The longitude of periapsis (degrees)
+	 * @param {number} longitudeOfPeriapsis The longitude of periapsis at the epoch (degrees)
 	 * @param {number} longitudeOfPeriapsisRate The rate of change of the longitude of periapsis (degrees/century)
-	 * @param {number} longitudeOfAscendingNode The longitude of the ascending node (degrees/century)
+	 * @param {number} longitudeOfAscendingNode The longitude of the ascending node at the epoch (degrees/century)
 	 * @param {number} longitudeOfAscendingNodeRate The rate of change of the longitude of the ascending node (degrees/century)
 	 * @param {number} b Additional correction factor needed for Jupiter through Pluto
 	 * @param {number} c Additional correction factor needed for Jupiter through Pluto

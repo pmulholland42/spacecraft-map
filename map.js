@@ -219,6 +219,8 @@ planets.push(new Planet("Venus", "The Sun", "planet", "assets/venus.png", 12104,
 
 planets.push(new Planet("Earth", "The Sun", "planet", "assets/earth.png", 12742, 
 	new Orbit(1.00000018, -0.00000003, 0.01673163, -0.00003661, -0.00054346, -0.01337178, 100.46691572, 35999.37306329, 102.93005885, 0.3179526, -5.11260389, 0.24123856)))
+planets.push(new Planet("The Moon",  "Earth", "moon", "assets/moon.png", 3474, 
+	new Orbit(0.00256954861, 0, 0.0549, 0, 5.145, 0, 0, 479122.86243729, 0, 2133.35276271, 0, -1934.44384739)));
 
 planets.push(new Planet("Mars", "The Sun", "planet", "assets/mars.png", 6779, 
 	new Orbit(1.52371243, 0.00000097, 0.09336511, 0.00009149, 1.85181869, -0.00724757, -4.56813164, 19140.29934243, -23.91744784, 0.45223625, 49.71320984, -0.26852431)))

@@ -308,15 +308,29 @@ function draw()
 
 	updateCanvas = false;
 	ctx.clearRect(0, 0, canvas.width, canvas.height);
-	ctx.strokeStyle = "rgb(120, 120, 120)";
+	ctx.strokeStyle = "rgb(80, 80, 80)";
 	ctx.fillStyle = "white";
 	
 	for (var planet of planets)
 	{
-		// Draw the planet
 		var size = planet.diameter * scaleFactor;
 		if (size < minPlanetSize && (planet.type != "moon" || zoom >= zoomMultiplierMoonThreshold))
 			size = minPlanetSize;
+
+		// Draw the orbit
+		if (showOrbits && planet.type != "star" && ((planet.type == "planet" && size <= minPlanetSize) || (planet.type == "moon" && zoom >= zoomMultiplierMoonThreshold)))
+		{
+			var x = (planet.parent.x - xCoord - planet.orbit.distanceFromCenterToFocus * kmPerAU * Math.cos(toRadians(planet.orbit.longitudeOfPeriapsis))) * scaleFactor + halfScreenWidth;
+			var y = (planet.parent.y - yCoord + planet.orbit.distanceFromCenterToFocus * kmPerAU * Math.sin(toRadians(planet.orbit.longitudeOfPeriapsis))) * scaleFactor + halfScreenHeight;
+			var radiusX = planet.orbit.semiMajorAxis * scaleFactor * kmPerAU;
+			var radiusY = planet.orbit.semiMinorAxis * scaleFactor * kmPerAU;
+			var rotation = toRadians(-planet.orbit.longitudeOfPeriapsis);
+			ctx.beginPath();
+			ctx.ellipse(x, y, radiusX, radiusY, rotation, 0, tau);
+			ctx.stroke();
+		}
+
+		// Draw the planet
 		var screenX = (planet.x - xCoord) * scaleFactor - size/2 + halfScreenWidth;
 		var screenY = (planet.y - yCoord) * scaleFactor - size/2 + halfScreenHeight;
 		ctx.drawImage(planet.sprite, screenX, screenY, size, size);
@@ -335,19 +349,6 @@ function draw()
 				ctx.textAlign = "left";
 				ctx.fillText(planet.name, screenX + size + 2, screenY + size/2);
 			}
-		}
-
-		// Draw the orbit
-		if (showOrbits && planet.type != "star" && ((planet.type == "planet" && size <= minPlanetSize) || (planet.type == "moon" && zoom >= zoomMultiplierMoonThreshold)))
-		{
-			var x = (planet.parent.x - xCoord - planet.orbit.distanceFromCenterToFocus * kmPerAU * Math.cos(toRadians(planet.orbit.longitudeOfPeriapsis))) * scaleFactor + halfScreenWidth;
-			var y = (planet.parent.y - yCoord + planet.orbit.distanceFromCenterToFocus * kmPerAU * Math.sin(toRadians(planet.orbit.longitudeOfPeriapsis))) * scaleFactor + halfScreenHeight;
-			var radiusX = planet.orbit.semiMajorAxis * scaleFactor * kmPerAU;
-			var radiusY = planet.orbit.semiMinorAxis * scaleFactor * kmPerAU;
-			var rotation = toRadians(-planet.orbit.longitudeOfPeriapsis);
-			ctx.beginPath();
-			ctx.ellipse(x, y, radiusX, radiusY, rotation, 0, tau);
-			ctx.stroke();
 		}
 	}
 

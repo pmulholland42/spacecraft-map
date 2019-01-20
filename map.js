@@ -152,7 +152,7 @@ class Orbit
 
 		this.semiMinorAxis = 0;
 		this.distanceFromCenterToFocus = 0;
-		this.period = 0;
+		this.period = 360 / (this.meanLongitudeRate / 36525);
 		this.argumentOfPeriapsis = 0;
 		this.meanAnomaly = 0;
 		this.eccentricAnomaly = 0;
@@ -240,31 +240,6 @@ planets.push(new Planet("Neptune", "The Sun", "planet", "assets/neptune.png", 49
 planets.push(new Planet("Pluto", "The Sun", "dwarf planet", "assets/pluto.png", 1188.3,
 	new Orbit(39.48686035, 0.00449751, 0.24885238, 0.00006016, 17.14104260, 0.00000501, 238.96535011, 145.18042903, 224.09702598, -0.00968827, 110.30167986, -0.00809981, -0.01262724)));
 
-
-/*planets.push(new Planet("Sun", null, "assets/sun.png", 1391016, 0, 0, 0, 0, 0, 0, "star"));
-
-planets.push(new Planet("Mercury", "Sun", "assets/mercury.png", 4879, 57909050, 87.969, 0.205630, 48.331, 29.124, 174.796, "planet"));
-
-planets.push(new Planet("Venus", "Sun", "assets/venus.png", 12104, 108208000, 224.701, 0.006772, 76.680, 54.884, 50.115, "planet"));
-
-planets.push(new Planet("Earth", "Sun", "assets/earth.png", 12742, 149598023, 365.256363004, 0.0167086, -11.26064, 114.20783, 358.617, "planet"));
-planets.push(new Planet("Moon", "Earth", "assets/moon.png", 3474, 384400, 27.321661, 0.0549, 0, 0, 123, "moon"));
-
-planets.push(new Planet("Mars", "Sun", "assets/mars.png", 6779, 227939200, 686.971, 0.0934, 49.558, 286.502, 19.387, "planet"));
-planets.push(new Planet("Phobos", "Mars", "assets/phobos.png", 11, 9376, 0.31891023, 0.0151, 0, 0, 0, "moon"));
-planets.push(new Planet("Deimos", "Mars", "assets/deimos.png", 6.2, 23463, 1.263, 0.00033, 0, 0, 0, "moon"));
-
-planets.push(new Planet("Jupiter", "Sun", "assets/jupiter.png", 139822, 778570000, 4332.59, 0.0489, 100.464, 273.867, 20.020, "planet"));
-planets.push(new Planet("Io", "Jupiter", "assets/io.png", 1821, 421700, 1.769137786, 0.0041, 0, 0, 0, "moon"));
-planets.push(new Planet("Europa", "Jupiter", "assets/europa.png", 1560.8, 670900, 3.551181, 0.009, 0, 0, 0, "moon"));
-planets.push(new Planet("Ganymede", "Jupiter", "assets/ganymede.png", 2634.1, 1070400, 7.15455296, 0.0013, 0, 0, 0, "moon"));
-planets.push(new Planet("Callisto", "Jupiter", "assets/callisto.png", 2410.3, 1882700, 16.6890184, 0.0074, 0, 0, 0, "moon"));
-
-planets.push(new Planet("Saturn", "Sun", "assets/saturn.png", 116464, 1433530000, 10759.22, 0.0565, 113.665, 339.392, 317.020, "planet"));
-
-planets.push(new Planet("Uranus", "Sun", "assets/uranus.png", 50724, 2875040000, 30688.5, 0.046381, 74.006, 96.998857, 142.2386, "planet"));
-
-planets.push(new Planet("Neptune", "Sun", "assets/neptune.png", 49244, 4500000000, 60182, 0.009456, 131.784, 276.336, 256.228, "planet"));*/
 
 function init()
 {
@@ -634,7 +609,7 @@ function updateInfoBox()
 		if (currentPlanet.parent != null)
 		{
 			infoText += "Distance from " + currentPlanet.parent.name + ": " + Math.round(currentPlanet.distanceFromParent).toLocaleString() + " km\n";
-			infoText += "Period: " + currentPlanet.orbit.period + " days\n";
+			infoText += "Period: " + currentPlanet.orbit.period.toFixed(2) + " days\n";
 			infoText += "Eccentricity: " + currentPlanet.orbit.eccentricity.toFixed(5) + "\n";
 			infoText += "Mean anomaly: " + currentPlanet.orbit.meanAnomaly.toFixed(2) + "°\n"; 
 			infoText += "True anomaly: " + currentPlanet.orbit.trueAnomaly.toFixed(2) + "°"; 

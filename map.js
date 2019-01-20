@@ -7,6 +7,7 @@ var errorMessage;
 var optionsPanel;
 var infoPanel;
 var timePanel;
+var aboutPanel;
 var planetLabel;
 var planetInfo;
 var wikiLink;
@@ -264,6 +265,11 @@ function init()
 	timePanel = document.getElementById("timeline");
 	timePanel.style.top = (window.innerHeight*0.85) + "px";
 	timePanel.style.left = (window.innerWidth*0.4) + "px";
+
+	aboutPanel = document.getElementById("about");
+	aboutPanel.style.top = (window.innerHeight*0.5) + "px";
+	aboutPanel.style.left = (window.innerWidth*0.75) + "px";
+	aboutPanel.style.maxWidth = (window.innerWidth*0.2) + "px";
 
 	planetLabel = document.getElementById("planetlabel");
 
@@ -624,6 +630,11 @@ function updateInfoBox()
 		wikiLink.style.display = "none";
 	}
 	planetInfo.textContent = infoText;
+}
+
+function hideAboutPanel()
+{
+	aboutPanel.style.display = "none";
 }
 
 function toRadians(angle)

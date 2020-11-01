@@ -1,58 +1,125 @@
 <!DOCTYPE html>
 <html>
-    <head>
-        <meta charset="utf-8">
-		<link rel="icon" type="image/png" href="favicon.ico">
-        <title>Spacecraft map</title>
-		<script type="text/javascript" src="map.js?v={random number/string}"></script>
-		<link rel="stylesheet" href="map.css?v={random number/string}">
-    </head>
+  <head>
+    <meta charset="utf-8" />
+    <link rel="icon" type="image/png" href="favicon.ico" />
+    <title>Spacecraft map</title>
+    <script
+      type="text/javascript"
+      src="map.js?v={random number/string}"
+    ></script>
+    <link rel="stylesheet" href="map.css?v={random number/string}" />
+  </head>
 
-    <body onload="init()">
-		<!--Canvas for rendering the map-->
-        <canvas id="mapcanvas"></canvas>
+  <body onload="init()">
+    <!--Canvas for rendering the map-->
+    <canvas id="mapcanvas"></canvas>
 
-        <p id="errormessage">Javascript is required to use this page</p>
+    <p id="errormessage">Javascript is required to use this page</p>
 
-        <!--Options panel-->
-        <div id="options" class="panel">
-            <div class="grippy"></div>
-            <h3 class="panel-header">Options</h3><br/>
-            <input id="orbitsCheck" type="checkbox" onchange="onCheck(event)" checked> Show orbits<br/>
-            <input id="labelsCheck" type="checkbox" onchange="onCheck(event)" checked> Show labels<br/>
-            <input id="backgroundCheck" type="checkbox"> Show background stars <br/>
-            <input id="debugCheck" type="checkbox" onchange="onCheck(event)"> Show debug info<br/>
-        </div>
-        <div id="info" class="panel">
-            <div class="grippy"></div>
-            <h3 id="planetlabel" class="panel-header">No planet selected</h3><br/>
-            <input id="focusCheck" type="checkbox" onchange="onCheck(event)" checked> Keep centered<br/><br/>
-            <a id="wikilink" href="https://en.wikipedia.org/wiki/Mercury_(planet)" target="_blank">Wikipedia</a>
-            <p id="planetinfo" style="white-space: pre-line"></p>
-        </div>
-        <div id="timeline" class="panel">
-            <button id="resetTimeButton" type="button" class="timeButton" onclick="resetTime()">Current Time</button> 
-            <button id="reverseTimeButton" type="button" class="timeButton" onclick="reverseTime()">&lt&lt</button> 
-            <button id="pauseTimeButton" type="button" class="timeButton" onclick="pauseTime()">||</button> 
-            <button id="forwardTimeButton" type="button" class="timeButton" onclick="fastForwardTime()">&gt&gt</button> 
-        </div>
-        <div id="about" class="panel">
-            <p style="font-weight: bold">Welcome to a 2D map of the solar system!</p>
-            <br/>
-            Click and drag to pan around.<br/>
-            Scroll to zoom.<br/>
-            Click on a planet to select it.<br/>
-            <br/>
-            Planetary positions are accurate from 3000 BCE to 3000 CE.
-            The position of the moon is not currently accurate.<br/>
-            <br/>
-            Orbital data is from <a href="https://ssd.jpl.nasa.gov/txt/aprx_pos_planets.pdf" target="_blank">NASA JPL </a><br/>
-            <br/>
-            Created by <a href="http://petermulholland.co" target="_blank">Peter Mulholland</a><br/>
-            <br/>
-            <a href="https://github.com/pmulholland42/spacecraft-map" target="_blank">View source on Github</a><br/>
-            <br/>
-            <a href="#" onclick="hideAboutPanel()">Click here to hide this panel</a>
-        </div>
-    </body>
+    <!--Options panel-->
+    <div id="options" class="panel">
+      <div class="grippy"></div>
+      <h3 class="panel-header">Options</h3>
+      <br />
+      <input
+        id="orbitsCheck"
+        type="checkbox"
+        onchange="onCheck(event)"
+        checked
+      />
+      Show orbits<br />
+      <input
+        id="labelsCheck"
+        type="checkbox"
+        onchange="onCheck(event)"
+        checked
+      />
+      Show labels<br />
+      <input id="backgroundCheck" type="checkbox" /> Show background stars
+      <br />
+      <input id="debugCheck" type="checkbox" onchange="onCheck(event)" /> Show
+      debug info<br />
+    </div>
+    <div id="info" class="panel">
+      <div class="grippy"></div>
+      <h3 id="planetlabel" class="panel-header">No planet selected</h3>
+      <br />
+      <input
+        id="focusCheck"
+        type="checkbox"
+        onchange="onCheck(event)"
+        checked
+      />
+      Keep centered<br /><br />
+      <a
+        id="wikilink"
+        href="https://en.wikipedia.org/wiki/Mercury_(planet)"
+        target="_blank"
+        >Wikipedia</a
+      >
+      <p id="planetinfo" style="white-space: pre-line"></p>
+    </div>
+    <div id="timeline" class="panel">
+      <button
+        id="resetTimeButton"
+        type="button"
+        class="timeButton"
+        onclick="resetTime()"
+      >
+        Current Time
+      </button>
+      <button
+        id="reverseTimeButton"
+        type="button"
+        class="timeButton"
+        onclick="reverseTime()"
+      >
+        &lt&lt
+      </button>
+      <button
+        id="pauseTimeButton"
+        type="button"
+        class="timeButton"
+        onclick="pauseTime()"
+      >
+        ||
+      </button>
+      <button
+        id="forwardTimeButton"
+        type="button"
+        class="timeButton"
+        onclick="fastForwardTime()"
+      >
+        &gt&gt
+      </button>
+    </div>
+    <div id="about" class="panel">
+      <p style="font-weight: bold">Welcome to a 2D map of the solar system!</p>
+      <br />
+      Click and drag to pan around.<br />
+      Scroll to zoom.<br />
+      Click on a planet to select it.<br />
+      <br />
+      Planetary positions are accurate from 3000 BCE to 3000 CE. The position of
+      the moon is not currently accurate.<br />
+      <br />
+      Orbital data is from
+      <a
+        href="https://ssd.jpl.nasa.gov/txt/aprx_pos_planets.pdf"
+        target="_blank"
+        >NASA JPL </a
+      ><br />
+      <br />
+      Created by
+      <a href="http://petermulholland.co" target="_blank">Peter Mulholland</a
+      ><br />
+      <br />
+      <a href="https://github.com/pmulholland42/spacecraft-map" target="_blank"
+        >View source on Github</a
+      ><br />
+      <br />
+      <a href="#" onclick="hideAboutPanel()">Click here to hide this panel</a>
+    </div>
+  </body>
 </html>

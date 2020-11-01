@@ -1,5 +1,6 @@
 import React from "react";
 import { connect, ConnectedProps } from "react-redux";
+import { useDraggable } from "../hooks/useDraggable";
 import {
   setShowOrbits,
   setShowLabels,
@@ -7,7 +8,6 @@ import {
   setShowDebugInfo,
 } from "../redux/actionCreators";
 import { RootState } from "../redux/store";
-import "./map.css";
 
 const mapStateToProps = (state: RootState) => ({
   showOrbits: state.options.showOrbits,
@@ -28,6 +28,8 @@ const connector = connect(mapStateToProps, mapDispatchToProps);
 type PropsFromRedux = ConnectedProps<typeof connector>;
 
 export const OptionsPanel = connector((props: PropsFromRedux) => {
+  const [panelRef] = useDraggable();
+
   const toggleOrbits = (event: React.ChangeEvent<HTMLInputElement>) => {
     props.setShowOrbits(event.target.checked);
   };
@@ -44,7 +46,7 @@ export const OptionsPanel = connector((props: PropsFromRedux) => {
   };
 
   return (
-    <div id="options" className="panel">
+    <div id="options" className="panel" ref={panelRef}>
       <div className="grippy" />
       <h3 className="panel-header">Options</h3>
       <br />

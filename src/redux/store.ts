@@ -1,12 +1,14 @@
 import { combineReducers, createStore } from "redux";
 import {
+  SET_KEEP_CENTERED,
   SET_SHOW_BACKGROUND_STARS,
   SET_SHOW_DEBUG_INFO,
   SET_SHOW_LABELS,
   SET_SHOW_ORBITS,
 } from "./actions";
-import { OptionsActionTypes } from "./actionTypes";
+import { ObjectInfoActionTypes, OptionsActionTypes } from "./actionTypes";
 
+// Options
 interface Options {
   showOrbits: boolean;
   showLabels: boolean;
@@ -39,7 +41,31 @@ const optionsReducer = (
   }
 };
 
-const rootReducer = combineReducers({ options: optionsReducer });
+// Object info
+interface ObjectInfo {
+  keepCentered: boolean;
+}
+
+const initialObjectInfoState: ObjectInfo = {
+  keepCentered: false,
+};
+
+const objectInfoReducer = (
+  state: ObjectInfo = initialObjectInfoState,
+  action: ObjectInfoActionTypes
+) => {
+  switch (action.type) {
+    case SET_KEEP_CENTERED:
+      return { ...state, keepCentered: action.payload };
+    default:
+      return state;
+  }
+};
+
+const rootReducer = combineReducers({
+  options: optionsReducer,
+  objectInfo: objectInfoReducer,
+});
 
 export const store = createStore(rootReducer);
 

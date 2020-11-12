@@ -46,12 +46,11 @@ export const OptionsPanel = connector((props: PropsFromRedux) => {
   };
 
   return (
-    <div id="options" className="panel" ref={panelRef}>
+    <div className="panel" ref={panelRef}>
       <div className="grippy" />
       <h3 className="panel-header">Options</h3>
       <br />
       <input
-        id="orbitsCheck"
         type="checkbox"
         onChange={toggleOrbits}
         checked={props.showOrbits}
@@ -59,7 +58,6 @@ export const OptionsPanel = connector((props: PropsFromRedux) => {
       Show orbits
       <br />
       <input
-        id="labelsCheck"
         type="checkbox"
         onChange={toggleLabels}
         checked={props.showLabels}
@@ -67,19 +65,17 @@ export const OptionsPanel = connector((props: PropsFromRedux) => {
       Show labels
       <br />
       <input
-        id="backgroundCheck"
         type="checkbox"
         onChange={toggleBackgroundStars}
         checked={props.showBackgroundStars}
-      />{" "}
+      />
       Show background stars
       <br />
       <input
-        id="debugCheck"
         type="checkbox"
         onChange={toggleDebugInfo}
         checked={props.showDebugInfo}
-      />{" "}
+      />
       Show debug info
       <br />
     </div>

@@ -1,10 +1,12 @@
 import {
+  SET_KEEP_CENTERED,
   SET_SHOW_BACKGROUND_STARS,
   SET_SHOW_DEBUG_INFO,
   SET_SHOW_LABELS,
   SET_SHOW_ORBITS,
 } from "./actions";
 
+// Options
 export interface SetShowOrbitsAction {
   type: typeof SET_SHOW_ORBITS;
   payload: boolean;
@@ -27,3 +29,11 @@ export type OptionsActionTypes =
   | SetShowLabelsAction
   | SetShowBackgroundStarsAction
   | SetShowDebugInfoAction;
+
+// Object info
+export interface SetKeepCenteredAction {
+  type: typeof SET_KEEP_CENTERED;
+  payload: boolean;
+}
+
+export type ObjectInfoActionTypes = SetKeepCenteredAction;

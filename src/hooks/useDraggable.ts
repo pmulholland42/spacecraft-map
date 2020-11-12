@@ -5,6 +5,9 @@ interface Coords {
   y: number;
 }
 
+// TODO: return isBeingDragged too
+// TODO: allow the user to pass in a bounding box for the draggable element
+
 /**
  * Allows an absolute positioned element to be clicked and dragged around the screen.
  * @returns A ref for the element to be dragged, and an optional ref for the handle

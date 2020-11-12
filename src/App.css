@@ -80,3 +80,14 @@ a {
 .grippy::after {
   content: ".. .. .. ..";
 }
+
+.ellipse {
+  position: absolute;
+  left: 300px;
+  top: 100px;
+  background-color: antiquewhite;
+  border-radius: 50%;
+  height: 150px;
+  width: 100px;
+  transform: rotate(20deg);
+}

@@ -1,10 +1,9 @@
 import React, { useState } from "react";
 import { connect, ConnectedProps } from "react-redux";
-import { useDraggable } from "../hooks/useDraggable";
-import { RootState } from "../redux/store";
-import { setDisplayTime } from "../redux/actionCreators";
+import { useDraggable } from "../../hooks/useDraggable";
+import { RootState } from "../../redux/store";
+import { setDisplayTime } from "../../redux/actionCreators";
 import useInterval from "use-interval";
-import "./InfoPanel.css";
 
 const oneDay = 86400000;
 

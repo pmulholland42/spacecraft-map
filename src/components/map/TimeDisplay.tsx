@@ -1,6 +1,6 @@
 import React from "react";
 import { connect, ConnectedProps } from "react-redux";
-import { RootState } from "../redux/store";
+import { RootState } from "../../redux/store";
 import "./TimeDisplay.css";
 
 const mapStateToProps = (state: RootState) => ({

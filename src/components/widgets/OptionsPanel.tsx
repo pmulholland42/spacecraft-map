@@ -1,13 +1,13 @@
 import React from "react";
 import { connect, ConnectedProps } from "react-redux";
-import { useDraggable } from "../hooks/useDraggable";
+import { useDraggable } from "../../hooks/useDraggable";
 import {
   setShowOrbits,
   setShowLabels,
   setShowBackgroundStars,
   setShowDebugInfo,
-} from "../redux/actionCreators";
-import { RootState } from "../redux/store";
+} from "../../redux/actionCreators";
+import { RootState } from "../../redux/store";
 
 const mapStateToProps = (state: RootState) => ({
   showOrbits: state.options.showOrbits,

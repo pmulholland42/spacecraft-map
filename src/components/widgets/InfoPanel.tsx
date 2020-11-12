@@ -1,8 +1,8 @@
 import React from "react";
 import { connect, ConnectedProps } from "react-redux";
-import { useDraggable } from "../hooks/useDraggable";
-import { RootState } from "../redux/store";
-import { setKeepCentered } from "../redux/actionCreators";
+import { useDraggable } from "../../hooks/useDraggable";
+import { RootState } from "../../redux/store";
+import { setKeepCentered } from "../../redux/actionCreators";
 import "./InfoPanel.css";
 
 const mapStateToProps = (state: RootState) => ({

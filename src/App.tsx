@@ -1,11 +1,12 @@
 import React from "react";
 import { Provider } from "react-redux";
-import { OptionsPanel } from "./components/OptionsPanel";
+import { OptionsPanel } from "./components/widgets/OptionsPanel";
 import { store } from "./redux/store";
 import "./App.css";
-import { InfoPanel } from "./components/InfoPanel";
-import { TimeDisplay } from "./components/TimeDisplay";
-import { TimeControlBar } from "./components/TimeControlBar";
+import { InfoPanel } from "./components/widgets/InfoPanel";
+import { TimeDisplay } from "./components/map/TimeDisplay";
+import { TimeControlBar } from "./components/widgets/TimeControlBar";
+import { Map } from "./components/map/Map";
 
 function App() {
   return (
@@ -15,6 +16,7 @@ function App() {
         <InfoPanel />
         <TimeDisplay />
         <TimeControlBar />
+        <Map />
       </div>
     </Provider>
   );

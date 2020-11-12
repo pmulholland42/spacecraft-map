@@ -1,22 +1,27 @@
 import { combineReducers, createStore } from "redux";
 import {
+  SET_DISPLAY_TIME,
   SET_KEEP_CENTERED,
   SET_SHOW_BACKGROUND_STARS,
   SET_SHOW_DEBUG_INFO,
   SET_SHOW_LABELS,
   SET_SHOW_ORBITS,
 } from "./actions";
-import { ObjectInfoActionTypes, OptionsActionTypes } from "./actionTypes";
+import {
+  ObjectInfoActionTypes,
+  OptionsActionTypes,
+  TimeActionTypes,
+} from "./actionTypes";
 
 // Options
-interface Options {
+interface OptionsState {
   showOrbits: boolean;
   showLabels: boolean;
   showBackgroundStars: boolean;
   showDebugInfo: boolean;
 }
 
-const initialOptionsState: Options = {
+const initialOptionsState: OptionsState = {
   showOrbits: true,
   showLabels: true,
   showBackgroundStars: false,
@@ -24,7 +29,7 @@ const initialOptionsState: Options = {
 };
 
 const optionsReducer = (
-  state: Options = initialOptionsState,
+  state: OptionsState = initialOptionsState,
   action: OptionsActionTypes
 ) => {
   switch (action.type) {
@@ -42,16 +47,16 @@ const optionsReducer = (
 };
 
 // Object info
-interface ObjectInfo {
+interface ObjectInfoState {
   keepCentered: boolean;
 }
 
-const initialObjectInfoState: ObjectInfo = {
+const initialObjectInfoState: ObjectInfoState = {
   keepCentered: false,
 };
 
 const objectInfoReducer = (
-  state: ObjectInfo = initialObjectInfoState,
+  state: ObjectInfoState = initialObjectInfoState,
   action: ObjectInfoActionTypes
 ) => {
   switch (action.type) {
@@ -62,9 +67,31 @@ const objectInfoReducer = (
   }
 };
 
+// Date / time
+interface TimeState {
+  displayTime: Date;
+}
+
+const initialTimeState: TimeState = {
+  displayTime: new Date(),
+};
+
+const timeReducer = (
+  state: TimeState = initialTimeState,
+  action: TimeActionTypes
+) => {
+  switch (action.type) {
+    case SET_DISPLAY_TIME:
+      return { ...state, displayTime: action.payload };
+    default:
+      return state;
+  }
+};
+
 const rootReducer = combineReducers({
   options: optionsReducer,
   objectInfo: objectInfoReducer,
+  time: timeReducer,
 });
 
 export const store = createStore(rootReducer);

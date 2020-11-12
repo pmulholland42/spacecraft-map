@@ -1,4 +1,5 @@
 import {
+  SET_DISPLAY_TIME,
   SET_KEEP_CENTERED,
   SET_SHOW_BACKGROUND_STARS,
   SET_SHOW_DEBUG_INFO,
@@ -6,6 +7,7 @@ import {
   SET_SHOW_ORBITS,
 } from "./actions";
 import {
+  SetDisplayTimeAction,
   SetKeepCenteredAction,
   SetShowBackgroundStarsAction,
   SetShowDebugInfoAction,
@@ -42,4 +44,9 @@ export const setKeepCentered = (
 ): SetKeepCenteredAction => ({
   type: SET_KEEP_CENTERED,
   payload: keepCentered,
+});
+
+export const setDisplayTime = (time: Date): SetDisplayTimeAction => ({
+  type: SET_DISPLAY_TIME,
+  payload: time,
 });

@@ -4,6 +4,7 @@ import { OptionsPanel } from "./components/OptionsPanel";
 import { store } from "./redux/store";
 import "./App.css";
 import { InfoPanel } from "./components/InfoPanel";
+import { TimeDisplay } from "./components/TimeDisplay";
 
 function App() {
   return (
@@ -11,6 +12,7 @@ function App() {
       <div className="App">
         <OptionsPanel />
         <InfoPanel />
+        <TimeDisplay />
       </div>
     </Provider>
   );

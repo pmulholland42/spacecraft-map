@@ -1,0 +1,8 @@
+.time-display {
+  color: #00ff00;
+  font-size: 24px;
+  position: absolute;
+  left: 50%;
+  bottom: 5%;
+  transform: translate(-50%, -50%);
+}

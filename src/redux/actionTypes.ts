@@ -1,4 +1,5 @@
 import {
+  SET_DISPLAY_TIME,
   SET_KEEP_CENTERED,
   SET_SHOW_BACKGROUND_STARS,
   SET_SHOW_DEBUG_INFO,
@@ -37,3 +38,11 @@ export interface SetKeepCenteredAction {
 }
 
 export type ObjectInfoActionTypes = SetKeepCenteredAction;
+
+// Time
+export interface SetDisplayTimeAction {
+  type: typeof SET_DISPLAY_TIME;
+  payload: Date;
+}
+
+export type TimeActionTypes = SetDisplayTimeAction;

@@ -11,7 +11,7 @@ import { Map } from "./components/map/Map";
 function App() {
   return (
     <Provider store={store}>
-      <div className="App">
+      <div style={{ width: "100%", height: "100%" }}>
         <OptionsPanel />
         <InfoPanel />
         <TimeDisplay />

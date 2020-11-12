@@ -5,6 +5,7 @@ import { store } from "./redux/store";
 import "./App.css";
 import { InfoPanel } from "./components/InfoPanel";
 import { TimeDisplay } from "./components/TimeDisplay";
+import { TimeControlBar } from "./components/TimeControlBar";
 
 function App() {
   return (
@@ -13,6 +14,7 @@ function App() {
         <OptionsPanel />
         <InfoPanel />
         <TimeDisplay />
+        <TimeControlBar />
       </div>
     </Provider>
   );

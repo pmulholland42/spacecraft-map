@@ -7,9 +7,9 @@ export interface AstronomicalObject {
   /** The object that this object orbits */
   parent?: AstronomicalObject;
   /** The type of object, eg. star, planet, or moon */
-  type: string;
-  /** The image to be rendered for this object */
-  sprite: HTMLImageElement;
+  type: "star" | "planet" | "moon" | "dwarf";
+  /** The path for the image to be rendered for this object */
+  image: string;
   /** The diameter of the object (km) */
   diameter: number;
   /** The orbit of the object */

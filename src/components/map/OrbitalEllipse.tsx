@@ -58,7 +58,7 @@ export const OrbitalEllipse = connector(
       <div
         style={{
           borderWidth: 1,
-          border: "1px solid white",
+          border: "1px solid #505050",
           width: radiusX,
           height: radiusY,
           top: y,

@@ -3,7 +3,13 @@ import { connect, ConnectedProps } from "react-redux";
 import { RootState } from "../../redux/store";
 import { setZoom, setScreenCenter } from "../../redux/actionCreators";
 import { OrbitalEllipse } from "./OrbitalEllipse";
-import { getOrbitalPosition, toScreenCoords, toSpaceCoords, toSpaceDistance } from "../../utilities";
+import {
+  getObjectCoordinates,
+  getOrbitalPosition,
+  toScreenCoords,
+  toSpaceCoords,
+  toSpaceDistance,
+} from "../../utilities";
 import { Coordinate } from "../../interfaces";
 import {
   earth,
@@ -116,7 +122,51 @@ export const Map = connector(
       }
     };
 
-    const sunCoords = toScreenCoords({ x: 0, y: 0 }, zoom, screenCenter);
+    let orbits: JSX.Element[] = [];
+    let objects: JSX.Element[] = [];
+
+    solarSystem.forEach((object) => {
+      const position = getOrbitalPosition(object.orbit, displayTime);
+      orbits.push(
+        <OrbitalEllipse
+          key={`${object.name}-orbit`}
+          name={object.name}
+          parentX={0}
+          parentY={0}
+          distanceFromCenterToFocus={position.distanceFromCenterToFocus}
+          longitudeOfPeriapsis={position.longitudeOfPeriapsis}
+          semiMajorAxis={position.semiMajorAxis}
+          semiMinorAxis={position.semiMinorAxis}
+        />
+      );
+
+      const coords = toScreenCoords(
+        getObjectCoordinates(
+          position.semiMajorAxis,
+          position.eccentricity,
+          position.eccentricAnomaly,
+          position.trueAnomaly,
+          position.longitudeOfPeriapsis,
+          { x: 0, y: 0 }
+        ),
+        zoom,
+        screenCenter
+      );
+      objects.push(
+        <div
+          key={`${object.name}`}
+          style={{
+            height: "3px",
+            width: "3px",
+            position: "absolute",
+            top: coords.y,
+            left: coords.x,
+            backgroundColor: "yellow",
+            translate: "-50% -50%",
+          }}
+        />
+      );
+    });
 
     return (
       <div
@@ -126,31 +176,8 @@ export const Map = connector(
         onMouseUp={onMouseUp}
         onMouseMove={onMouseMove}
       >
-        {solarSystem.map((object) => {
-          const position = getOrbitalPosition(object.orbit, displayTime);
-          return (
-            <OrbitalEllipse
-              key={object.name}
-              parentX={0}
-              parentY={0}
-              distanceFromCenterToFocus={position.distanceFromCenterToFocus}
-              longitudeOfPeriapsis={position.longitudeOfPeriapsis}
-              semiMajorAxis={position.semiMajorAxis}
-              semiMinorAxis={position.semiMinorAxis}
-            />
-          );
-        })}
-        <div
-          style={{
-            height: "3px",
-            width: "3px",
-            position: "absolute",
-            top: sunCoords.y,
-            left: sunCoords.x,
-            backgroundColor: "yellow",
-            translate: "-50% -50%",
-          }}
-        />
+        {orbits}
+        {objects}
       </div>
     );
   }

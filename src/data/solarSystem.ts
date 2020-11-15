@@ -166,7 +166,7 @@ export const jupiter: AstronomicalObject = {
 };
 
 export const saturn: AstronomicalObject = {
-  name: "Mars",
+  name: "Saturn",
   type: "planet",
   parent: sun,
   diameter: 116464,
@@ -245,7 +245,7 @@ export const neptune: AstronomicalObject = {
 };
 
 export const pluto: AstronomicalObject = {
-  name: "pluto",
+  name: "Pluto",
   type: "dwarf",
   parent: sun,
   diameter: 1188.3,

@@ -4,6 +4,8 @@ import { RootState } from "../../redux/store";
 import { auToKm, toScreenCoords, toScreenDistance } from "../../utilities";
 
 interface OrbitalEllipseProps {
+  /** The name of the object */
+  name?: string;
   /** The x coordinate of the orbit's parent object (km) */
   parentX: number;
   /** The y coordinate of the orbit's parent object (km) */
@@ -31,6 +33,7 @@ type Props = OrbitalEllipseProps & PropsFromRedux;
 
 export const OrbitalEllipse = connector(
   ({
+    name,
     parentX,
     parentY,
     distanceFromCenterToFocus,
@@ -52,6 +55,7 @@ export const OrbitalEllipse = connector(
 
     return (
       <div
+        id={`${name}-orbit`}
         style={{
           borderWidth: 1,
           border: "1px solid #505050",

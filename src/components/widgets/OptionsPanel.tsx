@@ -1,6 +1,7 @@
 import React from "react";
 import { connect, ConnectedProps } from "react-redux";
 import { useDraggable } from "../../hooks/useDraggable";
+import { Coordinate } from "../../interfaces";
 import {
   setShowOrbits,
   setShowLabels,
@@ -8,6 +9,10 @@ import {
   setShowDebugInfo,
 } from "../../redux/actionCreators";
 import { RootState } from "../../redux/store";
+
+interface OptionsPanelProps {
+  initialPosition: Coordinate;
+}
 
 const mapStateToProps = (state: RootState) => ({
   showOrbits: state.options.showOrbits,
@@ -27,57 +32,53 @@ const connector = connect(mapStateToProps, mapDispatchToProps);
 
 type PropsFromRedux = ConnectedProps<typeof connector>;
 
-export const OptionsPanel = connector((props: PropsFromRedux) => {
-  const [panelRef] = useDraggable();
+type Props = PropsFromRedux & OptionsPanelProps;
 
-  const toggleOrbits = (event: React.ChangeEvent<HTMLInputElement>) => {
-    props.setShowOrbits(event.target.checked);
-  };
-  const toggleLabels = (event: React.ChangeEvent<HTMLInputElement>) => {
-    props.setShowLabels(event.target.checked);
-  };
-  const toggleBackgroundStars = (
-    event: React.ChangeEvent<HTMLInputElement>
-  ) => {
-    props.setShowBackgroundStars(event.target.checked);
-  };
-  const toggleDebugInfo = (event: React.ChangeEvent<HTMLInputElement>) => {
-    props.setShowDebugInfo(event.target.checked);
-  };
+export const OptionsPanel = connector(
+  ({
+    initialPosition,
+    showOrbits,
+    showLabels,
+    showBackgroundStars,
+    showDebugInfo,
+    setShowOrbits,
+    setShowLabels,
+    setShowBackgroundStars,
+    setShowDebugInfo,
+  }: Props) => {
+    const [panelRef] = useDraggable(initialPosition);
 
-  return (
-    <div className="panel" ref={panelRef}>
-      <div className="grippy" />
-      <h3 className="panel-header">Options</h3>
-      <br />
-      <input
-        type="checkbox"
-        onChange={toggleOrbits}
-        checked={props.showOrbits}
-      />
-      Show orbits
-      <br />
-      <input
-        type="checkbox"
-        onChange={toggleLabels}
-        checked={props.showLabels}
-      />
-      Show labels
-      <br />
-      <input
-        type="checkbox"
-        onChange={toggleBackgroundStars}
-        checked={props.showBackgroundStars}
-      />
-      Show background stars
-      <br />
-      <input
-        type="checkbox"
-        onChange={toggleDebugInfo}
-        checked={props.showDebugInfo}
-      />
-      Show debug info
-      <br />
-    </div>
-  );
-});
+    const toggleOrbits = (event: React.ChangeEvent<HTMLInputElement>) => {
+      setShowOrbits(event.target.checked);
+    };
+    const toggleLabels = (event: React.ChangeEvent<HTMLInputElement>) => {
+      setShowLabels(event.target.checked);
+    };
+    const toggleBackgroundStars = (event: React.ChangeEvent<HTMLInputElement>) => {
+      setShowBackgroundStars(event.target.checked);
+    };
+    const toggleDebugInfo = (event: React.ChangeEvent<HTMLInputElement>) => {
+      setShowDebugInfo(event.target.checked);
+    };
+
+    return (
+      <div className="panel" ref={panelRef}>
+        <div className="grippy" />
+        <h3 className="panel-header">Options</h3>
+        <br />
+        <input type="checkbox" onChange={toggleOrbits} checked={showOrbits} />
+        Show orbits
+        <br />
+        <input type="checkbox" onChange={toggleLabels} checked={showLabels} />
+        Show labels
+        <br />
+        <input type="checkbox" onChange={toggleBackgroundStars} checked={showBackgroundStars} />
+        Show background stars
+        <br />
+        <input type="checkbox" onChange={toggleDebugInfo} checked={showDebugInfo} />
+        Show debug info
+        <br />
+      </div>
+    );
+  }
+);

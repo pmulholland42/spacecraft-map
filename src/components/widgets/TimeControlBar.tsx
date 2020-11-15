@@ -4,8 +4,12 @@ import { useDraggable } from "../../hooks/useDraggable";
 import { RootState } from "../../redux/store";
 import { setDisplayTime } from "../../redux/actionCreators";
 import useInterval from "use-interval";
+import { oneDay } from "../../constants";
+import { Coordinate } from "../../interfaces";
 
-const oneDay = 86400000;
+export interface TimeControlBarProps {
+  initialPosition: Coordinate;
+}
 
 const mapStateToProps = (state: RootState) => ({
   displayTime: state.time.displayTime,
@@ -19,49 +23,49 @@ const connector = connect(mapStateToProps, mapDispatchToProps);
 
 type PropsFromRedux = ConnectedProps<typeof connector>;
 
-export const TimeControlBar = connector(
-  ({ displayTime, setDisplayTime }: PropsFromRedux) => {
-    const [panelRef] = useDraggable();
-    const [timeSpeed, setTimeSpeed] = useState(0);
+type Props = TimeControlBarProps & PropsFromRedux;
 
-    useInterval(() => {
-      let newTime = new Date(displayTime.getTime() + timeSpeed);
-      setDisplayTime(newTime);
-    }, 200);
+export const TimeControlBar = connector(({ initialPosition, displayTime, setDisplayTime }: Props) => {
+  const [panelRef] = useDraggable(initialPosition);
+  const [timeSpeed, setTimeSpeed] = useState(0);
 
-    const resetTime = () => {
-      pauseTime();
-      setDisplayTime(new Date());
-    };
+  useInterval(() => {
+    let newTime = new Date(displayTime.getTime() + timeSpeed);
+    setDisplayTime(newTime);
+  }, 200);
 
-    const reverseTime = () => {
-      setTimeSpeed(Math.min(-oneDay, timeSpeed - oneDay));
-    };
+  const resetTime = () => {
+    pauseTime();
+    setDisplayTime(new Date());
+  };
 
-    const pauseTime = () => {
-      setTimeSpeed(0);
-    };
+  const reverseTime = () => {
+    setTimeSpeed(Math.min(-oneDay, timeSpeed - oneDay));
+  };
 
-    const fastForwardTime = () => {
-      setTimeSpeed(Math.max(oneDay, timeSpeed + oneDay));
-    };
+  const pauseTime = () => {
+    setTimeSpeed(0);
+  };
 
-    // TODO: replace this with a slider of some sort, or at least use icons instead of text for the buttons
-    return (
-      <div className="panel" ref={panelRef}>
-        <button type="button" onClick={resetTime}>
-          Current Time
-        </button>
-        <button type="button" onClick={reverseTime}>
-          Reverse
-        </button>
-        <button type="button" onClick={pauseTime}>
-          Pause
-        </button>
-        <button type="button" onClick={fastForwardTime}>
-          Fast forward
-        </button>
-      </div>
-    );
-  }
-);
+  const fastForwardTime = () => {
+    setTimeSpeed(Math.max(oneDay, timeSpeed + oneDay));
+  };
+
+  // TODO: replace this with a slider of some sort, or at least use icons instead of text for the buttons
+  return (
+    <div className="panel" ref={panelRef}>
+      <button type="button" onClick={resetTime}>
+        Current Time
+      </button>
+      <button type="button" onClick={reverseTime}>
+        Reverse
+      </button>
+      <button type="button" onClick={pauseTime}>
+        Pause
+      </button>
+      <button type="button" onClick={fastForwardTime}>
+        Fast forward
+      </button>
+    </div>
+  );
+});

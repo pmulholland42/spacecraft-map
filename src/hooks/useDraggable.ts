@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from "react";
+import { Coordinate } from "../interfaces";
 
 interface Coords {
   x: number;
@@ -12,20 +13,26 @@ interface Coords {
  * Allows an absolute positioned element to be clicked and dragged around the screen.
  * @returns A ref for the element to be dragged, and an optional ref for the handle
  */
-export function useDraggable() {
+export function useDraggable(initialPosition?: Coordinate) {
   const [isBeingDragged, setIsBeingDragged] = useState(false);
   const [relativeCoords, setRelativeCoords] = useState<Coords | null>(null);
   const draggableRef = useRef<HTMLDivElement>(null);
   const handleRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
+    if (initialPosition !== undefined && draggableRef.current !== null) {
+      draggableRef.current.style.left = initialPosition.x + "px";
+      draggableRef.current.style.top = initialPosition.y + "px";
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  useEffect(() => {
     // Move the draggable element with the mouse
     function handleMouseMove(event: MouseEvent) {
       if (draggableRef.current !== null && relativeCoords !== null) {
-        draggableRef.current.style.left =
-          event.clientX + relativeCoords.x + "px";
-        draggableRef.current.style.top =
-          event.clientY + relativeCoords.y + "px";
+        draggableRef.current.style.left = event.clientX + relativeCoords.x + "px";
+        draggableRef.current.style.top = event.clientY + relativeCoords.y + "px";
       }
     }
 

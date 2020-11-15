@@ -12,10 +12,10 @@ function App() {
   return (
     <Provider store={store}>
       <div style={{ width: "100%", height: "100%" }}>
-        <OptionsPanel />
-        <InfoPanel />
+        <OptionsPanel initialPosition={{ x: 80, y: 100 }} />
+        <InfoPanel initialPosition={{ x: 80, y: 250 }} />
         <TimeDisplay />
-        <TimeControlBar />
+        <TimeControlBar initialPosition={{ x: 800, y: 995 }} />
         <Map />
       </div>
     </Provider>

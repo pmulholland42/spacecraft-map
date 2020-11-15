@@ -3,9 +3,23 @@ import { connect, ConnectedProps } from "react-redux";
 import { RootState } from "../../redux/store";
 import { setZoom, setScreenCenter } from "../../redux/actionCreators";
 import { OrbitalEllipse } from "./OrbitalEllipse";
-import { toSpaceCoords } from "../../utilities";
-import { Coordinate } from "../../interfaces/Coordinate";
-import { maxWidthDistance } from "../../constants";
+import { getOrbitalPosition, toScreenCoords, toSpaceCoords, toSpaceDistance } from "../../utilities";
+import { Coordinate } from "../../interfaces";
+import {
+  earth,
+  jupiter,
+  mars,
+  mercury,
+  moon,
+  neptune,
+  pluto,
+  saturn,
+  sun,
+  uranus,
+  venus,
+} from "../../data/solarSystem";
+
+const solarSystem = [sun, mercury, venus, earth, moon, mars, jupiter, saturn, uranus, neptune, pluto];
 
 const mapStateToProps = (state: RootState) => ({
   showOrbits: state.options.showOrbits,
@@ -45,7 +59,7 @@ export const Map = connector(
     setScreenCenter,
   }: PropsFromRedux) => {
     const [isDragging, setIsDragging] = useState(false);
-    const prevMousePosition = useRef<Coordinate | null>(null);
+    const prevMousePositionRef = useRef<Coordinate | null>(null);
 
     const onWheel = (event: React.WheelEvent<HTMLDivElement>) => {
       const mouseCoords: Coordinate = { x: event.clientX, y: event.clientY };
@@ -79,30 +93,30 @@ export const Map = connector(
 
     const onMouseDown = (event: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
       setIsDragging(true);
-      prevMousePosition.current = { x: event.clientX, y: event.clientY };
+      prevMousePositionRef.current = { x: event.clientX, y: event.clientY };
     };
 
     const onMouseUp = () => {
       setIsDragging(false);
-      prevMousePosition.current = null;
+      prevMousePositionRef.current = null;
     };
 
     const onMouseMove = (event: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
-      if (isDragging && !keepCentered && prevMousePosition.current !== null) {
+      if (isDragging && !keepCentered && prevMousePositionRef.current !== null) {
         // Pan around the map
-        const deltaX = prevMousePosition.current.x - event.clientX;
-        const deltaY = prevMousePosition.current.y - event.clientY;
+        const deltaX = toSpaceDistance(prevMousePositionRef.current.x - event.clientX, zoom);
+        const deltaY = toSpaceDistance(prevMousePositionRef.current.y - event.clientY, zoom);
 
-        const kmPerPixel = maxWidthDistance / window.innerWidth;
-
-        const x = screenCenter.x + (deltaX * kmPerPixel) / zoom;
-        const y = screenCenter.y + (deltaY * kmPerPixel) / zoom;
+        const x = screenCenter.x + deltaX;
+        const y = screenCenter.y + deltaY;
 
         setScreenCenter({ x, y });
 
-        prevMousePosition.current = { x: event.clientX, y: event.clientY };
+        prevMousePositionRef.current = { x: event.clientX, y: event.clientY };
       }
     };
+
+    const sunCoords = toScreenCoords({ x: 0, y: 0 }, zoom, screenCenter);
 
     return (
       <div
@@ -112,13 +126,30 @@ export const Map = connector(
         onMouseUp={onMouseUp}
         onMouseMove={onMouseMove}
       >
-        <OrbitalEllipse
-          parentX={0}
-          parentY={0}
-          distanceFromCenterToFocus={0.07960333203897962}
-          longitudeOfPeriapsis={77.4911417038919}
-          semiMajorAxis={0.38709843}
-          semiMinorAxis={0.37882516288752105}
+        {solarSystem.map((object) => {
+          const position = getOrbitalPosition(object.orbit, displayTime);
+          return (
+            <OrbitalEllipse
+              key={object.name}
+              parentX={0}
+              parentY={0}
+              distanceFromCenterToFocus={position.distanceFromCenterToFocus}
+              longitudeOfPeriapsis={position.longitudeOfPeriapsis}
+              semiMajorAxis={position.semiMajorAxis}
+              semiMinorAxis={position.semiMinorAxis}
+            />
+          );
+        })}
+        <div
+          style={{
+            height: "3px",
+            width: "3px",
+            position: "absolute",
+            top: sunCoords.y,
+            left: sunCoords.x,
+            backgroundColor: "yellow",
+            translate: "-50% -50%",
+          }}
         />
       </div>
     );

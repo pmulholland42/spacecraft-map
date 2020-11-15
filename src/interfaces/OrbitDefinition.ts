@@ -1,4 +1,9 @@
+/**
+ * Defines an orbit's state at an epoch and how it changes over time
+ */
 export interface OrbitDefinition {
+  /** The epoch is the time at which the initial orbit values are measured */
+  epoch: Date;
   /** The semi-major axis of the orbit at the epoch (AU) */
   semiMajorAxis: number;
   /** The rate of change of the semi-major axis (AU/century) */

@@ -1,4 +1,4 @@
-import { Coordinate } from "../interfaces/Coordinate";
+import { Coordinate } from "../interfaces";
 import {
   SET_DISPLAY_TIME,
   SET_KEEP_CENTERED,

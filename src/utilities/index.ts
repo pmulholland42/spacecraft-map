@@ -1,2 +1,2 @@
-export * from "./angles";
-export * from "./coordinateConversions";
+export * from "./calculations";
+export * from "./conversions";

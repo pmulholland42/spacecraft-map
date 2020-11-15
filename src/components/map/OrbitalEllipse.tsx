@@ -1,15 +1,20 @@
 import React from "react";
 import { connect, ConnectedProps } from "react-redux";
-import { kmPerAU, maxWidthDistance } from "../../constants";
 import { RootState } from "../../redux/store";
-import { toRadians } from "../../utilities";
+import { auToKm, toScreenCoords, toScreenDistance } from "../../utilities";
 
 interface OrbitalEllipseProps {
+  /** The x coordinate of the orbit's parent object (km) */
   parentX: number;
+  /** The y coordinate of the orbit's parent object (km) */
   parentY: number;
+  /** The distance from the center of the orbit to its focal point (AU) */
   distanceFromCenterToFocus: number;
+  /** The longitude of periapsis (degrees) */
   longitudeOfPeriapsis: number;
+  /** The semi-major axis of the orbit (AU) */
   semiMajorAxis: number;
+  /** The semi-minor axis of the orbit (AU) */
   semiMinorAxis: number;
 }
 
@@ -35,37 +40,29 @@ export const OrbitalEllipse = connector(
     screenCenter,
     zoom,
   }: Props) => {
-    const kmPerPixel = maxWidthDistance / window.innerWidth; // Kilometers per pixel when zoomed out all the way
+    const x = auToKm(parentX - (semiMajorAxis - distanceFromCenterToFocus));
+    const y = auToKm(parentY - semiMinorAxis);
+    const screenCoords = toScreenCoords({ x, y }, zoom, screenCenter);
+    const radiusX = toScreenDistance(auToKm(semiMajorAxis), zoom);
+    const radiusY = toScreenDistance(auToKm(semiMinorAxis), zoom);
+    const rotation = 180 - longitudeOfPeriapsis;
 
-    const scaleFactor = zoom / kmPerPixel;
-    const x =
-      (parentX -
-        screenCenter.x -
-        distanceFromCenterToFocus * kmPerAU * Math.cos(toRadians(longitudeOfPeriapsis))) *
-        scaleFactor +
-      window.screen.width / 2;
-    const y =
-      (parentY -
-        screenCenter.y +
-        distanceFromCenterToFocus * kmPerAU * Math.sin(toRadians(longitudeOfPeriapsis))) *
-        scaleFactor +
-      window.screen.height / 2;
-    const radiusX = semiMajorAxis * scaleFactor * kmPerAU;
-    const radiusY = semiMinorAxis * scaleFactor * kmPerAU;
-    const rotation = -longitudeOfPeriapsis;
+    const horizontalOffset = toScreenDistance(auToKm(semiMajorAxis - distanceFromCenterToFocus), zoom);
+    const verticalOffset = toScreenDistance(auToKm(semiMinorAxis), zoom);
 
     return (
       <div
         style={{
           borderWidth: 1,
           border: "1px solid #505050",
-          width: radiusX,
-          height: radiusY,
-          top: y,
-          left: x,
-          rotate: rotation + "deg",
+          width: radiusX * 2,
+          height: radiusY * 2,
+          top: screenCoords.y,
+          left: screenCoords.x,
           borderRadius: "50%",
           position: "absolute",
+          transform: `rotate(${rotation}deg)`,
+          transformOrigin: `${horizontalOffset}px ${verticalOffset}px`,
         }}
       ></div>
     );

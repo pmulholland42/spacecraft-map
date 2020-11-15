@@ -9,13 +9,8 @@ import {
   SET_SHOW_ORBITS,
   SET_ZOOM,
 } from "./actions";
-import {
-  MapActionTypes,
-  ObjectInfoActionTypes,
-  OptionsActionTypes,
-  TimeActionTypes,
-} from "./actionTypes";
-import { Coordinate } from "../interfaces/Coordinate";
+import { MapActionTypes, ObjectInfoActionTypes, OptionsActionTypes, TimeActionTypes } from "./actionTypes";
+import { Coordinate } from "../interfaces";
 
 // Options
 interface OptionsState {

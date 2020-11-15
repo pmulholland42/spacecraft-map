@@ -1,4 +1,5 @@
-import { AstronomicalObject } from "../interfaces/AstronomicalObject";
+import { AstronomicalObject } from "../interfaces";
+import { j2000Epoch } from "../constants/scientific";
 
 export const sun: AstronomicalObject = {
   name: "The Sun",
@@ -6,6 +7,7 @@ export const sun: AstronomicalObject = {
   diameter: 1391016,
   image: "sun.png",
   orbit: {
+    epoch: j2000Epoch,
     semiMajorAxis: 0,
     semiMajorAxisRate: 0,
     eccentricity: 0,
@@ -28,6 +30,7 @@ export const mercury: AstronomicalObject = {
   diameter: 4879,
   image: "mercury.png",
   orbit: {
+    epoch: j2000Epoch,
     semiMajorAxis: 0.38709843,
     semiMajorAxisRate: 0,
     eccentricity: 0.20563661,
@@ -50,6 +53,7 @@ export const venus: AstronomicalObject = {
   diameter: 12104,
   image: "venus.png",
   orbit: {
+    epoch: j2000Epoch,
     semiMajorAxis: 0.72332102,
     semiMajorAxisRate: -0.00000026,
     eccentricity: 0.00676399,
@@ -72,6 +76,7 @@ export const earth: AstronomicalObject = {
   diameter: 12742,
   image: "earth.png",
   orbit: {
+    epoch: j2000Epoch,
     semiMajorAxis: 1.00000018,
     semiMajorAxisRate: -0.00000003,
     eccentricity: 0.01673163,
@@ -94,6 +99,7 @@ export const moon: AstronomicalObject = {
   diameter: 3474,
   image: "moon.png",
   orbit: {
+    epoch: j2000Epoch,
     semiMajorAxis: 0.00256954861,
     semiMajorAxisRate: 0,
     eccentricity: 0.0549,
@@ -116,6 +122,7 @@ export const mars: AstronomicalObject = {
   diameter: 6779,
   image: "mars.png",
   orbit: {
+    epoch: j2000Epoch,
     semiMajorAxis: 1.52371243,
     semiMajorAxisRate: 0.00000097,
     eccentricity: 0.09336511,
@@ -138,6 +145,7 @@ export const jupiter: AstronomicalObject = {
   diameter: 139822,
   image: "jupiter.png",
   orbit: {
+    epoch: j2000Epoch,
     semiMajorAxis: 5.20248019,
     semiMajorAxisRate: -0.00002864,
     eccentricity: 0.0485359,
@@ -164,6 +172,7 @@ export const saturn: AstronomicalObject = {
   diameter: 116464,
   image: "saturn.png",
   orbit: {
+    epoch: j2000Epoch,
     semiMajorAxis: 9.54149883,
     semiMajorAxisRate: -0.00003065,
     eccentricity: 0.05550825,
@@ -189,6 +198,7 @@ export const uranus: AstronomicalObject = {
   diameter: 50724,
   image: "uranus.png",
   orbit: {
+    epoch: j2000Epoch,
     semiMajorAxis: 19.18797948,
     semiMajorAxisRate: -0.00020455,
     eccentricity: 0.0468574,
@@ -214,6 +224,7 @@ export const neptune: AstronomicalObject = {
   diameter: 49244,
   image: "neptune.png",
   orbit: {
+    epoch: j2000Epoch,
     semiMajorAxis: 30.06952752,
     semiMajorAxisRate: 0.00006447,
     eccentricity: 0.00895439,
@@ -240,6 +251,7 @@ export const pluto: AstronomicalObject = {
   diameter: 1188.3,
   image: "pluto.png",
   orbit: {
+    epoch: j2000Epoch,
     semiMajorAxis: 39.48686035,
     semiMajorAxisRate: 0.00449751,
     eccentricity: 0.24885238,

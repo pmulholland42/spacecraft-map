@@ -1,5 +1,5 @@
 import { oneCentury } from "../constants";
-import { Coordinate, OrbitalPosition, OrbitDefinition } from "../interfaces";
+import { AstronomicalObject, Coordinate, OrbitalPosition, OrbitDefinition } from "../interfaces";
 import { auToKm, toDegrees, toRadians } from "./conversions";
 
 import moize from "moize";
@@ -86,7 +86,7 @@ export const getPeriod = (orbit: OrbitDefinition) => {
   return 360 / (orbit.meanLongitudeRate / 36525);
 };
 
-export const getObjectCoordinates = moize.deep(
+const getCoordinates = moize.deep(
   /**
    * Returns the coordinates of an object in space (km)
    * @param semiMajorAxis The semi-major axis of the object's orbit (AU)
@@ -117,3 +117,25 @@ export const getObjectCoordinates = moize.deep(
     return { x, y };
   }
 );
+
+/**
+ * Gets the coords (in km) of an object in space via recursion
+ * @param object
+ * @param time
+ */
+export const getObjectCoordinates = (object: AstronomicalObject | undefined, time: Date): Coordinate => {
+  if (object?.parent === undefined) {
+    return { x: 0, y: 0 };
+  } else {
+    const position = getOrbitalPosition(object.orbit, time);
+    const parentCoords = getObjectCoordinates(object.parent, time);
+    return getCoordinates(
+      position.semiMajorAxis,
+      position.eccentricity,
+      position.eccentricAnomaly,
+      position.trueAnomaly,
+      position.longitudeOfPeriapsis,
+      parentCoords
+    );
+  }
+};

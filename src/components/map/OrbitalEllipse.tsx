@@ -1,15 +1,14 @@
 import React from "react";
 import { connect, ConnectedProps } from "react-redux";
+import { Coordinate } from "../../interfaces";
 import { RootState } from "../../redux/store";
 import { auToKm, toScreenCoords, toScreenDistance } from "../../utilities";
 
 interface OrbitalEllipseProps {
   /** The name of the object */
   name?: string;
-  /** The x coordinate of the orbit's parent object (km) */
-  parentX: number;
-  /** The y coordinate of the orbit's parent object (km) */
-  parentY: number;
+  /** The coordinates of the orbit's parent in space (km) */
+  parentCoords: Coordinate;
   /** The distance from the center of the orbit to its focal point (AU) */
   distanceFromCenterToFocus: number;
   /** The longitude of periapsis (degrees) */
@@ -35,8 +34,7 @@ type Props = OrbitalEllipseProps & PropsFromRedux;
 export const OrbitalEllipse = connector(
   ({
     name,
-    parentX,
-    parentY,
+    parentCoords,
     distanceFromCenterToFocus,
     longitudeOfPeriapsis,
     semiMajorAxis,
@@ -44,8 +42,8 @@ export const OrbitalEllipse = connector(
     screenCenter,
     zoom,
   }: Props) => {
-    const x = auToKm(parentX - (semiMajorAxis - distanceFromCenterToFocus));
-    const y = auToKm(parentY - semiMinorAxis);
+    const x = parentCoords.x - auToKm(semiMajorAxis - distanceFromCenterToFocus);
+    const y = parentCoords.y - auToKm(semiMinorAxis);
     const screenCoords = toScreenCoords({ x, y }, zoom, screenCenter);
     const radiusX = toScreenDistance(auToKm(semiMajorAxis), zoom);
     const radiusY = toScreenDistance(auToKm(semiMinorAxis), zoom);

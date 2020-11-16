@@ -3,10 +3,11 @@ import { connect, ConnectedProps } from "react-redux";
 import { RootState } from "../../redux/store";
 import { setZoom, setScreenCenter } from "../../redux/actionCreators";
 import { OrbitalEllipse } from "./OrbitalEllipse";
-import { getObjectCoordinates, getOrbitalPosition, toSpaceCoords, toSpaceDistance } from "../../utilities";
+import { getOrbitalPosition, getObjectCoordinates, toSpaceCoords, toSpaceDistance } from "../../utilities";
 import { Coordinate } from "../../interfaces";
 import {
   earth,
+  moon,
   jupiter,
   mars,
   mercury,
@@ -19,7 +20,7 @@ import {
 } from "../../data/solarSystem";
 import { OrbitalBody } from "./OrbitalBody";
 
-const solarSystem = [sun, mercury, venus, earth, mars, jupiter, saturn, uranus, neptune, pluto];
+const solarSystem = [sun, mercury, venus, earth, moon, mars, jupiter, saturn, uranus, neptune, pluto];
 
 const mapStateToProps = (state: RootState) => ({
   showOrbits: state.options.showOrbits,
@@ -121,12 +122,14 @@ export const Map = connector(
 
     solarSystem.forEach((object) => {
       const position = getOrbitalPosition(object.orbit, displayTime);
+      const parentCoords = getObjectCoordinates(object.parent, displayTime);
+      const objectCoords = getObjectCoordinates(object, displayTime);
+
       orbits.push(
         <OrbitalEllipse
           key={`${object.id}-orbit`}
           name={object.id}
-          parentX={0}
-          parentY={0}
+          parentCoords={parentCoords}
           distanceFromCenterToFocus={position.distanceFromCenterToFocus}
           longitudeOfPeriapsis={position.longitudeOfPeriapsis}
           semiMajorAxis={position.semiMajorAxis}
@@ -134,15 +137,7 @@ export const Map = connector(
         />
       );
 
-      const coords = getObjectCoordinates(
-        position.semiMajorAxis,
-        position.eccentricity,
-        position.eccentricAnomaly,
-        position.trueAnomaly,
-        position.longitudeOfPeriapsis,
-        { x: 0, y: 0 }
-      );
-      objects.push(<OrbitalBody key={object.id} object={object} coords={coords} />);
+      objects.push(<OrbitalBody key={object.id} object={object} coords={objectCoords} />);
     });
 
     return (

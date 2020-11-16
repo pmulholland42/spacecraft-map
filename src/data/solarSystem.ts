@@ -2,10 +2,11 @@ import { AstronomicalObject } from "../interfaces";
 import { j2000Epoch } from "../constants/scientific";
 
 export const sun: AstronomicalObject = {
-  name: "The Sun",
+  id: "sun",
   type: "star",
   diameter: 1391016,
   image: "sun.png",
+  color: "#FDB813",
   orbit: {
     epoch: j2000Epoch,
     semiMajorAxis: 0,
@@ -24,11 +25,12 @@ export const sun: AstronomicalObject = {
 };
 
 export const mercury: AstronomicalObject = {
-  name: "Mercury",
+  id: "mercury",
   parent: sun,
   type: "planet",
   diameter: 4879,
   image: "mercury.png",
+  color: "#7D7C81",
   orbit: {
     epoch: j2000Epoch,
     semiMajorAxis: 0.38709843,
@@ -47,11 +49,12 @@ export const mercury: AstronomicalObject = {
 };
 
 export const venus: AstronomicalObject = {
-  name: "Venus",
+  id: "venus",
   parent: sun,
   type: "planet",
   diameter: 12104,
   image: "venus.png",
+  color: "#CAC9C7",
   orbit: {
     epoch: j2000Epoch,
     semiMajorAxis: 0.72332102,
@@ -70,11 +73,12 @@ export const venus: AstronomicalObject = {
 };
 
 export const earth: AstronomicalObject = {
-  name: "Earth",
+  id: "earth",
   parent: sun,
   type: "planet",
   diameter: 12742,
   image: "earth.png",
+  color: "#0066CC",
   orbit: {
     epoch: j2000Epoch,
     semiMajorAxis: 1.00000018,
@@ -93,11 +97,12 @@ export const earth: AstronomicalObject = {
 };
 
 export const moon: AstronomicalObject = {
-  name: "The Moon",
+  id: "moon",
   type: "moon",
   parent: earth,
   diameter: 3474,
   image: "moon.png",
+  color: "#787271",
   orbit: {
     epoch: j2000Epoch,
     semiMajorAxis: 0.00256954861,
@@ -116,11 +121,12 @@ export const moon: AstronomicalObject = {
 };
 
 export const mars: AstronomicalObject = {
-  name: "Mars",
+  id: "mars",
   type: "planet",
   parent: sun,
   diameter: 6779,
   image: "mars.png",
+  color: "#E87C5A",
   orbit: {
     epoch: j2000Epoch,
     semiMajorAxis: 1.52371243,
@@ -139,11 +145,12 @@ export const mars: AstronomicalObject = {
 };
 
 export const jupiter: AstronomicalObject = {
-  name: "Jupiter",
+  id: "jupiter",
   type: "planet",
   parent: sun,
   diameter: 139822,
   image: "jupiter.png",
+  color: "#C0A288",
   orbit: {
     epoch: j2000Epoch,
     semiMajorAxis: 5.20248019,
@@ -166,11 +173,12 @@ export const jupiter: AstronomicalObject = {
 };
 
 export const saturn: AstronomicalObject = {
-  name: "Saturn",
+  id: "saturn",
   type: "planet",
   parent: sun,
   diameter: 116464,
   image: "saturn.png",
+  color: "#DFBC7C",
   orbit: {
     epoch: j2000Epoch,
     semiMajorAxis: 9.54149883,
@@ -192,11 +200,12 @@ export const saturn: AstronomicalObject = {
   },
 };
 export const uranus: AstronomicalObject = {
-  name: "Uranus",
+  id: "uranus",
   type: "planet",
   parent: sun,
   diameter: 50724,
   image: "uranus.png",
+  color: "#B6DCDF",
   orbit: {
     epoch: j2000Epoch,
     semiMajorAxis: 19.18797948,
@@ -218,11 +227,12 @@ export const uranus: AstronomicalObject = {
   },
 };
 export const neptune: AstronomicalObject = {
-  name: "Neptune",
+  id: "neptune",
   type: "planet",
   parent: sun,
   diameter: 49244,
   image: "neptune.png",
+  color: "#4264FB",
   orbit: {
     epoch: j2000Epoch,
     semiMajorAxis: 30.06952752,
@@ -245,11 +255,12 @@ export const neptune: AstronomicalObject = {
 };
 
 export const pluto: AstronomicalObject = {
-  name: "Pluto",
+  id: "pluto",
   type: "dwarf",
   parent: sun,
   diameter: 1188.3,
   image: "pluto.png",
+  color: "#CAC1B0",
   orbit: {
     epoch: j2000Epoch,
     semiMajorAxis: 39.48686035,

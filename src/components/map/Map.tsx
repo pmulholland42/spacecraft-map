@@ -3,20 +3,13 @@ import { connect, ConnectedProps } from "react-redux";
 import { RootState } from "../../redux/store";
 import { setZoom, setScreenCenter } from "../../redux/actionCreators";
 import { OrbitalEllipse } from "./OrbitalEllipse";
-import {
-  getObjectCoordinates,
-  getOrbitalPosition,
-  toScreenCoords,
-  toSpaceCoords,
-  toSpaceDistance,
-} from "../../utilities";
+import { getObjectCoordinates, getOrbitalPosition, toSpaceCoords, toSpaceDistance } from "../../utilities";
 import { Coordinate } from "../../interfaces";
 import {
   earth,
   jupiter,
   mars,
   mercury,
-  moon,
   neptune,
   pluto,
   saturn,
@@ -24,8 +17,9 @@ import {
   uranus,
   venus,
 } from "../../data/solarSystem";
+import { OrbitalBody } from "./OrbitalBody";
 
-const solarSystem = [sun, mercury, venus, earth, moon, mars, jupiter, saturn, uranus, neptune, pluto];
+const solarSystem = [sun, mercury, venus, earth, mars, jupiter, saturn, uranus, neptune, pluto];
 
 const mapStateToProps = (state: RootState) => ({
   showOrbits: state.options.showOrbits,
@@ -129,8 +123,8 @@ export const Map = connector(
       const position = getOrbitalPosition(object.orbit, displayTime);
       orbits.push(
         <OrbitalEllipse
-          key={`${object.name}-orbit`}
-          name={object.name}
+          key={`${object.id}-orbit`}
+          name={object.id}
           parentX={0}
           parentY={0}
           distanceFromCenterToFocus={position.distanceFromCenterToFocus}
@@ -140,32 +134,15 @@ export const Map = connector(
         />
       );
 
-      const coords = toScreenCoords(
-        getObjectCoordinates(
-          position.semiMajorAxis,
-          position.eccentricity,
-          position.eccentricAnomaly,
-          position.trueAnomaly,
-          position.longitudeOfPeriapsis,
-          { x: 0, y: 0 }
-        ),
-        zoom,
-        screenCenter
+      const coords = getObjectCoordinates(
+        position.semiMajorAxis,
+        position.eccentricity,
+        position.eccentricAnomaly,
+        position.trueAnomaly,
+        position.longitudeOfPeriapsis,
+        { x: 0, y: 0 }
       );
-      objects.push(
-        <div
-          key={`${object.name}`}
-          style={{
-            height: "3px",
-            width: "3px",
-            position: "absolute",
-            top: coords.y,
-            left: coords.x,
-            backgroundColor: "yellow",
-            translate: "-50% -50%",
-          }}
-        />
-      );
+      objects.push(<OrbitalBody key={object.id} object={object} coords={coords} />);
     });
 
     return (
@@ -176,7 +153,7 @@ export const Map = connector(
         onMouseUp={onMouseUp}
         onMouseMove={onMouseMove}
       >
-        {orbits}
+        {showOrbits && orbits}
         {objects}
       </div>
     );

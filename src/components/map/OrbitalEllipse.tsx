@@ -23,6 +23,7 @@ interface OrbitalEllipseProps {
 const mapStateToProps = (state: RootState) => ({
   screenCenter: state.map.screenCenter,
   zoom: state.map.zoom,
+  showOrbits: state.options.showOrbits,
 });
 
 const connector = connect(mapStateToProps);

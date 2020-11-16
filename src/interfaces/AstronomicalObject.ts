@@ -2,14 +2,16 @@ import { OrbitDefinition } from "./OrbitDefinition";
 
 /** A star, planet, moon, asteroid, etc. */
 export interface AstronomicalObject {
-  /** The name of the object */
-  name: string;
+  /** Unique identifier for the object (i.e. its name) */
+  id: string;
   /** The object that this object orbits */
   parent?: AstronomicalObject;
   /** The type of object, eg. star, planet, or moon */
   type: "star" | "planet" | "moon" | "dwarf";
-  /** The path for the image to be rendered for this object */
+  /** The name of the image to be display for this object */
   image: string;
+  /** The color to display when the planet is small enough that it's just a dot */
+  color: string;
   /** The diameter of the object (km) */
   diameter: number;
   /** The orbit of the object */

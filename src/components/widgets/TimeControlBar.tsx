@@ -32,7 +32,7 @@ export const TimeControlBar = connector(({ initialPosition, displayTime, setDisp
   useInterval(() => {
     let newTime = new Date(displayTime.getTime() + timeSpeed);
     setDisplayTime(newTime);
-  }, 200);
+  }, 100);
 
   const resetTime = () => {
     pauseTime();

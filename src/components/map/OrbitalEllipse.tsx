@@ -52,6 +52,16 @@ export const OrbitalEllipse = connector(
     const horizontalOffset = toScreenDistance(auToKm(semiMajorAxis - distanceFromCenterToFocus), zoom);
     const verticalOffset = toScreenDistance(auToKm(semiMinorAxis), zoom);
 
+    if (radiusX > window.innerWidth * 2) {
+      return (
+        <div
+          id={`${name}-orbit`}
+          style={{
+            display: "none",
+          }}
+        ></div>
+      );
+    }
     return (
       <div
         id={`${name}-orbit`}

@@ -1,11 +1,11 @@
 import React from "react";
 import { Provider } from "react-redux";
-import { OptionsPanel } from "./components/widgets/OptionsPanel";
+import { OptionsPanel } from "./components/ui/OptionsPanel";
 import { store } from "./redux/store";
 import "./App.css";
-import { InfoPanel } from "./components/widgets/InfoPanel";
-import { TimeDisplay } from "./components/map/TimeDisplay";
-import { TimeControlBar } from "./components/widgets/TimeControlBar";
+import { InfoPanel } from "./components/ui/InfoPanel";
+import { TimeDisplay } from "./components/ui/TimeDisplay";
+import { TimeControlBar } from "./components/ui/TimeControlBar";
 import { Map } from "./components/map/Map";
 
 function App() {

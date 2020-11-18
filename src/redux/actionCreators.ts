@@ -1,7 +1,9 @@
+import { AstronomicalObject, Coordinate } from "../interfaces";
 import {
   SET_DISPLAY_TIME,
   SET_KEEP_CENTERED,
   SET_SCREEN_CENTER,
+  SET_SELECTED_OBJECT,
   SET_SHOW_BACKGROUND_STARS,
   SET_SHOW_DEBUG_INFO,
   SET_SHOW_LABELS,
@@ -12,6 +14,7 @@ import {
   SetDisplayTimeAction,
   SetKeepCenteredAction,
   SetScreenCenterAction,
+  SetSelectedObjectAction,
   SetShowBackgroundStarsAction,
   SetShowDebugInfoAction,
   SetShowLabelsAction,
@@ -21,49 +24,45 @@ import {
 
 export const setShowOrbits = (showOrbits: boolean): SetShowOrbitsAction => ({
   type: SET_SHOW_ORBITS,
-  payload: showOrbits,
+  showOrbits,
 });
 
 export const setShowLabels = (showLabels: boolean): SetShowLabelsAction => ({
   type: SET_SHOW_LABELS,
-  payload: showLabels,
+  showLabels,
 });
 
-export const setShowBackgroundStars = (
-  showBackgroundStars: boolean
-): SetShowBackgroundStarsAction => ({
+export const setShowBackgroundStars = (showBackgroundStars: boolean): SetShowBackgroundStarsAction => ({
   type: SET_SHOW_BACKGROUND_STARS,
-  payload: showBackgroundStars,
+  showBackgroundStars,
 });
 
-export const setShowDebugInfo = (
-  showDebugInfo: boolean
-): SetShowDebugInfoAction => ({
+export const setShowDebugInfo = (showDebugInfo: boolean): SetShowDebugInfoAction => ({
   type: SET_SHOW_DEBUG_INFO,
-  payload: showDebugInfo,
+  showDebugInfo,
 });
 
-export const setKeepCentered = (
-  keepCentered: boolean
-): SetKeepCenteredAction => ({
+export const setKeepCentered = (keepCentered: boolean): SetKeepCenteredAction => ({
   type: SET_KEEP_CENTERED,
-  payload: keepCentered,
+  keepCentered,
 });
 
-export const setDisplayTime = (time: Date): SetDisplayTimeAction => ({
+export const setSelectedObject = (selectedObject: AstronomicalObject): SetSelectedObjectAction => ({
+  type: SET_SELECTED_OBJECT,
+  selectedObject,
+});
+
+export const setDisplayTime = (displayTime: Date): SetDisplayTimeAction => ({
   type: SET_DISPLAY_TIME,
-  payload: time,
+  displayTime,
 });
 
-export const setScreenCenter = (center: {
-  x: number;
-  y: number;
-}): SetScreenCenterAction => ({
+export const setScreenCenter = (screenCenter: Coordinate): SetScreenCenterAction => ({
   type: SET_SCREEN_CENTER,
-  payload: center,
+  screenCenter,
 });
 
 export const setZoom = (zoom: number): SetZoomAction => ({
   type: SET_ZOOM,
-  payload: zoom,
+  zoom,
 });

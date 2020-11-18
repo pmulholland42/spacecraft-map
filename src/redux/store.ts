@@ -3,6 +3,7 @@ import {
   SET_DISPLAY_TIME,
   SET_KEEP_CENTERED,
   SET_SCREEN_CENTER,
+  SET_SELECTED_OBJECT,
   SET_SHOW_BACKGROUND_STARS,
   SET_SHOW_DEBUG_INFO,
   SET_SHOW_LABELS,
@@ -10,7 +11,7 @@ import {
   SET_ZOOM,
 } from "./actions";
 import { MapActionTypes, ObjectInfoActionTypes, OptionsActionTypes, TimeActionTypes } from "./actionTypes";
-import { Coordinate } from "../interfaces";
+import { AstronomicalObject, Coordinate } from "../interfaces";
 
 // Options
 interface OptionsState {
@@ -30,13 +31,13 @@ const initialOptionsState: OptionsState = {
 const optionsReducer = (state: OptionsState = initialOptionsState, action: OptionsActionTypes) => {
   switch (action.type) {
     case SET_SHOW_ORBITS:
-      return { ...state, showOrbits: action.payload };
+      return { ...state, showOrbits: action.showOrbits };
     case SET_SHOW_LABELS:
-      return { ...state, showLabels: action.payload };
+      return { ...state, showLabels: action.showLabels };
     case SET_SHOW_BACKGROUND_STARS:
-      return { ...state, showBackgroundStars: action.payload };
+      return { ...state, showBackgroundStars: action.showBackgroundStars };
     case SET_SHOW_DEBUG_INFO:
-      return { ...state, showDebugInfo: action.payload };
+      return { ...state, showDebugInfo: action.showDebugInfo };
     default:
       return state;
   }
@@ -45,10 +46,12 @@ const optionsReducer = (state: OptionsState = initialOptionsState, action: Optio
 // Object info
 interface ObjectInfoState {
   keepCentered: boolean;
+  selectedObject: AstronomicalObject | null;
 }
 
 const initialObjectInfoState: ObjectInfoState = {
   keepCentered: false,
+  selectedObject: null,
 };
 
 const objectInfoReducer = (
@@ -57,7 +60,9 @@ const objectInfoReducer = (
 ) => {
   switch (action.type) {
     case SET_KEEP_CENTERED:
-      return { ...state, keepCentered: action.payload };
+      return { ...state, keepCentered: action.keepCentered };
+    case SET_SELECTED_OBJECT:
+      return { ...state, selectedObject: action.selectedObject };
     default:
       return state;
   }
@@ -75,7 +80,7 @@ const initialTimeState: TimeState = {
 const timeReducer = (state: TimeState = initialTimeState, action: TimeActionTypes) => {
   switch (action.type) {
     case SET_DISPLAY_TIME:
-      return { ...state, displayTime: action.payload };
+      return { ...state, displayTime: action.displayTime };
     default:
       return state;
   }
@@ -95,9 +100,9 @@ const initialMapState: MapState = {
 const mapReducer = (state: MapState = initialMapState, action: MapActionTypes) => {
   switch (action.type) {
     case SET_SCREEN_CENTER:
-      return { ...state, screenCenter: action.payload };
+      return { ...state, screenCenter: action.screenCenter };
     case SET_ZOOM:
-      return { ...state, zoom: action.payload };
+      return { ...state, zoom: action.zoom };
     default:
       return state;
   }

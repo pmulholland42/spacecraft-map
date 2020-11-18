@@ -18,6 +18,10 @@ export const SearchBar = () => {
   const showSearchSuggestions = searchText.length > 0 && searchSuggestions.length > 0;
   const borderBottomRadius = showSearchSuggestions ? 0 : undefined;
 
+  const clearSearchText = () => {
+    setSearchText("");
+  };
+
   return (
     <div className="search-bar-container">
       <div
@@ -42,12 +46,13 @@ export const SearchBar = () => {
           <FontAwesomeIcon icon={faSearch} size={"lg"} />
         </div>
         {searchText.length > 0 && (
-          <div className="search-bar-button" onClick={() => setSearchText("")}>
+          <div className="search-bar-button" onClick={clearSearchText}>
             <FontAwesomeIcon icon={faTimes} size={"lg"} />
           </div>
         )}
       </div>
-      {showSearchSuggestions && searchSuggestions.map((object) => <SearchSuggestion object={object} />)}
+      {showSearchSuggestions &&
+        searchSuggestions.map((object) => <SearchSuggestion object={object} onSelect={clearSearchText} />)}
     </div>
   );
 };

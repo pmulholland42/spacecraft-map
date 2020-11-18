@@ -10,6 +10,9 @@
   border-bottom-right-radius: 10px;
   padding-bottom: 5px;
 }
+.search-suggestion:hover {
+  background-color: rgb(214, 214, 214);
+}
 
 .search-suggestion-icon {
   flex: 1;

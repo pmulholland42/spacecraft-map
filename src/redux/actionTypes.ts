@@ -1,8 +1,9 @@
-import { Coordinate } from "../interfaces";
+import { AstronomicalObject, Coordinate } from "../interfaces";
 import {
   SET_DISPLAY_TIME,
   SET_KEEP_CENTERED,
   SET_SCREEN_CENTER,
+  SET_SELECTED_OBJECT,
   SET_SHOW_BACKGROUND_STARS,
   SET_SHOW_DEBUG_INFO,
   SET_SHOW_LABELS,
@@ -13,19 +14,19 @@ import {
 // Options
 export interface SetShowOrbitsAction {
   type: typeof SET_SHOW_ORBITS;
-  payload: boolean;
+  showOrbits: boolean;
 }
 export interface SetShowLabelsAction {
   type: typeof SET_SHOW_LABELS;
-  payload: boolean;
+  showLabels: boolean;
 }
 export interface SetShowBackgroundStarsAction {
   type: typeof SET_SHOW_BACKGROUND_STARS;
-  payload: boolean;
+  showBackgroundStars: boolean;
 }
 export interface SetShowDebugInfoAction {
   type: typeof SET_SHOW_DEBUG_INFO;
-  payload: boolean;
+  showDebugInfo: boolean;
 }
 
 export type OptionsActionTypes =
@@ -37,15 +38,19 @@ export type OptionsActionTypes =
 // Object info
 export interface SetKeepCenteredAction {
   type: typeof SET_KEEP_CENTERED;
-  payload: boolean;
+  keepCentered: boolean;
+}
+export interface SetSelectedObjectAction {
+  type: typeof SET_SELECTED_OBJECT;
+  selectedObject: AstronomicalObject;
 }
 
-export type ObjectInfoActionTypes = SetKeepCenteredAction;
+export type ObjectInfoActionTypes = SetKeepCenteredAction | SetSelectedObjectAction;
 
 // Time
 export interface SetDisplayTimeAction {
   type: typeof SET_DISPLAY_TIME;
-  payload: Date;
+  displayTime: Date;
 }
 
 export type TimeActionTypes = SetDisplayTimeAction;
@@ -54,12 +59,12 @@ export type TimeActionTypes = SetDisplayTimeAction;
 
 export interface SetScreenCenterAction {
   type: typeof SET_SCREEN_CENTER;
-  payload: Coordinate;
+  screenCenter: Coordinate;
 }
 
 export interface SetZoomAction {
   type: typeof SET_ZOOM;
-  payload: number;
+  zoom: number;
 }
 
 export type MapActionTypes = SetScreenCenterAction | SetZoomAction;

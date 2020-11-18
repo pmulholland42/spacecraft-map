@@ -11,12 +11,25 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { useTranslation } from "react-i18next";
 import { getObjectName, getObjectTypeName } from "../../utilities";
+import { setSelectedObject } from "../../redux/actionCreators";
+import { connect, ConnectedProps } from "react-redux";
 
 interface SearchSuggestionProps {
   object: AstronomicalObject;
+  onSelect: () => void;
 }
 
-export const SearchSuggestion = ({ object }: SearchSuggestionProps) => {
+const mapDispatchToProps = {
+  setSelectedObject,
+};
+
+const connector = connect(null, mapDispatchToProps);
+
+type PropsFromRedux = ConnectedProps<typeof connector>;
+
+type Props = SearchSuggestionProps & PropsFromRedux;
+
+export const SearchSuggestion = connector(({ object, onSelect, setSelectedObject }: Props) => {
   const { t } = useTranslation();
 
   let icon: IconDefinition;
@@ -36,8 +49,13 @@ export const SearchSuggestion = ({ object }: SearchSuggestionProps) => {
       break;
   }
 
+  const onClick = () => {
+    setSelectedObject(object);
+    onSelect();
+  };
+
   return (
-    <div className="search-suggestion">
+    <div className="search-suggestion" onClick={onClick}>
       <div className="search-suggestion-icon">
         <FontAwesomeIcon icon={icon} size={"lg"} />
       </div>
@@ -50,4 +68,4 @@ export const SearchSuggestion = ({ object }: SearchSuggestionProps) => {
       </div>
     </div>
   );
-};
+});

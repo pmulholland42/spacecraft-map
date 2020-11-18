@@ -1,4 +1,4 @@
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { connect, ConnectedProps } from "react-redux";
 import { RootState } from "../../redux/store";
 import { setZoom, setScreenCenter } from "../../redux/actionCreators";
@@ -7,6 +7,7 @@ import { getOrbitalPosition, getObjectCoordinates, toSpaceCoords, toSpaceDistanc
 import { Coordinate } from "../../interfaces";
 import solarSystem from "../../data/solarSystem";
 import { OrbitalBody } from "./OrbitalBody";
+import { usePrevious } from "../../hooks/usePrevious";
 
 const mapStateToProps = (state: RootState) => ({
   showOrbits: state.options.showOrbits,
@@ -14,6 +15,7 @@ const mapStateToProps = (state: RootState) => ({
   showBackgroundStars: state.options.showBackgroundStars,
   showDebugInfo: state.options.showDebugInfo,
   keepCentered: state.objectInfo.keepCentered,
+  selectedObject: state.objectInfo.selectedObject,
   displayTime: state.time.displayTime,
   zoom: state.map.zoom,
   screenCenter: state.map.screenCenter,
@@ -39,6 +41,7 @@ export const Map = connector(
     showBackgroundStars,
     showDebugInfo,
     keepCentered,
+    selectedObject,
     displayTime,
     zoom,
     screenCenter,
@@ -47,6 +50,14 @@ export const Map = connector(
   }: PropsFromRedux) => {
     const [isDragging, setIsDragging] = useState(false);
     const prevMousePositionRef = useRef<Coordinate | null>(null);
+    const prevSelectedObject = usePrevious(selectedObject);
+
+    useEffect(() => {
+      if (selectedObject !== null && selectedObject !== prevSelectedObject) {
+        const coords = getObjectCoordinates(selectedObject, displayTime);
+        setScreenCenter(coords);
+      }
+    }, [selectedObject, prevSelectedObject, setScreenCenter, displayTime]);
 
     const onWheel = (event: React.WheelEvent<HTMLDivElement>) => {
       const mouseCoords: Coordinate = { x: event.clientX, y: event.clientY };

@@ -5,22 +5,8 @@ import { setZoom, setScreenCenter } from "../../redux/actionCreators";
 import { OrbitalEllipse } from "./OrbitalEllipse";
 import { getOrbitalPosition, getObjectCoordinates, toSpaceCoords, toSpaceDistance } from "../../utilities";
 import { Coordinate } from "../../interfaces";
-import {
-  earth,
-  moon,
-  jupiter,
-  mars,
-  mercury,
-  neptune,
-  pluto,
-  saturn,
-  sun,
-  uranus,
-  venus,
-} from "../../data/solarSystem";
+import solarSystem from "../../data/solarSystem";
 import { OrbitalBody } from "./OrbitalBody";
-
-const solarSystem = [sun, mercury, venus, earth, moon, mars, jupiter, saturn, uranus, neptune, pluto];
 
 const mapStateToProps = (state: RootState) => ({
   showOrbits: state.options.showOrbits,

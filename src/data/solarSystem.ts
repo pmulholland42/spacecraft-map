@@ -278,3 +278,6 @@ export const pluto: AstronomicalObject = {
     b: -0.01262724,
   },
 };
+
+const solarSystem = [sun, mercury, venus, earth, moon, mars, jupiter, saturn, uranus, neptune, pluto];
+export default solarSystem;

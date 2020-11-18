@@ -8,7 +8,6 @@ html {
   height: 100%;
   background-color: black;
   overflow: hidden;
-  font-family: "Courier New", Courier, monospace;
 }
 
 canvas {

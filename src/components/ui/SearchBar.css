@@ -1,0 +1,31 @@
+.search-bar-container {
+  width: 360px;
+  position: absolute;
+  top: 10px;
+  left: 20px;
+  z-index: 102;
+}
+
+.search-bar {
+  height: 45px;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  background-color: white;
+  border-radius: 10px;
+  border: 1px solid rgb(180, 180, 180);
+}
+
+.search-bar-button {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+
+.search-bar-text-input {
+  height: 100%;
+  border: none;
+  font-size: 1em;
+}

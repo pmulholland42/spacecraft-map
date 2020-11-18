@@ -9,12 +9,16 @@ import {
   faQuestion,
   IconDefinition,
 } from "@fortawesome/free-solid-svg-icons";
+import { useTranslation } from "react-i18next";
+import { getObjectName, getObjectTypeName } from "../../utilities";
 
 interface SearchSuggestionProps {
   object: AstronomicalObject;
 }
 
 export const SearchSuggestion = ({ object }: SearchSuggestionProps) => {
+  const { t } = useTranslation();
+
   let icon: IconDefinition;
 
   switch (object.type) {
@@ -38,9 +42,10 @@ export const SearchSuggestion = ({ object }: SearchSuggestionProps) => {
         <FontAwesomeIcon icon={icon} size={"lg"} />
       </div>
       <div className="search-suggestion-text">
-        <span className="search-suggestion-name">{object.id}</span>
+        <span className="search-suggestion-name">{t(getObjectName(object.id))}</span>
         <span className="search-suggestion-type">
-          {object.type} {object.parent && `orbiting ${object.parent.id}`}
+          {t(getObjectTypeName(object.type))}{" "}
+          {object.parent && t("orbiting") + " " + t(getObjectName(object.parent.id))}
         </span>
       </div>
     </div>

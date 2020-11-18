@@ -1,0 +1,23 @@
+{
+  "searchTheSolarSystem": "Search the solar system",
+  "orbiting": "orbiting",
+  "solarSystemObjects": {
+    "sun": "Sun",
+    "mercury": "Mercury",
+    "venus": "Venus",
+    "earth": "Earth",
+    "moon": "Moon",
+    "mars": "Mars",
+    "jupiter": "Jupiter",
+    "saturn": "Saturn",
+    "uranus": "Uranus",
+    "neptune": "Neptune",
+    "pluto": "Pluto"
+  },
+  "objectTypes": {
+    "moon": "Moon",
+    "star": "Star",
+    "planet": "Planet",
+    "dwarfPlanet": "Dwarf planet"
+  }
+}

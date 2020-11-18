@@ -4,9 +4,12 @@ import { faBars, faSearch, faTimes } from "@fortawesome/free-solid-svg-icons";
 import solarSystem from "../../data/solarSystem";
 import "./SearchBar.css";
 import { SearchSuggestion } from "./SearchSuggestion";
+import { useTranslation } from "react-i18next";
 
 export const SearchBar = () => {
   const [searchText, setSearchText] = useState("");
+
+  const { t } = useTranslation();
 
   const searchSuggestions = useMemo(() => {
     return solarSystem.filter((object) => object.id.includes(searchText.toLowerCase()));
@@ -33,7 +36,7 @@ export const SearchBar = () => {
           type="text"
           value={searchText}
           onChange={(event) => setSearchText(event.target.value)}
-          placeholder={"Search the solar system"}
+          placeholder={t("searchTheSolarSystem")}
         />
         <div className="search-bar-button">
           <FontAwesomeIcon icon={faSearch} size={"lg"} />

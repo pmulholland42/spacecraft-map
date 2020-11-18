@@ -1,3 +1,4 @@
+import { ObjectType } from "./ObjectType";
 import { OrbitDefinition } from "./OrbitDefinition";
 
 /** A star, planet, moon, asteroid, etc. */
@@ -7,7 +8,7 @@ export interface AstronomicalObject {
   /** The object that this object orbits */
   parent?: AstronomicalObject;
   /** The type of object, eg. star, planet, or moon */
-  type: "star" | "planet" | "moon" | "dwarf";
+  type: ObjectType;
   /** The name of the image to be display for this object */
   image: string;
   /** The color to display when the planet is small enough that it's just a dot */

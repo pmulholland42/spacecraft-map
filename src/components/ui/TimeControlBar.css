@@ -1,0 +1,10 @@
+.time-control-button {
+  padding: 10px;
+  margin-left: 10px;
+  margin-right: 10px;
+  height: 40px;
+  border: none;
+  background-color: rgb(209, 209, 209);
+  border-radius: 2px;
+  cursor: pointer;
+}

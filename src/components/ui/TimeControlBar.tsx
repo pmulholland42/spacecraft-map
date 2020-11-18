@@ -6,6 +6,9 @@ import { setDisplayTime } from "../../redux/actionCreators";
 import useInterval from "use-interval";
 import { oneDay } from "../../constants";
 import { Coordinate } from "../../interfaces";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faPause, faFastForward, faFastBackward, faClock } from "@fortawesome/free-solid-svg-icons";
+import "./TimeControlBar.css";
 
 export interface TimeControlBarProps {
   initialPosition: Coordinate;
@@ -54,17 +57,17 @@ export const TimeControlBar = connector(({ initialPosition, displayTime, setDisp
   // TODO: replace this with a slider of some sort, or at least use icons instead of text for the buttons
   return (
     <div className="panel" ref={panelRef}>
-      <button type="button" onClick={resetTime}>
-        Current Time
+      <button type="button" onClick={resetTime} className="time-control-button">
+        <FontAwesomeIcon icon={faClock} size={"lg"} />
       </button>
-      <button type="button" onClick={reverseTime}>
-        Reverse
+      <button type="button" onClick={reverseTime} className="time-control-button">
+        <FontAwesomeIcon icon={faFastBackward} size={"lg"} />
       </button>
-      <button type="button" onClick={pauseTime}>
-        Pause
+      <button type="button" onClick={pauseTime} className="time-control-button">
+        <FontAwesomeIcon icon={faPause} size={"lg"} />
       </button>
-      <button type="button" onClick={fastForwardTime}>
-        Fast forward
+      <button type="button" onClick={fastForwardTime} className="time-control-button">
+        <FontAwesomeIcon icon={faFastForward} size={"lg"} />
       </button>
     </div>
   );

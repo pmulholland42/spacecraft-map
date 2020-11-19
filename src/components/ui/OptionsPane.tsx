@@ -12,6 +12,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faAngleDoubleLeft } from "@fortawesome/free-solid-svg-icons";
 import { useTranslation } from "react-i18next";
 import { animated, useTransition } from "react-spring";
+import Switch from "react-switch";
 
 interface OptionsPaneProps {
   isOpen: boolean;
@@ -59,17 +60,17 @@ export const OptionsPane = connector(
       leave: { left: -322 },
     });
 
-    const toggleOrbits = (event: React.ChangeEvent<HTMLInputElement>) => {
-      setShowOrbits(event.target.checked);
+    const toggleOrbits = (checked: boolean) => {
+      setShowOrbits(checked);
     };
-    const toggleLabels = (event: React.ChangeEvent<HTMLInputElement>) => {
-      setShowLabels(event.target.checked);
+    const toggleLabels = (checked: boolean) => {
+      setShowLabels(checked);
     };
-    const toggleBackgroundStars = (event: React.ChangeEvent<HTMLInputElement>) => {
-      setShowBackgroundStars(event.target.checked);
+    const toggleBackgroundStars = (checked: boolean) => {
+      setShowBackgroundStars(checked);
     };
-    const toggleDebugInfo = (event: React.ChangeEvent<HTMLInputElement>) => {
-      setShowDebugInfo(event.target.checked);
+    const toggleDebugInfo = (checked: boolean) => {
+      setShowDebugInfo(checked);
     };
 
     return (
@@ -86,22 +87,22 @@ export const OptionsPane = connector(
                 </span>
                 <hr className="options-pane-divider" />
                 <div className="options-list">
-                  <div className="option">
+                  <label className="option">
                     {t("showOrbits")}
-                    <input type="checkbox" onChange={toggleOrbits} checked={showOrbits} />
-                  </div>
-                  <div className="option">
+                    <Switch onChange={toggleOrbits} checked={showOrbits} />
+                  </label>
+                  <label className="option">
                     {t("showLabels")}
-                    <input type="checkbox" onChange={toggleLabels} checked={showLabels} />
-                  </div>
-                  <div className="option">
+                    <Switch onChange={toggleLabels} checked={showLabels} />
+                  </label>
+                  <label className="option">
                     {t("showBackgroundStars")}
-                    <input type="checkbox" onChange={toggleBackgroundStars} checked={showBackgroundStars} />
-                  </div>
-                  <div className="option">
+                    <Switch onChange={toggleBackgroundStars} checked={showBackgroundStars} />
+                  </label>
+                  <label className="option">
                     {t("showDebugInfo")}
-                    <input type="checkbox" onChange={toggleDebugInfo} checked={showDebugInfo} />
-                  </div>
+                    <Switch onChange={toggleDebugInfo} checked={showDebugInfo} />
+                  </label>
                 </div>
               </animated.div>
             )

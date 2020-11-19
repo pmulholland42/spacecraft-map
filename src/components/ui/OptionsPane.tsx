@@ -58,6 +58,7 @@ export const OptionsPane = connector(
       from: { left: -322 },
       enter: { left: 0 },
       leave: { left: -322 },
+      config: { tension: 250, clamp: true },
     });
 
     const toggleOrbits = (checked: boolean) => {

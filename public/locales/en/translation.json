@@ -1,6 +1,10 @@
 {
-  "searchTheSolarSystem": "Search the solar system",
   "orbiting": "orbiting",
+  "searchTheSolarSystem": "Search the solar system",
+  "showBackgroundStars": "Show background stars",
+  "showDebugInfo": "Show debug info",
+  "showLabels": "Show labels",
+  "showOrbits": "Show orbits",
   "solarSystemObjects": {
     "sun": "Sun",
     "mercury": "Mercury",
@@ -15,9 +19,9 @@
     "pluto": "Pluto"
   },
   "objectTypes": {
+    "dwarfPlanet": "Dwarf planet",
     "moon": "Moon",
-    "star": "Star",
     "planet": "Planet",
-    "dwarfPlanet": "Dwarf planet"
+    "star": "Star"
   }
 }

@@ -6,7 +6,11 @@ import "./SearchBar.css";
 import { SearchSuggestion } from "./SearchSuggestion";
 import { useTranslation } from "react-i18next";
 
-export const SearchBar = () => {
+interface SearchBarProps {
+  openOptionsPane: () => void;
+}
+
+export const SearchBar = ({ openOptionsPane }: SearchBarProps) => {
   const [searchText, setSearchText] = useState("");
 
   const { t } = useTranslation();
@@ -31,7 +35,7 @@ export const SearchBar = () => {
           borderBottomRightRadius: borderBottomRadius,
         }}
       >
-        <div className="search-bar-button">
+        <div className="search-bar-button" onClick={() => openOptionsPane()}>
           <FontAwesomeIcon icon={faBars} size={"lg"} />
         </div>
         <input

@@ -18,7 +18,7 @@ function App() {
           <OptionsPane isOpen={optionsPaneOpen} closeOptionsPane={() => setOptionsPaneOpen(false)} />
           <SearchBar openOptionsPane={() => setOptionsPaneOpen(true)} />
           <TimeDisplay />
-          <TimeControlBar initialPosition={{ x: 800, y: 995 }} />
+          <TimeControlBar />
           <Map />
         </div>
       </Provider>

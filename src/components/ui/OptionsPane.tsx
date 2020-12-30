@@ -1,4 +1,4 @@
-import "./OptionsPane.css";
+import "./OptionsPane.scss";
 import {
   setShowOrbits,
   setShowLabels,

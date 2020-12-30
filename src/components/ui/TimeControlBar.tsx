@@ -1,4 +1,4 @@
-import "./TimeControlBar.css";
+import "./TimeControlBar.scss";
 import { oneSecond, oneDay, oneYear } from "../../constants";
 import { RootState } from "../../redux/store";
 import { setDisplayTime } from "../../redux/actionCreators";

@@ -1,7 +1,7 @@
 import React, { Suspense, useState } from "react";
 import { Provider } from "react-redux";
 import { store } from "./redux/store";
-import "./App.css";
+import "./App.scss";
 import { TimeDisplay } from "./components/ui/TimeDisplay";
 import { TimeControlBar } from "./components/ui/TimeControlBar";
 import { Map } from "./components/map/Map";

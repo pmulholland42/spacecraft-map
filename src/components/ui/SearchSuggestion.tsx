@@ -1,5 +1,5 @@
 import React from "react";
-import "./SearchSuggestion.css";
+import "./SearchSuggestion.scss";
 import { AstronomicalObject } from "../../interfaces";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {

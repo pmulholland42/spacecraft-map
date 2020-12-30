@@ -3,7 +3,7 @@ import { connect, ConnectedProps } from "react-redux";
 import { useDraggable } from "../../hooks/useDraggable";
 import { RootState } from "../../redux/store";
 import { setKeepCentered } from "../../redux/actionCreators";
-import "./InfoPanel.css";
+import "./InfoPanel.scss";
 import { Coordinate } from "../../interfaces";
 
 interface InfoPanelProps {

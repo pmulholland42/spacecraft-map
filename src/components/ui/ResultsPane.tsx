@@ -1,4 +1,4 @@
-import "./ResultsPane.css";
+import "./ResultsPane.scss";
 import React from "react";
 import { animated, useTransition } from "react-spring";
 import { connect, ConnectedProps } from "react-redux";

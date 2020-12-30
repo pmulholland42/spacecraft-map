@@ -2,7 +2,7 @@ import React, { useEffect, useMemo, useRef, useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faBars, faSearch, faTimes } from "@fortawesome/free-solid-svg-icons";
 import solarSystem from "../../data/solarSystem";
-import "./SearchBar.css";
+import "./SearchBar.scss";
 import { SearchSuggestion } from "./SearchSuggestion";
 import { useTranslation } from "react-i18next";
 import { AstronomicalObject } from "../../interfaces";

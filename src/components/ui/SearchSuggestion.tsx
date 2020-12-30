@@ -16,7 +16,7 @@ import { connect, ConnectedProps } from "react-redux";
 
 interface SearchSuggestionProps {
   object: AstronomicalObject;
-  onSelect: () => void;
+  onSelect: (selectedObject: AstronomicalObject) => void;
 }
 
 const mapDispatchToProps = {
@@ -50,8 +50,9 @@ export const SearchSuggestion = connector(({ object, onSelect, setSelectedObject
   }
 
   const onClick = () => {
+    // TODO: move this redux logic up a couple components?
     setSelectedObject(object);
-    onSelect();
+    onSelect(object);
   };
 
   return (

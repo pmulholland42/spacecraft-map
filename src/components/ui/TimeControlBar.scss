@@ -1,9 +1,11 @@
+
 .time-control-bar {
   position: absolute;
   left: 50%;
   bottom: 0;
   transform: translate(-50%, -50%);
   z-index: 1;
+  display: flex;
 }
 
 .time-control-button {
@@ -37,3 +39,30 @@
   border-left: solid 10px transparent;
   border-right: solid 10px transparent;
 }
+
+// Input slider settings:
+
+$track-color: #ffffff;
+$thumb-color: #ffffff;
+
+$thumb-radius: 9px;
+$thumb-height: 18px;
+$thumb-width: 18px;
+$thumb-shadow-size: 4px;
+$thumb-shadow-blur: 4px;
+$thumb-shadow-color: rgba(0, 0, 0, .2);
+$thumb-border-width: 1px;
+$thumb-border-color: #303030;
+
+$track-width: 100%;
+$track-height: 10px;
+$track-shadow-size: 1px;
+$track-shadow-blur: 1px;
+$track-shadow-color: rgba(0, 0, 0, .2);
+$track-border-width: 0px;
+$track-border-color: #ffffff;
+
+$track-radius: 5px;
+$contrast: 5%;
+
+@import "input-range";

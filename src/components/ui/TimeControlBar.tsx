@@ -131,6 +131,7 @@ export const TimeControlBar = connector(({ displayTime, setDisplayTime }: PropsF
       </button>
 
       <input
+        className="input-slider"
         type="range"
         min={0}
         max={timeSteps.length - 1}
@@ -139,6 +140,10 @@ export const TimeControlBar = connector(({ displayTime, setDisplayTime }: PropsF
         onChange={onInputChange}
         onMouseDown={onInputMouseDown}
         ref={inputRef}
+        style={{
+          // This css only works in js for some reason... need to investigate later
+          background: "black"
+        }}
       />
 
       {isDraggingSlider && (

@@ -42,7 +42,7 @@ export interface SetKeepCenteredAction {
 }
 export interface SetSelectedObjectAction {
   type: typeof SET_SELECTED_OBJECT;
-  selectedObject: AstronomicalObject;
+  selectedObject: AstronomicalObject | null;
 }
 
 export type ObjectInfoActionTypes = SetKeepCenteredAction | SetSelectedObjectAction;

@@ -24,7 +24,10 @@ const mapDispatchToProps = {
   setKeepCentered,
 };
 
+// The selected object is taken in as a prop and not read directly from redux
+// because this allows the parent component to handle the null case, where no object is selected
 interface ObjectDetailsProps {
+  /** The object for which to show details */
   object: AstronomicalObject;
 }
 
@@ -64,9 +67,9 @@ export const ObjectDetails = connector(({ object, keepCentered, setKeepCentered,
   return (
     <div className="object-details">
       <img
-        src="https://picsum.photos/320/240"
+        src="https://picsum.photos/320/170"
         width="100%"
-        height="240px"
+        height="170px"
         alt={objectName}
         title={objectName}
       />

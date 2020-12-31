@@ -1,4 +1,4 @@
-.results-pane {
+.details-pane {
   height: 100%;
   width: 320px;
   position: absolute;
@@ -9,8 +9,5 @@
   flex-direction: column;
   align-items: center;
   overflow: hidden;
-}
-
-.results-pane-content {
-  padding-top: 150px;
+  padding-top: 70px;
 }

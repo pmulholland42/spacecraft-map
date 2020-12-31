@@ -47,7 +47,7 @@ export const setKeepCentered = (keepCentered: boolean): SetKeepCenteredAction =>
   keepCentered,
 });
 
-export const setSelectedObject = (selectedObject: AstronomicalObject): SetSelectedObjectAction => ({
+export const setSelectedObject = (selectedObject: AstronomicalObject | null): SetSelectedObjectAction => ({
   type: SET_SELECTED_OBJECT,
   selectedObject,
 });

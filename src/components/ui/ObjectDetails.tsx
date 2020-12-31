@@ -56,18 +56,26 @@ export const ObjectDetails = connector(({ object, keepCentered, setKeepCentered,
         trueAnomaly,
         longitudeOfPeriapsis
       ),
-    [object, displayTime]
+    [semiMajorAxis, eccentricity, eccentricAnomaly, trueAnomaly, longitudeOfPeriapsis]
   );
+
+  const objectName = getObjectName(object.id, t);
 
   return (
     <div className="object-details">
-      <img src="https://picsum.photos/320/240" width="100%" height="240px" />
+      <img
+        src="https://picsum.photos/320/240"
+        width="100%"
+        height="240px"
+        alt={objectName}
+        title={objectName}
+      />
       {/* Name, description, wiki link */}
       <div className="info-text">
-        <h2>{getObjectName(object.id, t)}</h2>
+        <h2>{objectName}</h2>
         <h3 className="short-description">{getShortDescription(object, t)}</h3>
         <p className="long-description">
-          <a href={getWikiLink(object, t, language)} target="_blank" rel="no">
+          <a href={getWikiLink(object, t, language)} target="_blank" rel="noreferrer">
             {t("wikipedia")}
           </a>
         </p>

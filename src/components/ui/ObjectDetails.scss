@@ -1,0 +1,56 @@
+.object-details {
+  width: 100%;
+}
+
+.info-text {
+  padding: 20px;
+  width: 100%;
+}
+
+.short-description {
+  font-weight: normal;
+  color: grey;
+  font-size: 1.1em;
+  padding-top: 7px;
+}
+
+.long-description {
+  padding-top: 7px;
+}
+
+hr {
+  color: #a7a7a7;
+  background-color: #a7a7a7;
+  height: 1px;
+  border: none;
+}
+
+.keep-centered-toggle {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px;
+}
+
+.orbital-stats-header {
+  font-size: 1.1em;
+  padding-bottom: 5px;
+}
+
+dl {
+  width: 100%;
+  overflow: hidden;
+  padding: 0;
+  margin: 0;
+}
+dt {
+  float: left;
+  width: 50%;
+  padding-top: 5px;
+}
+dd {
+  padding-top: 5px;
+  float: left;
+  width: 50%;
+}

@@ -10,7 +10,7 @@ import {
   IconDefinition,
 } from "@fortawesome/free-solid-svg-icons";
 import { useTranslation } from "react-i18next";
-import { getObjectName, getObjectTypeName } from "../../utilities";
+import { getObjectName, getShortDescription } from "../../utilities";
 import { setSelectedObject } from "../../redux/actionCreators";
 import { connect, ConnectedProps } from "react-redux";
 
@@ -61,11 +61,8 @@ export const SearchSuggestion = connector(({ object, onSelect, setSelectedObject
         <FontAwesomeIcon icon={icon} size={"lg"} />
       </div>
       <div className="search-suggestion-text">
-        <span className="search-suggestion-name">{t(getObjectName(object.id))}</span>
-        <span className="search-suggestion-type">
-          {t(getObjectTypeName(object.type))}{" "}
-          {object.parent && t("orbiting") + " " + t(getObjectName(object.parent.id))}
-        </span>
+        <span className="search-suggestion-name">{getObjectName(object.id, t)}</span>
+        <span className="search-suggestion-type">{getShortDescription(object, t)}</span>
       </div>
     </div>
   );

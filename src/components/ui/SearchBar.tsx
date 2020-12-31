@@ -82,7 +82,7 @@ export const SearchBar = ({ onSearch, onClose, onSelect, onMenuClick, resultsPan
 
   const onSuggestionSelect = (selectedObject: AstronomicalObject) => {
     setShowSearchSuggestions(false);
-    setSearchText(t(getObjectName(selectedObject.id)));
+    setSearchText(getObjectName(selectedObject.id, t));
     onSelect(selectedObject);
   };
 

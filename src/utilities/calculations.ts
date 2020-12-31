@@ -86,35 +86,28 @@ export const getPeriod = (orbit: OrbitDefinition) => {
   return 360 / (orbit.meanLongitudeRate / 36525);
 };
 
-const getCoordinates = moize.deep(
+export const getRelativeCoordinates = moize(
   /**
-   * Returns the coordinates of an object in space (km)
+   * Returns the polar coordinates of an object in space, relative to its parent (radians, km)
    * @param semiMajorAxis The semi-major axis of the object's orbit (AU)
    * @param eccentricity The eccentricity of the object's orbit
    * @param eccentricAnomaly The eccentric anomaly of the object's orbit (degrees)
    * @param trueAnomaly The true anomaly of the object's orbit (degrees)
    * @param longitudeOfPeriapsis The longitude of periapsis of the object's orbit (degrees)
-   * @param parentCoords The coordinates of the object's parent in space (km)
    */
   (
     semiMajorAxis: number,
     eccentricity: number,
     eccentricAnomaly: number,
     trueAnomaly: number,
-    longitudeOfPeriapsis: number,
-    parentCoords: Coordinate
-  ): Coordinate => {
+    longitudeOfPeriapsis: number
+  ): { angle: number; distanceFromParent: number } => {
     const distanceFromParent = auToKm(
       semiMajorAxis * (1 - eccentricity * Math.cos(toRadians(eccentricAnomaly)))
     );
     const angle = toRadians(trueAnomaly + longitudeOfPeriapsis);
 
-    // The distance and angle are the polar coordinates of the object relative to its parent
-    // Convert them to cartesian coords and add the parent's position to get the actual coords of the object
-    const x = parentCoords.x + Math.cos(angle) * distanceFromParent;
-    const y = parentCoords.y - Math.sin(angle) * distanceFromParent;
-
-    return { x, y };
+    return { angle, distanceFromParent };
   }
 );
 
@@ -129,13 +122,19 @@ export const getObjectCoordinates = (object: AstronomicalObject | undefined, tim
   } else {
     const position = getOrbitalPosition(object.orbit, time);
     const parentCoords = getObjectCoordinates(object.parent, time);
-    return getCoordinates(
+    const { angle, distanceFromParent } = getRelativeCoordinates(
       position.semiMajorAxis,
       position.eccentricity,
       position.eccentricAnomaly,
       position.trueAnomaly,
-      position.longitudeOfPeriapsis,
-      parentCoords
+      position.longitudeOfPeriapsis
     );
+
+    // The distance and angle are the polar coordinates of the object relative to its parent
+    // Convert them to cartesian coords and add the parent's position to get the actual coords of the object
+    const x = parentCoords.x + Math.cos(angle) * distanceFromParent;
+    const y = parentCoords.y - Math.sin(angle) * distanceFromParent;
+
+    return { x, y };
   }
 };

@@ -53,11 +53,12 @@ export const Map = connector(
     const prevSelectedObject = usePrevious(selectedObject);
 
     useEffect(() => {
-      if (selectedObject !== null && selectedObject !== prevSelectedObject) {
+      // Center the screen on the selected object
+      if (selectedObject !== null && (selectedObject !== prevSelectedObject || keepCentered)) {
         const coords = getObjectCoordinates(selectedObject, displayTime);
         setScreenCenter(coords);
       }
-    }, [selectedObject, prevSelectedObject, setScreenCenter, displayTime]);
+    }, [selectedObject, prevSelectedObject, setScreenCenter, displayTime, keepCentered]);
 
     const onWheel = (event: React.WheelEvent<HTMLDivElement>) => {
       const mouseCoords: Coordinate = { x: event.clientX, y: event.clientY };

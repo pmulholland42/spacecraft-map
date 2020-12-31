@@ -60,10 +60,29 @@ export const Map = connector(
       }
     }, [selectedObject, prevSelectedObject, setScreenCenter, displayTime, keepCentered]);
 
+    /**
+     * Updates the zoom and screen center in response to a mouse event
+     * @param newZoom The desired zoom level
+     * @param mouseCoords The screen coords of the mouse event (double click or scroll wheel)
+     */
+    const zoomTo = (newZoom: number, mouseCoords: Coordinate) => {
+      if (!keepCentered) {
+        const initialCoords = toSpaceCoords(mouseCoords, zoom, screenCenter);
+        const finalCoords = toSpaceCoords(mouseCoords, newZoom, screenCenter);
+        // Adjust the screen center so that the coord under the cursor stays the same
+        // This is what makes it so you don't just zoom straight in and out, but instead it moves with the mouse
+        let newScreenCenter = {
+          x: screenCenter.x + initialCoords.x - finalCoords.x,
+          y: screenCenter.y + initialCoords.y - finalCoords.y,
+        };
+
+        setScreenCenter(newScreenCenter);
+      }
+      setZoom(newZoom);
+    };
+
     const onWheel = (event: React.WheelEvent<HTMLDivElement>) => {
       const mouseCoords: Coordinate = { x: event.clientX, y: event.clientY };
-
-      const initialCoords = toSpaceCoords(mouseCoords, zoom, screenCenter);
 
       let newZoom: number;
       // Scrolling up - zoom in
@@ -74,20 +93,14 @@ export const Map = connector(
       else {
         newZoom = zoom * 0.9;
       }
-      setZoom(newZoom);
+      zoomTo(newZoom, mouseCoords);
+    };
 
-      const finalCoords = toSpaceCoords(mouseCoords, newZoom, screenCenter);
+    const onDoubleClick = (event: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
+      const newZoom = zoom * 1.2;
+      const mouseCoords: Coordinate = { x: event.clientX, y: event.clientY };
 
-      if (!keepCentered) {
-        // Adjust the screen center so that the coord under the cursor stays the same
-        // This is what makes it so you don't just zoom straight in and out, but instead it moves with the mouse
-        let newScreenCenter = {
-          x: screenCenter.x + initialCoords.x - finalCoords.x,
-          y: screenCenter.y + initialCoords.y - finalCoords.y,
-        };
-
-        setScreenCenter(newScreenCenter);
-      }
+      zoomTo(newZoom, mouseCoords);
     };
 
     const onMouseDown = (event: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
@@ -145,6 +158,7 @@ export const Map = connector(
         onMouseDown={onMouseDown}
         onMouseUp={onMouseUp}
         onMouseMove={onMouseMove}
+        onDoubleClick={onDoubleClick}
       >
         {showOrbits && orbits}
         {objects}

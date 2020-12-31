@@ -7,6 +7,7 @@ import { Map } from "./components/map/Map";
 import { SearchBar } from "./components/ui/SearchBar";
 import { OptionsPane } from "./components/ui/OptionsPane";
 import { ResultsPane, ResultsPaneMode } from "./components/ui/ResultsPane";
+import { ZoomButtons } from "./components/ui/ZoomButtons";
 
 function App() {
   const [optionsPaneOpen, setOptionsPaneOpen] = useState(false);
@@ -41,6 +42,7 @@ function App() {
           />
           <TimeControlBar />
           <Map />
+          <ZoomButtons />
         </div>
       </Provider>
     </Suspense>

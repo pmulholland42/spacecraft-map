@@ -61,7 +61,7 @@ export const ObjectDetails = connector(({ object, keepCentered, setKeepCentered,
 
   return (
     <div className="object-details">
-      <img src="https://picsum.photos/400/240" width="400px" height="240px" />
+      <img src="https://picsum.photos/320/240" width="100%" height="240px" />
       {/* Name, description, wiki link */}
       <div className="info-text">
         <h2>{getObjectName(object.id, t)}</h2>

@@ -19,6 +19,7 @@
     "moize": "^5.4.7",
     "node-sass": "^4.14.1",
     "react": "^17.0.1",
+    "react-datepicker": "^3.3.0",
     "react-dom": "^17.0.1",
     "react-i18next": "^11.7.3",
     "react-redux": "^7.2.2",
@@ -54,6 +55,7 @@
     ]
   },
   "devDependencies": {
+    "@types/react-datepicker": "^3.1.2",
     "@types/react-redux": "^7.1.9"
   }
 }

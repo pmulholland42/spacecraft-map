@@ -1,10 +1,12 @@
-
-.time-control-bar {
+.time-control-container {
   position: absolute;
   left: 50%;
   bottom: 0;
   transform: translate(-50%, -50%);
   z-index: 1;
+}
+
+.time-control-bar {
   display: flex;
 }
 
@@ -19,7 +21,22 @@
   background: none;
 }
 
-.time-value-bubble {
+.time-picker {
+  display: flex;
+  justify-content: center;
+  > div {
+    > div {
+      > input {
+        border: none;
+        border-radius: 5px;
+        height: 20px;
+        text-align: center;
+      }
+    }
+  }
+}
+
+.time-step-bubble {
   position: absolute;
   border-radius: 5px;
   height: 30px;
@@ -27,17 +44,17 @@
   padding-right: 5px;
   background-color: white;
   transform: translate(-50%);
-}
 
-.time-value-bubble:after {
-  position: absolute;
-  top: 100%;
-  left: 50%;
-  transform: translate(-50%);
-  content: "";
-  border-top: solid 10px white;
-  border-left: solid 10px transparent;
-  border-right: solid 10px transparent;
+  &:after {
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    transform: translate(-50%);
+    content: "";
+    border-top: solid 10px white;
+    border-left: solid 10px transparent;
+    border-right: solid 10px transparent;
+  }
 }
 
 // Input slider settings:
@@ -50,7 +67,7 @@ $thumb-height: 18px;
 $thumb-width: 18px;
 $thumb-shadow-size: 4px;
 $thumb-shadow-blur: 4px;
-$thumb-shadow-color: rgba(0, 0, 0, .2);
+$thumb-shadow-color: rgba(0, 0, 0, 0.2);
 $thumb-border-width: 1px;
 $thumb-border-color: #303030;
 
@@ -58,7 +75,7 @@ $track-width: 100%;
 $track-height: 10px;
 $track-shadow-size: 1px;
 $track-shadow-blur: 1px;
-$track-shadow-color: rgba(0, 0, 0, .2);
+$track-shadow-color: rgba(0, 0, 0, 0.2);
 $track-border-width: 0px;
 $track-border-color: #ffffff;
 

@@ -2,7 +2,6 @@ import React, { Suspense, useState } from "react";
 import { Provider } from "react-redux";
 import { store } from "./redux/store";
 import "./App.scss";
-import { TimeDisplay } from "./components/ui/TimeDisplay";
 import { TimeControlBar } from "./components/ui/TimeControlBar";
 import { Map } from "./components/map/Map";
 import { SearchBar } from "./components/ui/SearchBar";
@@ -40,7 +39,6 @@ function App() {
             onMenuClick={() => setOptionsPaneOpen(true)}
             resultsPaneOpen={resultsPaneOpen}
           />
-          <TimeDisplay />
           <TimeControlBar />
           <Map />
         </div>

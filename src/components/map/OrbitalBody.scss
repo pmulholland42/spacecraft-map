@@ -1,19 +1,23 @@
 @import "../ui/common.scss";
 
-@mixin orbital-body {
+@mixin orbital-body-container {
   position: absolute;
+  display: flex;
+}
+
+.orbital-body {
   translate: -50% -50%;
   border-radius: 50%;
   padding: 10px;
   background-clip: content-box;
 }
 
-.planet {
-  @include orbital-body();
+.planet-container {
+  @include orbital-body-container();
   z-index: $planet-z-index;
 }
 
-.moon {
-  @include orbital-body();
+.moon-container {
+  @include orbital-body-container();
   z-index: $moon-z-index;
 }

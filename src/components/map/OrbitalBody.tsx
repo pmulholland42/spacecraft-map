@@ -6,6 +6,7 @@ import { AstronomicalObject, Coordinate } from "../../interfaces";
 import { RootState } from "../../redux/store";
 import { setSelectedObject, setDetailsPaneOpen } from "../../redux/actionCreators";
 import { toScreenCoords, toScreenDistance } from "../../utilities";
+import { Label } from "./Label";
 
 interface OrbitalBodyProps {
   /** The object */
@@ -17,6 +18,7 @@ interface OrbitalBodyProps {
 const mapStateToProps = (state: RootState) => ({
   screenCenter: state.map.screenCenter,
   zoom: state.map.zoom,
+  showLabels: state.options.showLabels,
 });
 
 const mapDispatchToProps = {
@@ -31,7 +33,7 @@ type PropsFromRedux = ConnectedProps<typeof connector>;
 type Props = OrbitalBodyProps & PropsFromRedux;
 
 export const OrbitalBody = connector(
-  ({ object, coords, screenCenter, zoom, setSelectedObject, setDetailsPaneOpen }: Props) => {
+  ({ object, coords, screenCenter, zoom, setSelectedObject, setDetailsPaneOpen, showLabels }: Props) => {
     const screenCoords = toScreenCoords(coords, zoom, screenCenter);
     const diameter = toScreenDistance(object.diameter, zoom);
 
@@ -41,9 +43,25 @@ export const OrbitalBody = connector(
     // In the future, more specific styles for stars, dwarfs, etc. could be added if needed.
     let className: string;
     if (object.type === "planet" || object.type === "star") {
-      className = "planet";
+      className = "planet-container";
     } else {
-      className = "moon";
+      className = "moon-container";
+    }
+
+    let showLabel = false;
+    if (showLabels) {
+      if (object.type === "moon") {
+        showLabel = diameter > 0.1;
+      } else if (object.type === "planet" || object.type === "dwarf") {
+        const innerPlanets = ["mercury", "venus", "earth", "mars"];
+        if (innerPlanets.includes(object.id)) {
+          showLabel = zoom > 3;
+        } else {
+          showLabel = true;
+        }
+      } else if (object.type === "star") {
+        showLabel = zoom > 7;
+      }
     }
 
     const onClick = () => {
@@ -51,33 +69,41 @@ export const OrbitalBody = connector(
       setDetailsPaneOpen(true);
     };
 
-    return diameter > minPlanetSize ? (
-      <img
-        id={`${object.id}`}
-        src={`images/${object.image}`}
-        alt=""
-        style={{
-          height: `${diameter}px`,
-          width: `${diameter}px`,
-          top: screenCoords.y,
-          left: screenCoords.x,
-        }}
-        onClick={onClick}
-        className={className}
-      />
-    ) : (
+    return (
       <div
-        id={`${object.id}`}
+        className={className}
         style={{
-          width: minPlanetSize,
-          height: minPlanetSize,
           top: screenCoords.y,
           left: screenCoords.x,
-          backgroundColor: object.color,
         }}
         onClick={onClick}
-        className={className}
-      />
+      >
+        {diameter > minPlanetSize ? (
+          <img
+            id={`${object.id}`}
+            src={`images/${object.image}`}
+            alt=""
+            style={{
+              height: `${diameter}px`,
+              width: `${diameter}px`,
+            }}
+            className="orbital-body"
+          />
+        ) : (
+          <div
+            id={`${object.id}`}
+            style={{
+              width: minPlanetSize,
+              height: minPlanetSize,
+
+              backgroundColor: object.color,
+            }}
+            onClick={onClick}
+            className="orbital-body"
+          />
+        )}
+        {showLabel && <Label objectId={object.id} />}
+      </div>
     );
   }
 );

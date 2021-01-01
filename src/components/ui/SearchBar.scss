@@ -1,9 +1,11 @@
+@import "./common.scss";
+
 .search-bar-container {
   width: 290px;
   position: absolute;
   top: 10px;
   left: 15px;
-  z-index: 4;
+  z-index: $search-bar-z-index;
 }
 
 .search-bar {

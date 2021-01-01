@@ -1,7 +1,9 @@
 import { AstronomicalObject, Coordinate } from "../interfaces";
 import {
+  SET_DETAILS_PANE_OPEN,
   SET_DISPLAY_TIME,
   SET_KEEP_CENTERED,
+  SET_OPTIONS_PANE_OPEN,
   SET_SCREEN_CENTER,
   SET_SELECTED_OBJECT,
   SET_SHOW_BACKGROUND_STARS,
@@ -20,6 +22,8 @@ import {
   SetShowLabelsAction,
   SetShowOrbitsAction,
   SetZoomAction,
+  SetDetailsPaneOpenAction,
+  SetOptionsPaneOpenAction,
 } from "./actionTypes";
 
 export const setShowOrbits = (showOrbits: boolean): SetShowOrbitsAction => ({
@@ -65,4 +69,13 @@ export const setScreenCenter = (screenCenter: Coordinate): SetScreenCenterAction
 export const setZoom = (zoom: number): SetZoomAction => ({
   type: SET_ZOOM,
   zoom,
+});
+
+export const setDetailsPaneOpen = (open: boolean): SetDetailsPaneOpenAction => ({
+  type: SET_DETAILS_PANE_OPEN,
+  open,
+});
+export const setOptionsPaneOpen = (open: boolean): SetOptionsPaneOpenAction => ({
+  type: SET_OPTIONS_PANE_OPEN,
+  open,
 });

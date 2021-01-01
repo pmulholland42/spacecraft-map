@@ -1,7 +1,9 @@
 import { AstronomicalObject, Coordinate } from "../interfaces";
 import {
+  SET_DETAILS_PANE_OPEN,
   SET_DISPLAY_TIME,
   SET_KEEP_CENTERED,
+  SET_OPTIONS_PANE_OPEN,
   SET_SCREEN_CENTER,
   SET_SELECTED_OBJECT,
   SET_SHOW_BACKGROUND_STARS,
@@ -68,3 +70,16 @@ export interface SetZoomAction {
 }
 
 export type MapActionTypes = SetScreenCenterAction | SetZoomAction;
+
+// UI
+
+export interface SetDetailsPaneOpenAction {
+  type: typeof SET_DETAILS_PANE_OPEN;
+  open: boolean;
+}
+export interface SetOptionsPaneOpenAction {
+  type: typeof SET_OPTIONS_PANE_OPEN;
+  open: boolean;
+}
+
+export type UIActionTypes = SetDetailsPaneOpenAction | SetOptionsPaneOpenAction;

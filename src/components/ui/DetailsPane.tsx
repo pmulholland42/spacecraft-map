@@ -7,23 +7,17 @@ import { useTranslation } from "react-i18next";
 
 import { ObjectDetails } from "./ObjectDetails";
 
-interface DetailsPaneProps {
-  /** Is this pane open? */
-  isOpen: boolean;
-}
-
 const mapStateToProps = (state: RootState) => ({
   selectedObject: state.objectInfo.selectedObject,
+  open: state.ui.detailsPaneOpen,
 });
 
 const connector = connect(mapStateToProps);
 
 type PropsFromRedux = ConnectedProps<typeof connector>;
 
-type Props = DetailsPaneProps & PropsFromRedux;
-
-export const DetailsPane = connector(({ isOpen, selectedObject }: Props) => {
-  const transitions = useTransition(isOpen, null, {
+export const DetailsPane = connector(({ open, selectedObject }: PropsFromRedux) => {
+  const transitions = useTransition(open, null, {
     from: { opacity: 0 },
     enter: { opacity: 1 },
     leave: { opacity: 0 },

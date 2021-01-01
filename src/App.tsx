@@ -11,19 +11,14 @@ import { ZoomButtons } from "./components/ui/ZoomButtons";
 
 function App() {
   const [optionsPaneOpen, setOptionsPaneOpen] = useState(false);
-  const [detailsPaneOpen, setDetailsPaneOpen] = useState(false);
 
   return (
     <Suspense fallback="loading i18n...">
       <Provider store={store}>
         <div style={{ width: "100%", height: "100%" }}>
-          <OptionsPane isOpen={optionsPaneOpen} closeOptionsPane={() => setOptionsPaneOpen(false)} />
-          <DetailsPane isOpen={detailsPaneOpen} />
-          <SearchBar
-            setDetailsPaneOpen={setDetailsPaneOpen}
-            onMenuClick={() => setOptionsPaneOpen(true)}
-            detailsPaneOpen={detailsPaneOpen}
-          />
+          <OptionsPane />
+          <DetailsPane />
+          <SearchBar />
           <TimeControlBar />
           <Map />
           <ZoomButtons />

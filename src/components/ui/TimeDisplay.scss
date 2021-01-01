@@ -1,3 +1,5 @@
+@import "./common.scss";
+
 .time-display {
   color: #00ff00;
   font-size: 24px;
@@ -7,5 +9,5 @@
   left: 50%;
   bottom: 6%;
   transform: translate(-50%, -50%);
-  z-index: 1;
+  z-index: $time-bar-z-index;
 }

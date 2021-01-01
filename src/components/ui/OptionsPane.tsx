@@ -1,5 +1,6 @@
 import "./OptionsPane.scss";
 import {
+  setOptionsPaneOpen,
   setShowOrbits,
   setShowLabels,
   setShowBackgroundStars,
@@ -14,12 +15,8 @@ import { useTranslation } from "react-i18next";
 import { animated, useTransition } from "react-spring";
 import Switch from "react-switch";
 
-interface OptionsPaneProps {
-  isOpen: boolean;
-  closeOptionsPane: () => void;
-}
-
 const mapStateToProps = (state: RootState) => ({
+  open: state.ui.optionsPaneOpen,
   showOrbits: state.options.showOrbits,
   showLabels: state.options.showLabels,
   showBackgroundStars: state.options.showBackgroundStars,
@@ -27,6 +24,7 @@ const mapStateToProps = (state: RootState) => ({
 });
 
 const mapDispatchToProps = {
+  setOptionsPaneOpen,
   setShowOrbits,
   setShowLabels,
   setShowBackgroundStars,
@@ -37,12 +35,10 @@ const connector = connect(mapStateToProps, mapDispatchToProps);
 
 type PropsFromRedux = ConnectedProps<typeof connector>;
 
-type Props = PropsFromRedux & OptionsPaneProps;
-
 export const OptionsPane = connector(
   ({
-    isOpen,
-    closeOptionsPane,
+    open,
+    setOptionsPaneOpen,
     showOrbits,
     showLabels,
     showBackgroundStars,
@@ -51,10 +47,10 @@ export const OptionsPane = connector(
     setShowLabels,
     setShowBackgroundStars,
     setShowDebugInfo,
-  }: Props) => {
+  }: PropsFromRedux) => {
     const { t } = useTranslation();
 
-    const transitions = useTransition(isOpen, null, {
+    const transitions = useTransition(open, null, {
       from: { left: -322 },
       enter: { left: 0 },
       leave: { left: -322 },
@@ -81,8 +77,8 @@ export const OptionsPane = connector(
             item && (
               <animated.div key={key} className="options-pane" style={props}>
                 <span className="options-pane-titlebar">
-                  <h3>Options</h3>
-                  <div className="options-pane-close-button" onClick={() => closeOptionsPane()}>
+                  <h3>{t("options")}</h3>
+                  <div className="options-pane-close-button" onClick={() => setOptionsPaneOpen(false)}>
                     <FontAwesomeIcon icon={faAngleDoubleLeft} size={"lg"} />
                   </div>
                 </span>

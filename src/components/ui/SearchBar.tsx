@@ -7,27 +7,23 @@ import { SearchSuggestion } from "./SearchSuggestion";
 import { useTranslation } from "react-i18next";
 import { AstronomicalObject } from "../../interfaces";
 import { getObjectName } from "../../utilities";
-import { setSelectedObject } from "../../redux/actionCreators";
+import { setSelectedObject, setDetailsPaneOpen, setOptionsPaneOpen } from "../../redux/actionCreators";
 import { connect, ConnectedProps } from "react-redux";
+import { RootState } from "../../redux/store";
 
-interface SearchBarProps {
-  /** Is the details pane open? */
-  detailsPaneOpen: boolean;
-  /** Opens or closes the details pane */
-  setDetailsPaneOpen: (open: boolean) => void;
-  /** Called when the user clicks the hamburger menu button */
-  onMenuClick: () => void;
-}
-
+const mapStateToProps = (state: RootState) => ({
+  selectedObject: state.objectInfo.selectedObject,
+  detailsPaneOpen: state.ui.detailsPaneOpen,
+});
 const mapDispatchToProps = {
   setSelectedObject,
+  setDetailsPaneOpen,
+  setOptionsPaneOpen,
 };
 
-const connector = connect(null, mapDispatchToProps);
+const connector = connect(mapStateToProps, mapDispatchToProps);
 
 type PropsFromRedux = ConnectedProps<typeof connector>;
-
-type Props = SearchBarProps & PropsFromRedux;
 
 /**
  * Search bar with a dropdown search suggestions list.
@@ -35,7 +31,13 @@ type Props = SearchBarProps & PropsFromRedux;
  * Controls the results pane and options pane.
  */
 export const SearchBar = connector(
-  ({ detailsPaneOpen, setDetailsPaneOpen, onMenuClick, setSelectedObject }: Props) => {
+  ({
+    detailsPaneOpen,
+    setDetailsPaneOpen,
+    setOptionsPaneOpen,
+    selectedObject,
+    setSelectedObject,
+  }: PropsFromRedux) => {
     const [searchText, setSearchText] = useState("");
     const [showSearchSuggestions, setShowSearchSuggestions] = useState(true);
 
@@ -69,6 +71,13 @@ export const SearchBar = connector(
       };
     }, [setShowSearchSuggestions]);
 
+    useEffect(() => {
+      // When a new object is selected, put its name in the search bar
+      if (selectedObject !== null) {
+        setSearchText(getObjectName(selectedObject.id, t));
+      }
+    }, [selectedObject]);
+
     const onCloseButtonClick = () => {
       setSearchText("");
       setDetailsPaneOpen(false);
@@ -82,9 +91,6 @@ export const SearchBar = connector(
       setSelectedObject(object);
       setShowSearchSuggestions(false);
       setDetailsPaneOpen(true);
-      if (object !== null) {
-        setSearchText(getObjectName(object.id, t));
-      }
     };
 
     const onSearchButtonClick = () => {
@@ -123,7 +129,7 @@ export const SearchBar = connector(
             borderBottomRightRadius: borderBottomRadius,
           }}
         >
-          <div className="search-bar-button" onClick={onMenuClick}>
+          <div className="search-bar-button" onClick={() => setOptionsPaneOpen(true)}>
             <FontAwesomeIcon icon={faBars} size={"lg"} />
           </div>
           <input

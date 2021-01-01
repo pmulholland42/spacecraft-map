@@ -1,7 +1,9 @@
 import { combineReducers, createStore } from "redux";
 import {
+  SET_DETAILS_PANE_OPEN,
   SET_DISPLAY_TIME,
   SET_KEEP_CENTERED,
+  SET_OPTIONS_PANE_OPEN,
   SET_SCREEN_CENTER,
   SET_SELECTED_OBJECT,
   SET_SHOW_BACKGROUND_STARS,
@@ -10,7 +12,13 @@ import {
   SET_SHOW_ORBITS,
   SET_ZOOM,
 } from "./actions";
-import { MapActionTypes, ObjectInfoActionTypes, OptionsActionTypes, TimeActionTypes } from "./actionTypes";
+import {
+  MapActionTypes,
+  ObjectInfoActionTypes,
+  OptionsActionTypes,
+  TimeActionTypes,
+  UIActionTypes,
+} from "./actionTypes";
 import { AstronomicalObject, Coordinate } from "../interfaces";
 
 // Options
@@ -94,7 +102,7 @@ interface MapState {
 
 const initialMapState: MapState = {
   screenCenter: { x: 0, y: 0 },
-  zoom: 1,
+  zoom: 10,
 };
 
 const mapReducer = (state: MapState = initialMapState, action: MapActionTypes) => {
@@ -108,11 +116,34 @@ const mapReducer = (state: MapState = initialMapState, action: MapActionTypes) =
   }
 };
 
+// UI
+interface UIState {
+  detailsPaneOpen: boolean;
+  optionsPaneOpen: boolean;
+}
+
+const initialUIState: UIState = {
+  detailsPaneOpen: false,
+  optionsPaneOpen: false,
+};
+
+const uiReducer = (state: UIState = initialUIState, action: UIActionTypes) => {
+  switch (action.type) {
+    case SET_DETAILS_PANE_OPEN:
+      return { ...state, detailsPaneOpen: action.open };
+    case SET_OPTIONS_PANE_OPEN:
+      return { ...state, optionsPaneOpen: action.open };
+    default:
+      return state;
+  }
+};
+
 const rootReducer = combineReducers({
   options: optionsReducer,
   objectInfo: objectInfoReducer,
   time: timeReducer,
   map: mapReducer,
+  ui: uiReducer,
 });
 
 export const store = createStore(rootReducer);

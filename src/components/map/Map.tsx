@@ -57,6 +57,9 @@ export const Map = connector(
       if (selectedObject !== null && (selectedObject !== prevSelectedObject || keepCentered)) {
         const coords = getObjectCoordinates(selectedObject, displayTime);
         setScreenCenter(coords);
+        if (selectedObject !== prevSelectedObject) {
+          setZoom(7000);
+        }
       }
     }, [selectedObject, prevSelectedObject, setScreenCenter, displayTime, keepCentered]);
 

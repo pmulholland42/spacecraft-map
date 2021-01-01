@@ -8,6 +8,7 @@ import { SearchBar } from "./components/ui/SearchBar";
 import { OptionsPane } from "./components/ui/OptionsPane";
 import { DetailsPane } from "./components/ui/DetailsPane";
 import { ZoomButtons } from "./components/ui/ZoomButtons";
+import { DebugPanel } from "./components/ui/DebugPanel";
 
 function App() {
   const [optionsPaneOpen, setOptionsPaneOpen] = useState(false);
@@ -22,6 +23,7 @@ function App() {
           <TimeControlBar />
           <Map />
           <ZoomButtons />
+          <DebugPanel initialPosition={{ x: 1000, y: 200 }} />
         </div>
       </Provider>
     </Suspense>

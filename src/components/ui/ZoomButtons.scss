@@ -1,9 +1,12 @@
+@import "./common.scss";
+
 .button-column {
   display: flex;
   flex-direction: column;
   position: absolute;
   bottom: 5vh;
   right: 5vh;
+  z-index: $zoom-buttons-z-index;
 }
 
 .zoom-button {

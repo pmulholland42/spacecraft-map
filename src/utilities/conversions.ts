@@ -7,7 +7,7 @@ import { Coordinate } from "../interfaces";
  */
 export const getScaleFactor = (zoom: number) => {
   const kmPerPixel = maxWidthDistance / window.innerWidth;
-  return zoom / kmPerPixel;
+  return Math.pow(1.5, zoom) / kmPerPixel;
 };
 
 /**

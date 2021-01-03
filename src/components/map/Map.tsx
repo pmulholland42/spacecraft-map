@@ -14,6 +14,7 @@ import { Coordinate } from "../../interfaces";
 import solarSystem from "../../data/solarSystem";
 import { OrbitalBody } from "./OrbitalBody";
 import { usePrevious } from "../../hooks/usePrevious";
+import { maxZoomLevel, minZoomLevel } from "../../constants";
 
 const mapStateToProps = (state: RootState) => ({
   showOrbits: state.options.showOrbits,
@@ -60,7 +61,7 @@ export const Map = connector(
         setKeepCentered(false);
 
         const coords = getObjectCoordinates(selectedObject, displayTime);
-        animateZoomAndPan(coords, 23000);
+        animateZoomAndPan(coords, 25);
       }
     }, [selectedObject, prevSelectedObject, setScreenCenter, displayTime, setKeepCentered]);
 
@@ -99,11 +100,11 @@ export const Map = connector(
       let newZoom: number;
       // Scrolling up - zoom in
       if (event.deltaY < 0) {
-        newZoom = zoom * 1.1;
+        newZoom = Math.min(zoom + 0.25, maxZoomLevel);
       }
       // Scrolling down - zoom out
       else {
-        newZoom = zoom * 0.9;
+        newZoom = Math.max(zoom - 0.25, minZoomLevel);
       }
       zoomTo(newZoom, mouseCoords);
     };

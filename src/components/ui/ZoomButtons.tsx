@@ -7,6 +7,7 @@ import { faPlus, faMinus } from "@fortawesome/free-solid-svg-icons";
 import { faCircle } from "@fortawesome/free-regular-svg-icons";
 import { RootState } from "../../redux/store";
 import { animateZoom, animatePan } from "../../utilities/animations";
+import { maxZoomLevel, minZoomLevel } from "../../constants";
 
 const mapStateToProps = (state: RootState) => ({
   zoom: state.map.zoom,
@@ -23,15 +24,15 @@ type PropsFromRedux = ConnectedProps<typeof connector>;
 
 export const ZoomButtons = connector(({ zoom, keepCentered }: PropsFromRedux) => {
   const zoomIn = () => {
-    animateZoom(zoom * 1.5, 500);
+    animateZoom(Math.min(zoom + 1, maxZoomLevel), 500);
   };
 
   const zoomOut = () => {
-    animateZoom(zoom / 1.5, 500);
+    animateZoom(Math.max(zoom - 1, minZoomLevel), 500);
   };
 
   const fitToSolarSystem = async () => {
-    await animateZoom(0.6, 1000);
+    await animateZoom(minZoomLevel, 1000);
     if (!keepCentered) {
       await animatePan({ x: 0, y: 0 }, 1000);
     }

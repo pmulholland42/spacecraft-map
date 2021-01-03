@@ -1,4 +1,4 @@
-import React, { Suspense, useState } from "react";
+import React, { Suspense } from "react";
 import { Provider } from "react-redux";
 import { store } from "./redux/store";
 import "./App.scss";
@@ -11,8 +11,6 @@ import { ZoomButtons } from "./components/ui/ZoomButtons";
 import { DebugPanel } from "./components/ui/DebugPanel";
 
 function App() {
-  const [optionsPaneOpen, setOptionsPaneOpen] = useState(false);
-
   return (
     <Suspense fallback="loading i18n...">
       <Provider store={store}>

@@ -138,3 +138,11 @@ export const getObjectCoordinates = (object: AstronomicalObject | undefined, tim
     return { x, y };
   }
 };
+
+/**
+ * Gets the distance between 2D points
+ * @param pointA
+ * @param pointB
+ */
+export const getDistance = (pointA: Coordinate, pointB: Coordinate) =>
+  Math.sqrt(Math.pow(pointA.x - pointB.x, 2) + Math.pow(pointA.y - pointB.y, 2));

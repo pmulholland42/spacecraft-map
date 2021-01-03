@@ -76,7 +76,7 @@ export const SearchBar = connector(
       if (selectedObject !== null) {
         setSearchText(getObjectName(selectedObject.id, t));
       }
-    }, [selectedObject]);
+    }, [selectedObject, t]);
 
     const onCloseButtonClick = () => {
       setSearchText("");

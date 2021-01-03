@@ -6,9 +6,11 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPlus, faMinus } from "@fortawesome/free-solid-svg-icons";
 import { faCircle } from "@fortawesome/free-regular-svg-icons";
 import { RootState } from "../../redux/store";
+import { animateZoom, animatePan } from "../../utilities/animations";
 
 const mapStateToProps = (state: RootState) => ({
   zoom: state.map.zoom,
+  keepCentered: state.objectInfo.keepCentered,
 });
 
 const mapDispatchToProps = {
@@ -19,17 +21,20 @@ const connector = connect(mapStateToProps, mapDispatchToProps);
 
 type PropsFromRedux = ConnectedProps<typeof connector>;
 
-export const ZoomButtons = connector(({ zoom, setZoom }: PropsFromRedux) => {
+export const ZoomButtons = connector(({ zoom, keepCentered }: PropsFromRedux) => {
   const zoomIn = () => {
-    setZoom(zoom * 1.2);
+    animateZoom(zoom * 1.5, 500);
   };
 
   const zoomOut = () => {
-    setZoom(zoom * 0.8);
+    animateZoom(zoom / 1.5, 500);
   };
 
-  const fitToSolarSystem = () => {
-    setZoom(0.6);
+  const fitToSolarSystem = async () => {
+    await animateZoom(0.6, 1000);
+    if (!keepCentered) {
+      await animatePan({ x: 0, y: 0 }, 1000);
+    }
   };
 
   return (

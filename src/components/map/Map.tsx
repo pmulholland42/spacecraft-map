@@ -1,9 +1,15 @@
 import React, { useEffect, useRef, useState } from "react";
 import { connect, ConnectedProps } from "react-redux";
-import { RootState } from "../../redux/store";
-import { setZoom, setScreenCenter } from "../../redux/actionCreators";
+import { RootState, store } from "../../redux/store";
+import { setZoom, setScreenCenter, setKeepCentered } from "../../redux/actionCreators";
 import { OrbitalEllipse } from "./OrbitalEllipse";
-import { getOrbitalPosition, getObjectCoordinates, toSpaceCoords, toSpaceDistance } from "../../utilities";
+import {
+  getOrbitalPosition,
+  getObjectCoordinates,
+  toSpaceCoords,
+  toSpaceDistance,
+  animateZoomAndPan,
+} from "../../utilities";
 import { Coordinate } from "../../interfaces";
 import solarSystem from "../../data/solarSystem";
 import { OrbitalBody } from "./OrbitalBody";
@@ -11,9 +17,6 @@ import { usePrevious } from "../../hooks/usePrevious";
 
 const mapStateToProps = (state: RootState) => ({
   showOrbits: state.options.showOrbits,
-  showLabels: state.options.showLabels,
-  showBackgroundStars: state.options.showBackgroundStars,
-  showDebugInfo: state.options.showDebugInfo,
   keepCentered: state.objectInfo.keepCentered,
   selectedObject: state.objectInfo.selectedObject,
   displayTime: state.time.displayTime,
@@ -24,6 +27,7 @@ const mapStateToProps = (state: RootState) => ({
 const mapDispatchToProps = {
   setZoom,
   setScreenCenter,
+  setKeepCentered,
 };
 
 const connector = connect(mapStateToProps, mapDispatchToProps);
@@ -37,9 +41,6 @@ type PropsFromRedux = ConnectedProps<typeof connector>;
 export const Map = connector(
   ({
     showOrbits,
-    showLabels,
-    showBackgroundStars,
-    showDebugInfo,
     keepCentered,
     selectedObject,
     displayTime,
@@ -47,21 +48,29 @@ export const Map = connector(
     screenCenter,
     setZoom,
     setScreenCenter,
+    setKeepCentered,
   }: PropsFromRedux) => {
     const [isDragging, setIsDragging] = useState(false);
     const prevMousePositionRef = useRef<Coordinate | null>(null);
     const prevSelectedObject = usePrevious(selectedObject);
 
     useEffect(() => {
-      // Center the screen on the selected object
-      if (selectedObject !== null && (selectedObject !== prevSelectedObject || keepCentered)) {
+      // Center the screen on the newly selected object
+      if (selectedObject !== null && selectedObject !== prevSelectedObject) {
+        setKeepCentered(false);
+
+        const coords = getObjectCoordinates(selectedObject, displayTime);
+        animateZoomAndPan(coords, 23000);
+      }
+    }, [selectedObject, prevSelectedObject, setScreenCenter, displayTime, setKeepCentered]);
+
+    useEffect(() => {
+      // Keep the selected object centered
+      if (keepCentered && selectedObject !== null && selectedObject === prevSelectedObject) {
         const coords = getObjectCoordinates(selectedObject, displayTime);
         setScreenCenter(coords);
-        if (selectedObject !== prevSelectedObject) {
-          setZoom(7000);
-        }
       }
-    }, [selectedObject, prevSelectedObject, setScreenCenter, displayTime, keepCentered]);
+    }, [selectedObject, keepCentered, displayTime, setScreenCenter, prevSelectedObject]);
 
     /**
      * Updates the zoom and screen center in response to a mouse event

@@ -1,0 +1,22 @@
+@import "../../ui/common.scss";
+
+.text-bubble {
+  background-color: white;
+  border-radius: 5px;
+  padding: 10px;
+  position: absolute;
+  z-index: $text-bubble-z-index;
+  translate: -50% calc(-100% - 10px);
+  max-width: 30vw;
+
+  &:after {
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    transform: translate(-50%);
+    content: "";
+    border-top: solid 10px white;
+    border-left: solid 10px transparent;
+    border-right: solid 10px transparent;
+  }
+}

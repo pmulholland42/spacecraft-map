@@ -1,6 +1,6 @@
 import React from "react";
 import { connect, ConnectedProps } from "react-redux";
-import { RootState } from "../../redux/store";
+import { RootState } from "../../../redux/store";
 import "./TimeDisplay.scss";
 
 const mapStateToProps = (state: RootState) => ({
@@ -22,9 +22,5 @@ const dateOptions: Intl.DateTimeFormatOptions = {
 const locale = "en-US";
 
 export const TimeDisplay = connector((props: PropsFromRedux) => {
-  return (
-    <div className="time-display">
-      {props.displayTime.toLocaleDateString(locale, dateOptions)}
-    </div>
-  );
+  return <div className="time-display">{props.displayTime.toLocaleDateString(locale, dateOptions)}</div>;
 });

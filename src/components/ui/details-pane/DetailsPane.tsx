@@ -2,10 +2,10 @@ import "./DetailsPane.scss";
 import React from "react";
 import { animated, useTransition } from "react-spring";
 import { connect, ConnectedProps } from "react-redux";
-import { RootState } from "../../redux/store";
+import { RootState } from "../../../redux/store";
 import { useTranslation } from "react-i18next";
 
-import { ObjectDetails } from "./ObjectDetails";
+import { ObjectDetails } from "../object-details/ObjectDetails";
 
 const mapStateToProps = (state: RootState) => ({
   selectedObject: state.objectInfo.selectedObject,

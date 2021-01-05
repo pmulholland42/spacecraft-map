@@ -5,8 +5,8 @@ import {
   setShowLabels,
   setShowBackgroundStars,
   setShowDebugInfo,
-} from "../../redux/actionCreators";
-import { RootState } from "../../redux/store";
+} from "../../../redux/actionCreators";
+import { RootState } from "../../../redux/store";
 import React from "react";
 import { connect, ConnectedProps } from "react-redux";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";

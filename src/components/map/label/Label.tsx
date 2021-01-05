@@ -1,7 +1,7 @@
 import "./Label.scss";
 import React from "react";
 import { useTranslation } from "react-i18next";
-import { getObjectName } from "../../utilities";
+import { getObjectName } from "../../../utilities";
 
 interface LabelProps {
   objectId: string;

@@ -1,8 +1,8 @@
 import React from "react";
 import { connect, ConnectedProps } from "react-redux";
-import { Coordinate } from "../../interfaces";
-import { RootState } from "../../redux/store";
-import { auToKm, toScreenCoords, toScreenDistance } from "../../utilities";
+import { Coordinate } from "../../../interfaces";
+import { RootState } from "../../../redux/store";
+import { auToKm, toScreenCoords, toScreenDistance } from "../../../utilities";
 
 interface OrbitalEllipseProps {
   /** The name of the object */

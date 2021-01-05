@@ -1,6 +1,6 @@
 import "./ObjectDetails.scss";
 import React, { useMemo } from "react";
-import { AstronomicalObject } from "../../interfaces";
+import { AstronomicalObject } from "../../../interfaces";
 import { useTranslation, getI18n } from "react-i18next";
 import {
   getObjectName,
@@ -9,10 +9,10 @@ import {
   getOrbitalPosition,
   getPeriod,
   getRelativeCoordinates,
-} from "../../utilities";
+} from "../../../utilities";
 import Switch from "react-switch";
-import { RootState } from "../../redux/store";
-import { setKeepCentered } from "../../redux/actionCreators";
+import { RootState } from "../../../redux/store";
+import { setKeepCentered } from "../../../redux/actionCreators";
 import { ConnectedProps, connect } from "react-redux";
 
 const mapStateToProps = (state: RootState) => ({

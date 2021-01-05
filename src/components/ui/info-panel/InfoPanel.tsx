@@ -1,10 +1,10 @@
 import React from "react";
 import { connect, ConnectedProps } from "react-redux";
-import { useDraggable } from "../../hooks/useDraggable";
-import { RootState } from "../../redux/store";
-import { setKeepCentered } from "../../redux/actionCreators";
+import { useDraggable } from "../../../hooks/useDraggable";
+import { RootState } from "../../../redux/store";
+import { setKeepCentered } from "../../../redux/actionCreators";
 import "./InfoPanel.scss";
-import { Coordinate } from "../../interfaces";
+import { Coordinate } from "../../../interfaces";
 
 interface InfoPanelProps {
   initialPosition: Coordinate;

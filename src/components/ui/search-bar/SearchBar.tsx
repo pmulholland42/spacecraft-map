@@ -2,14 +2,14 @@ import "./SearchBar.scss";
 import React, { useEffect, useMemo, useRef, useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faBars, faSearch, faTimes } from "@fortawesome/free-solid-svg-icons";
-import solarSystem from "../../data/solarSystem";
+import solarSystem from "../../../data/solarSystem";
 import { SearchSuggestion } from "./SearchSuggestion";
 import { useTranslation } from "react-i18next";
-import { AstronomicalObject } from "../../interfaces";
-import { getObjectName } from "../../utilities";
-import { setSelectedObject, setDetailsPaneOpen, setOptionsPaneOpen } from "../../redux/actionCreators";
+import { AstronomicalObject } from "../../../interfaces";
+import { getObjectName } from "../../../utilities";
+import { setSelectedObject, setDetailsPaneOpen, setOptionsPaneOpen } from "../../../redux/actionCreators";
 import { connect, ConnectedProps } from "react-redux";
-import { RootState } from "../../redux/store";
+import { RootState } from "../../../redux/store";
 
 const mapStateToProps = (state: RootState) => ({
   selectedObject: state.objectInfo.selectedObject,

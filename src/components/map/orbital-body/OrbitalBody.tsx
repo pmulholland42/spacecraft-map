@@ -1,12 +1,12 @@
 import "./OrbitalBody.scss";
 import React from "react";
 import { connect, ConnectedProps } from "react-redux";
-import { minPlanetSize } from "../../constants";
-import { AstronomicalObject, Coordinate } from "../../interfaces";
-import { RootState } from "../../redux/store";
-import { setSelectedObject, setDetailsPaneOpen } from "../../redux/actionCreators";
-import { toScreenCoords, toScreenDistance } from "../../utilities";
-import { Label } from "./Label";
+import { minPlanetSize } from "../../../constants";
+import { AstronomicalObject, Coordinate } from "../../../interfaces";
+import { RootState } from "../../../redux/store";
+import { setSelectedObject, setDetailsPaneOpen } from "../../../redux/actionCreators";
+import { toScreenCoords, toScreenDistance } from "../../../utilities";
+import { Label } from "../label/Label";
 
 interface OrbitalBodyProps {
   /** The object */

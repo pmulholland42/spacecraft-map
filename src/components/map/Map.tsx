@@ -1,8 +1,8 @@
 import React, { useEffect, useRef, useState } from "react";
 import { connect, ConnectedProps } from "react-redux";
-import { RootState, store } from "../../redux/store";
+import { RootState } from "../../redux/store";
 import { setZoom, setScreenCenter, setKeepCentered } from "../../redux/actionCreators";
-import { OrbitalEllipse } from "./OrbitalEllipse";
+import { OrbitalEllipse } from "./orbital-ellipse/OrbitalEllipse";
 import {
   getOrbitalPosition,
   getObjectCoordinates,
@@ -12,7 +12,7 @@ import {
 } from "../../utilities";
 import { Coordinate } from "../../interfaces";
 import solarSystem from "../../data/solarSystem";
-import { OrbitalBody } from "./OrbitalBody";
+import { OrbitalBody } from "./orbital-body/OrbitalBody";
 import { usePrevious } from "../../hooks/usePrevious";
 import { maxZoomLevel, minZoomLevel } from "../../constants";
 

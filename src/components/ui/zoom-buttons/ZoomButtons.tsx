@@ -1,13 +1,13 @@
 import "./ZoomButtons.scss";
 import React from "react";
-import { setZoom } from "../../redux/actionCreators";
+import { setZoom } from "../../../redux/actionCreators";
 import { connect, ConnectedProps } from "react-redux";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPlus, faMinus } from "@fortawesome/free-solid-svg-icons";
 import { faCircle } from "@fortawesome/free-regular-svg-icons";
-import { RootState } from "../../redux/store";
-import { animateZoom, animatePan } from "../../utilities/animations";
-import { maxZoomLevel, minZoomLevel } from "../../constants";
+import { RootState } from "../../../redux/store";
+import { animateZoom, animatePan } from "../../../utilities/animations";
+import { maxZoomLevel, minZoomLevel } from "../../../constants";
 
 const mapStateToProps = (state: RootState) => ({
   zoom: state.map.zoom,

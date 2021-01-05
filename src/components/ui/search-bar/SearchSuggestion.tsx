@@ -1,6 +1,6 @@
 import React from "react";
 import "./SearchSuggestion.scss";
-import { AstronomicalObject } from "../../interfaces";
+import { AstronomicalObject } from "../../../interfaces";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faGlobeAmericas,
@@ -10,8 +10,8 @@ import {
   IconDefinition,
 } from "@fortawesome/free-solid-svg-icons";
 import { useTranslation } from "react-i18next";
-import { getObjectName, getShortDescription } from "../../utilities";
-import { setSelectedObject } from "../../redux/actionCreators";
+import { getObjectName, getShortDescription } from "../../../utilities";
+import { setSelectedObject } from "../../../redux/actionCreators";
 import { connect, ConnectedProps } from "react-redux";
 
 interface SearchSuggestionProps {

@@ -1,8 +1,8 @@
 import "./TimeControlBar.scss";
 import "react-datepicker/dist/react-datepicker.css";
-import { oneSecond, oneDay, oneYear } from "../../constants";
-import { RootState } from "../../redux/store";
-import { setDisplayTime } from "../../redux/actionCreators";
+import { oneSecond, oneDay, oneYear } from "../../../constants";
+import { RootState } from "../../../redux/store";
+import { setDisplayTime } from "../../../redux/actionCreators";
 import React, { useEffect, useRef, useState } from "react";
 import { connect, ConnectedProps } from "react-redux";
 import useInterval from "use-interval";

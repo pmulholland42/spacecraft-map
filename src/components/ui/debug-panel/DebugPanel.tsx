@@ -1,9 +1,9 @@
 import React from "react";
 import { connect, ConnectedProps } from "react-redux";
-import { useDraggable } from "../../hooks/useDraggable";
-import { RootState } from "../../redux/store";
-import { setShowDebugInfo } from "../../redux/actionCreators";
-import { Coordinate } from "../../interfaces";
+import { useDraggable } from "../../../hooks/useDraggable";
+import { RootState } from "../../../redux/store";
+import { setShowDebugInfo } from "../../../redux/actionCreators";
+import { Coordinate } from "../../../interfaces";
 
 interface DebugPanelProps {
   initialPosition: Coordinate;

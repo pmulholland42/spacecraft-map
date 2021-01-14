@@ -10,6 +10,7 @@ import {
   SET_SHOW_DEBUG_INFO,
   SET_SHOW_LABELS,
   SET_SHOW_ORBITS,
+  SET_TOUR_MODAL_OPEN,
   SET_ZOOM,
 } from "./actions";
 import {
@@ -120,11 +121,13 @@ const mapReducer = (state: MapState = initialMapState, action: MapActionTypes) =
 interface UIState {
   detailsPaneOpen: boolean;
   optionsPaneOpen: boolean;
+  tourModalOpen: boolean;
 }
 
 const initialUIState: UIState = {
   detailsPaneOpen: false,
   optionsPaneOpen: false,
+  tourModalOpen: false,
 };
 
 const uiReducer = (state: UIState = initialUIState, action: UIActionTypes) => {
@@ -133,6 +136,8 @@ const uiReducer = (state: UIState = initialUIState, action: UIActionTypes) => {
       return { ...state, detailsPaneOpen: action.open };
     case SET_OPTIONS_PANE_OPEN:
       return { ...state, optionsPaneOpen: action.open };
+    case SET_TOUR_MODAL_OPEN:
+      return { ...state, tourModalOpen: action.open };
     default:
       return state;
   }

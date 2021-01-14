@@ -1,0 +1,23 @@
+@import "../common.scss";
+
+.tour-button {
+  z-index: $tour-button-z-index;
+  border-radius: 5px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  padding-left: 13px;
+  padding-right: 13px;
+  position: absolute;
+  top: 10px;
+  right: 15px;
+  background-color: white;
+  height: 45px;
+  border: 1px solid grey;
+  cursor: pointer;
+}
+
+.tour-button-text {
+  font-size: 18px;
+  padding-left: 10px;
+}

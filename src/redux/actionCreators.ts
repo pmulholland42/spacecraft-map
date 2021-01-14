@@ -10,6 +10,7 @@ import {
   SET_SHOW_DEBUG_INFO,
   SET_SHOW_LABELS,
   SET_SHOW_ORBITS,
+  SET_TOUR_MODAL_OPEN,
   SET_ZOOM,
 } from "./actions";
 import {
@@ -24,6 +25,7 @@ import {
   SetZoomAction,
   SetDetailsPaneOpenAction,
   SetOptionsPaneOpenAction,
+  SetTourModalOpenAction,
 } from "./actionTypes";
 
 export const setShowOrbits = (showOrbits: boolean): SetShowOrbitsAction => ({
@@ -71,11 +73,17 @@ export const setZoom = (zoom: number): SetZoomAction => ({
   zoom,
 });
 
+// UI
+
 export const setDetailsPaneOpen = (open: boolean): SetDetailsPaneOpenAction => ({
   type: SET_DETAILS_PANE_OPEN,
   open,
 });
 export const setOptionsPaneOpen = (open: boolean): SetOptionsPaneOpenAction => ({
   type: SET_OPTIONS_PANE_OPEN,
+  open,
+});
+export const setTourModalOpen = (open: boolean): SetTourModalOpenAction => ({
+  type: SET_TOUR_MODAL_OPEN,
   open,
 });

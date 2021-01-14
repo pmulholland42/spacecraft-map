@@ -10,6 +10,7 @@ import {
   SET_SHOW_DEBUG_INFO,
   SET_SHOW_LABELS,
   SET_SHOW_ORBITS,
+  SET_TOUR_MODAL_OPEN,
   SET_ZOOM,
 } from "./actions";
 
@@ -81,5 +82,9 @@ export interface SetOptionsPaneOpenAction {
   type: typeof SET_OPTIONS_PANE_OPEN;
   open: boolean;
 }
+export interface SetTourModalOpenAction {
+  type: typeof SET_TOUR_MODAL_OPEN;
+  open: boolean;
+}
 
-export type UIActionTypes = SetDetailsPaneOpenAction | SetOptionsPaneOpenAction;
+export type UIActionTypes = SetDetailsPaneOpenAction | SetOptionsPaneOpenAction | SetTourModalOpenAction;

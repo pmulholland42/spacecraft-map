@@ -3,9 +3,12 @@
 .time-control-container {
   position: absolute;
   left: 50%;
-  bottom: 0;
-  transform: translate(-50%, -50%);
+  bottom: 20px;
+  transform: translate(-50%);
   z-index: $time-bar-z-index;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
 .time-control-bar {
@@ -26,6 +29,7 @@
 .time-picker {
   display: flex;
   justify-content: center;
+  align-items: center;
   > div {
     > div {
       > input {
@@ -39,24 +43,14 @@
 }
 
 .time-step-bubble {
-  position: absolute;
   border-radius: 5px;
   height: 30px;
   padding-left: 5px;
   padding-right: 5px;
+  margin-bottom: 10px;
   background-color: white;
-  transform: translate(-50%);
-
-  &:after {
-    position: absolute;
-    top: 100%;
-    left: 50%;
-    transform: translate(-50%);
-    content: "";
-    border-top: solid 10px white;
-    border-left: solid 10px transparent;
-    border-right: solid 10px transparent;
-  }
+  display: flex;
+  align-items: center;
 }
 
 // Input slider settings:

@@ -58,33 +58,16 @@ type PropsFromRedux = ConnectedProps<typeof connector>;
 export const TimeControlBar = connector(({ displayTime, setDisplayTime }: PropsFromRedux) => {
   const [timeStepIndex, setTimeStepIndex] = useState(getPausedTimeStepIndex());
   const [timeStep, setTimeStep] = useState(0);
-  const [isDraggingSlider, setIsDraggingSlider] = useState(false);
   const [showTimeStepBubble, setShowTimeStepBubble] = useState(false);
-
-  const inputRef = useRef<HTMLInputElement | null>(null);
 
   useEffect(() => {
     setTimeStep(timeSteps[timeStepIndex].value);
   }, [timeStepIndex, setTimeStep]);
 
   useEffect(() => {
-    // While the user is dragging the time slider around, the time step bubble is displayed
-    function stopDraggingSlider() {
-      setIsDraggingSlider(false);
-    }
-    window.addEventListener("mouseup", stopDraggingSlider);
-    window.addEventListener("blur", stopDraggingSlider);
-
-    return () => {
-      window.removeEventListener("mouseup", stopDraggingSlider);
-      window.removeEventListener("blur", stopDraggingSlider);
-    };
-  }, [setIsDraggingSlider]);
-
-  useEffect(() => {
     // When the user clicks the fast forward or backward button, the time step bubble is briefly displayed
     setShowTimeStepBubble(true);
-    const timeout = setTimeout(() => setShowTimeStepBubble(false), 750);
+    const timeout = setTimeout(() => setShowTimeStepBubble(false), 1000);
 
     return () => {
       clearTimeout(timeout);
@@ -115,27 +98,10 @@ export const TimeControlBar = connector(({ displayTime, setDisplayTime }: PropsF
     setTimeStepIndex(getPausedTimeStepIndex());
   };
 
-  const onInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setTimeStepIndex(parseInt(event.target.value));
-  };
-
-  const onInputMouseDown = (event: React.MouseEvent<HTMLInputElement, MouseEvent>) => {
-    setIsDraggingSlider(true);
-  };
-
-  let valueBubbleBottom: number | undefined;
-  let valueBubbleLeft: number | undefined;
-
-  if (inputRef.current !== null) {
-    const inputRect = inputRef.current.getBoundingClientRect();
-
-    valueBubbleBottom = window.innerHeight - inputRect.y - 15;
-    // 9 comes from the width of the thumb divided by 2
-    valueBubbleLeft = inputRef.current.offsetLeft + inputRect.width * (timeStepIndex / timeSteps.length) + 9;
-  }
-
   return (
     <div className="time-control-container">
+      {showTimeStepBubble && <div className="time-step-bubble">{t(timeSteps[timeStepIndex].label)}</div>}
+
       <div className="time-control-bar">
         <button type="button" onClick={resetTime} className="time-control-button">
           <FontAwesomeIcon icon={faClock} size={"lg"} color={"white"} />
@@ -145,27 +111,14 @@ export const TimeControlBar = connector(({ displayTime, setDisplayTime }: PropsF
           <FontAwesomeIcon icon={faFastBackward} size={"lg"} color={"white"} />
         </button>
 
-        <input
-          className="input-slider"
-          type="range"
-          min={0}
-          max={timeSteps.length - 1}
-          step={1}
-          value={timeStepIndex}
-          onChange={onInputChange}
-          onMouseDown={onInputMouseDown}
-          ref={inputRef}
-          style={{
-            // This css only works in js for some reason... need to investigate later
-            background: "black",
-          }}
-        />
-
-        {(isDraggingSlider || showTimeStepBubble) && (
-          <div className="time-step-bubble" style={{ bottom: valueBubbleBottom, left: valueBubbleLeft }}>
-            {t(timeSteps[timeStepIndex].label)}
-          </div>
-        )}
+        <div className="time-picker">
+          <DatePicker
+            selected={displayTime}
+            onChange={setDisplayTime}
+            showTimeInput
+            dateFormat="M/dd/yyyy h:mm a"
+          />
+        </div>
 
         <button type="button" onClick={incrementTimeStep} className="time-control-button">
           <FontAwesomeIcon icon={faFastForward} size={"lg"} color={"white"} />
@@ -174,14 +127,6 @@ export const TimeControlBar = connector(({ displayTime, setDisplayTime }: PropsF
         <button type="button" onClick={pauseTime} className="time-control-button">
           <FontAwesomeIcon icon={faPause} size={"lg"} color={"white"} />
         </button>
-      </div>
-      <div className="time-picker">
-        <DatePicker
-          selected={displayTime}
-          onChange={setDisplayTime}
-          showTimeInput
-          dateFormat="M/dd/yyyy h:mm a"
-        />
       </div>
     </div>
   );

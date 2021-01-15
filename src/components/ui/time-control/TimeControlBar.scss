@@ -24,6 +24,10 @@
   border-radius: 2px;
   cursor: pointer;
   background: none;
+
+  &:disabled {
+    cursor: not-allowed;
+  }
 }
 
 .time-picker {

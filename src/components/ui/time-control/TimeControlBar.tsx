@@ -56,7 +56,8 @@ const connector = connect(mapStateToProps, mapDispatchToProps);
 type PropsFromRedux = ConnectedProps<typeof connector>;
 
 export const TimeControlBar = connector(({ displayTime, setDisplayTime }: PropsFromRedux) => {
-  const [timeStepIndex, setTimeStepIndex] = useState(getPausedTimeStepIndex());
+  const pausedTimeStepIndex = getPausedTimeStepIndex();
+  const [timeStepIndex, setTimeStepIndex] = useState(pausedTimeStepIndex);
   const [timeStep, setTimeStep] = useState(0);
   const [showTimeStepBubble, setShowTimeStepBubble] = useState(false);
 
@@ -98,6 +99,10 @@ export const TimeControlBar = connector(({ displayTime, setDisplayTime }: PropsF
     setTimeStepIndex(getPausedTimeStepIndex());
   };
 
+  const fastBackwardDisabled = timeStepIndex === 0;
+  const fastForwardDisabled = timeStepIndex === timeSteps.length - 1;
+  const pauseDisabled = timeStepIndex === pausedTimeStepIndex;
+
   return (
     <div className="time-control-container">
       {showTimeStepBubble && <div className="time-step-bubble">{t(timeSteps[timeStepIndex].label)}</div>}
@@ -107,8 +112,17 @@ export const TimeControlBar = connector(({ displayTime, setDisplayTime }: PropsF
           <FontAwesomeIcon icon={faClock} size={"lg"} color={"white"} />
         </button>
 
-        <button type="button" onClick={decrementTimeStep} className="time-control-button">
-          <FontAwesomeIcon icon={faFastBackward} size={"lg"} color={"white"} />
+        <button
+          type="button"
+          onClick={decrementTimeStep}
+          className="time-control-button"
+          disabled={fastBackwardDisabled}
+        >
+          <FontAwesomeIcon
+            icon={faFastBackward}
+            size={"lg"}
+            color={fastBackwardDisabled ? "grey" : "white"}
+          />
         </button>
 
         <div className="time-picker">
@@ -120,12 +134,17 @@ export const TimeControlBar = connector(({ displayTime, setDisplayTime }: PropsF
           />
         </div>
 
-        <button type="button" onClick={incrementTimeStep} className="time-control-button">
-          <FontAwesomeIcon icon={faFastForward} size={"lg"} color={"white"} />
+        <button
+          type="button"
+          onClick={incrementTimeStep}
+          className="time-control-button"
+          disabled={fastForwardDisabled}
+        >
+          <FontAwesomeIcon icon={faFastForward} size={"lg"} color={fastForwardDisabled ? "grey" : "white"} />
         </button>
 
-        <button type="button" onClick={pauseTime} className="time-control-button">
-          <FontAwesomeIcon icon={faPause} size={"lg"} color={"white"} />
+        <button type="button" onClick={pauseTime} className="time-control-button" disabled={pauseDisabled}>
+          <FontAwesomeIcon icon={faPause} size={"lg"} color={pauseDisabled ? "grey" : "white"} />
         </button>
       </div>
     </div>

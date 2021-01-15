@@ -1,5 +1,5 @@
 import { oneCentury } from "../constants";
-import { AstronomicalObject, Coordinate, OrbitalPosition, OrbitDefinition } from "../interfaces";
+import { AstronomicalObject, Coordinate, OrbitalPosition, OrbitDefinition, TimeStep } from "../interfaces";
 import { auToKm, toDegrees, toRadians } from "./conversions";
 
 import moize from "moize";
@@ -146,3 +146,15 @@ export const getObjectCoordinates = (object: AstronomicalObject | undefined, tim
  */
 export const getDistance = (pointA: Coordinate, pointB: Coordinate) =>
   Math.sqrt(Math.pow(pointA.x - pointB.x, 2) + Math.pow(pointA.y - pointB.y, 2));
+
+/**
+ * Get the index of the time step with value 0
+ */
+export const getPausedTimeStepIndex = (timeSteps: TimeStep[]) => {
+  // TODO: move this function somewhere else, maybe a common.ts file?
+  let index = timeSteps.findIndex((step) => step.value === 0);
+  if (index === -1) {
+    index = 0;
+  }
+  return index;
+};

@@ -1,5 +1,8 @@
 import { AstronomicalObject, Coordinate } from "../interfaces";
 import {
+  DECREMENT_TIME_STEP_INDEX,
+  INCREMENT_TIME_STEP_INDEX,
+  PAUSE_TIME,
   SET_DETAILS_PANE_OPEN,
   SET_DISPLAY_TIME,
   SET_KEEP_CENTERED,
@@ -10,6 +13,7 @@ import {
   SET_SHOW_DEBUG_INFO,
   SET_SHOW_LABELS,
   SET_SHOW_ORBITS,
+  SET_TIME_STEP_INDEX,
   SET_TOUR_MODAL_OPEN,
   SET_ZOOM,
 } from "./actions";
@@ -26,6 +30,10 @@ import {
   SetDetailsPaneOpenAction,
   SetOptionsPaneOpenAction,
   SetTourModalOpenAction,
+  SetTimeStepIndexAction,
+  IncrementTimeStepIndexAction,
+  DecrementTimeStepIndexAction,
+  PauseTimeAction,
 } from "./actionTypes";
 
 export const setShowOrbits = (showOrbits: boolean): SetShowOrbitsAction => ({
@@ -58,9 +66,25 @@ export const setSelectedObject = (selectedObject: AstronomicalObject | null): Se
   selectedObject,
 });
 
+// Time
+
 export const setDisplayTime = (displayTime: Date): SetDisplayTimeAction => ({
   type: SET_DISPLAY_TIME,
   displayTime,
+});
+export const setTimeStepIndex = (timeStepIndex: number): SetTimeStepIndexAction => ({
+  type: SET_TIME_STEP_INDEX,
+  timeStepIndex,
+});
+export const incrementTimeStepIndex = (): IncrementTimeStepIndexAction => ({
+  type: INCREMENT_TIME_STEP_INDEX,
+});
+
+export const decrementTimeStepIndex = (): DecrementTimeStepIndexAction => ({
+  type: DECREMENT_TIME_STEP_INDEX,
+});
+export const pauseTime = (): PauseTimeAction => ({
+  type: PAUSE_TIME,
 });
 
 export const setScreenCenter = (screenCenter: Coordinate): SetScreenCenterAction => ({

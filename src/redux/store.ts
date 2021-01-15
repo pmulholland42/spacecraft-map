@@ -1,5 +1,8 @@
 import { combineReducers, createStore } from "redux";
 import {
+  DECREMENT_TIME_STEP_INDEX,
+  INCREMENT_TIME_STEP_INDEX,
+  PAUSE_TIME,
   SET_DETAILS_PANE_OPEN,
   SET_DISPLAY_TIME,
   SET_KEEP_CENTERED,
@@ -10,6 +13,7 @@ import {
   SET_SHOW_DEBUG_INFO,
   SET_SHOW_LABELS,
   SET_SHOW_ORBITS,
+  SET_TIME_STEP_INDEX,
   SET_TOUR_MODAL_OPEN,
   SET_ZOOM,
 } from "./actions";
@@ -21,6 +25,8 @@ import {
   UIActionTypes,
 } from "./actionTypes";
 import { AstronomicalObject, Coordinate } from "../interfaces";
+import { getPausedTimeStepIndex } from "../utilities";
+import { timeSteps } from "../constants";
 
 // Options
 interface OptionsState {
@@ -80,16 +86,27 @@ const objectInfoReducer = (
 // Date / time
 interface TimeState {
   displayTime: Date;
+  /** Index to the array of time steps which determine how fast time is passing */
+  timeStepIndex: number;
 }
 
 const initialTimeState: TimeState = {
   displayTime: new Date(),
+  timeStepIndex: getPausedTimeStepIndex(timeSteps),
 };
 
 const timeReducer = (state: TimeState = initialTimeState, action: TimeActionTypes) => {
   switch (action.type) {
     case SET_DISPLAY_TIME:
       return { ...state, displayTime: action.displayTime };
+    case SET_TIME_STEP_INDEX:
+      return { ...state, timeStepIndex: action.timeStepIndex };
+    case INCREMENT_TIME_STEP_INDEX:
+      return { ...state, timeStepIndex: Math.min(state.timeStepIndex + 1, timeSteps.length - 1) };
+    case DECREMENT_TIME_STEP_INDEX:
+      return { ...state, timeStepIndex: Math.max(state.timeStepIndex - 1, 0) };
+    case PAUSE_TIME:
+      return { ...state, timeStepIndex: getPausedTimeStepIndex(timeSteps) };
     default:
       return state;
   }

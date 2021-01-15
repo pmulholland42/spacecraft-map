@@ -1,5 +1,8 @@
 import { AstronomicalObject, Coordinate } from "../interfaces";
 import {
+  DECREMENT_TIME_STEP_INDEX,
+  INCREMENT_TIME_STEP_INDEX,
+  PAUSE_TIME,
   SET_DETAILS_PANE_OPEN,
   SET_DISPLAY_TIME,
   SET_KEEP_CENTERED,
@@ -10,6 +13,7 @@ import {
   SET_SHOW_DEBUG_INFO,
   SET_SHOW_LABELS,
   SET_SHOW_ORBITS,
+  SET_TIME_STEP_INDEX,
   SET_TOUR_MODAL_OPEN,
   SET_ZOOM,
 } from "./actions";
@@ -55,8 +59,26 @@ export interface SetDisplayTimeAction {
   type: typeof SET_DISPLAY_TIME;
   displayTime: Date;
 }
+export interface SetTimeStepIndexAction {
+  type: typeof SET_TIME_STEP_INDEX;
+  timeStepIndex: number;
+}
+export interface IncrementTimeStepIndexAction {
+  type: typeof INCREMENT_TIME_STEP_INDEX;
+}
+export interface DecrementTimeStepIndexAction {
+  type: typeof DECREMENT_TIME_STEP_INDEX;
+}
+export interface PauseTimeAction {
+  type: typeof PAUSE_TIME;
+}
 
-export type TimeActionTypes = SetDisplayTimeAction;
+export type TimeActionTypes =
+  | SetDisplayTimeAction
+  | SetTimeStepIndexAction
+  | IncrementTimeStepIndexAction
+  | DecrementTimeStepIndexAction
+  | PauseTimeAction;
 
 // Map
 

@@ -46,10 +46,10 @@ export const TourModal = connector(({ tourModalOpen, setTourModalOpen }: PropsFr
                     className="tour"
                     onClick={() => {
                       setTourModalOpen(false);
-                      startTour(tour);
+                      startTour(tour, t);
                     }}
                   >
-                    {tour.name}
+                    {t(tour.name)}
                   </button>
                 ))}
               </div>

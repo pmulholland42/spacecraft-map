@@ -5,4 +5,3 @@ export * from "./ObjectType";
 export * from "./OrbitalPosition";
 export * from "./OrbitDefinition";
 export * from "./TimeStep";
-export * from "./Tour";

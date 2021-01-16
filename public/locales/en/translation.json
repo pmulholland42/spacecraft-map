@@ -1,7 +1,9 @@
 {
+  "continue": "Continue",
   "days": "days",
   "distanceFrom": "Distance from",
   "eccentricity": "Eccentricity",
+  "finish": "Finish",
   "keepCentered": "Keep centered",
   "meanAnomaly": "Mean anomaly",
   "noResults": "No results",
@@ -47,5 +49,19 @@
     "thirtyDays": "30 days/s",
     "oneYear": "1 yr/s",
     "tenYears": "10 yrs/s"
+  },
+  "tourMessages": {
+    "meetThePlanets": {
+      "title": "Meet the Planets",
+      "mercury": "This is Mercury!",
+      "venus": "This is Venus!",
+      "earth": "This is Earth!",
+      "mars": "This is Mars!",
+      "jupiter": "This is Jupiter!",
+      "saturn": "This is Saturn!",
+      "uranus": "This is Uranus!",
+      "neptune": "This is Neptune!",
+      "pluto": "This is Pluto!"
+    }
   }
 }

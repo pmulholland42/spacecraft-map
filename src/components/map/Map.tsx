@@ -179,7 +179,13 @@ export const Map = connector(
         {showOrbits && orbits}
         {objects}
         {textBubbles.map((textBubble) => (
-          <TextBubble object={textBubble.object} text={textBubble.text} key={textBubble.id} />
+          <TextBubble
+            object={textBubble.object}
+            text={textBubble.text}
+            promptText={textBubble.promptText}
+            onPromptClick={textBubble.onPromptClick}
+            key={textBubble.id}
+          />
         ))}
       </div>
     );

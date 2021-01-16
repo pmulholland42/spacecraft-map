@@ -15,6 +15,7 @@ import solarSystem from "../../data/solarSystem";
 import { OrbitalBody } from "./orbital-body/OrbitalBody";
 import { usePrevious } from "../../hooks/usePrevious";
 import { defaultPlanetZoom, maxZoomLevel, minZoomLevel } from "../../constants";
+import { TextBubble } from "./text-bubble/TextBubble";
 
 const mapStateToProps = (state: RootState) => ({
   showOrbits: state.options.showOrbits,
@@ -23,6 +24,7 @@ const mapStateToProps = (state: RootState) => ({
   displayTime: state.time.displayTime,
   zoom: state.map.zoom,
   screenCenter: state.map.screenCenter,
+  textBubbles: state.ui.textBubbles,
 });
 
 const mapDispatchToProps = {
@@ -47,6 +49,7 @@ export const Map = connector(
     displayTime,
     zoom,
     screenCenter,
+    textBubbles,
     setZoom,
     setScreenCenter,
     setKeepCentered,
@@ -175,6 +178,9 @@ export const Map = connector(
       >
         {showOrbits && orbits}
         {objects}
+        {textBubbles.map((textBubble) => (
+          <TextBubble object={textBubble.object} text={textBubble.text} key={textBubble.id} />
+        ))}
       </div>
     );
   }

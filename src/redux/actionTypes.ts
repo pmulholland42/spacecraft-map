@@ -1,8 +1,10 @@
-import { AstronomicalObject, Coordinate } from "../interfaces";
+import { AstronomicalObject, Coordinate, ITextBubble } from "../interfaces";
 import {
+  ADD_TEXT_BUBBLE,
   DECREMENT_TIME_STEP_INDEX,
   INCREMENT_TIME_STEP_INDEX,
   PAUSE_TIME,
+  REMOVE_TEXT_BUBBLE,
   SET_DETAILS_PANE_OPEN,
   SET_DISPLAY_TIME,
   SET_KEEP_CENTERED,
@@ -81,7 +83,6 @@ export type TimeActionTypes =
   | PauseTimeAction;
 
 // Map
-
 export interface SetScreenCenterAction {
   type: typeof SET_SCREEN_CENTER;
   screenCenter: Coordinate;
@@ -95,7 +96,6 @@ export interface SetZoomAction {
 export type MapActionTypes = SetScreenCenterAction | SetZoomAction;
 
 // UI
-
 export interface SetDetailsPaneOpenAction {
   type: typeof SET_DETAILS_PANE_OPEN;
   open: boolean;
@@ -108,5 +108,18 @@ export interface SetTourModalOpenAction {
   type: typeof SET_TOUR_MODAL_OPEN;
   open: boolean;
 }
+export interface AddTextBubbleAction {
+  type: typeof ADD_TEXT_BUBBLE;
+  textBubble: ITextBubble;
+}
+export interface RemoveTextBubbleAction {
+  type: typeof REMOVE_TEXT_BUBBLE;
+  id: string;
+}
 
-export type UIActionTypes = SetDetailsPaneOpenAction | SetOptionsPaneOpenAction | SetTourModalOpenAction;
+export type UIActionTypes =
+  | SetDetailsPaneOpenAction
+  | SetOptionsPaneOpenAction
+  | SetTourModalOpenAction
+  | AddTextBubbleAction
+  | RemoveTextBubbleAction;

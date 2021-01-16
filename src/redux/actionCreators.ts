@@ -1,8 +1,10 @@
-import { AstronomicalObject, Coordinate } from "../interfaces";
+import { AstronomicalObject, Coordinate, ITextBubble } from "../interfaces";
 import {
+  ADD_TEXT_BUBBLE,
   DECREMENT_TIME_STEP_INDEX,
   INCREMENT_TIME_STEP_INDEX,
   PAUSE_TIME,
+  REMOVE_TEXT_BUBBLE,
   SET_DETAILS_PANE_OPEN,
   SET_DISPLAY_TIME,
   SET_KEEP_CENTERED,
@@ -34,8 +36,11 @@ import {
   IncrementTimeStepIndexAction,
   DecrementTimeStepIndexAction,
   PauseTimeAction,
+  AddTextBubbleAction,
+  RemoveTextBubbleAction,
 } from "./actionTypes";
 
+// Options
 export const setShowOrbits = (showOrbits: boolean): SetShowOrbitsAction => ({
   type: SET_SHOW_ORBITS,
   showOrbits,
@@ -56,6 +61,7 @@ export const setShowDebugInfo = (showDebugInfo: boolean): SetShowDebugInfoAction
   showDebugInfo,
 });
 
+// Object info
 export const setKeepCentered = (keepCentered: boolean): SetKeepCenteredAction => ({
   type: SET_KEEP_CENTERED,
   keepCentered,
@@ -67,15 +73,16 @@ export const setSelectedObject = (selectedObject: AstronomicalObject | null): Se
 });
 
 // Time
-
 export const setDisplayTime = (displayTime: Date): SetDisplayTimeAction => ({
   type: SET_DISPLAY_TIME,
   displayTime,
 });
+
 export const setTimeStepIndex = (timeStepIndex: number): SetTimeStepIndexAction => ({
   type: SET_TIME_STEP_INDEX,
   timeStepIndex,
 });
+
 export const incrementTimeStepIndex = (): IncrementTimeStepIndexAction => ({
   type: INCREMENT_TIME_STEP_INDEX,
 });
@@ -83,6 +90,7 @@ export const incrementTimeStepIndex = (): IncrementTimeStepIndexAction => ({
 export const decrementTimeStepIndex = (): DecrementTimeStepIndexAction => ({
   type: DECREMENT_TIME_STEP_INDEX,
 });
+
 export const pauseTime = (): PauseTimeAction => ({
   type: PAUSE_TIME,
 });
@@ -98,16 +106,25 @@ export const setZoom = (zoom: number): SetZoomAction => ({
 });
 
 // UI
-
 export const setDetailsPaneOpen = (open: boolean): SetDetailsPaneOpenAction => ({
   type: SET_DETAILS_PANE_OPEN,
   open,
 });
+
 export const setOptionsPaneOpen = (open: boolean): SetOptionsPaneOpenAction => ({
   type: SET_OPTIONS_PANE_OPEN,
   open,
 });
+
 export const setTourModalOpen = (open: boolean): SetTourModalOpenAction => ({
   type: SET_TOUR_MODAL_OPEN,
   open,
+});
+export const addTextBubble = (textBubble: ITextBubble): AddTextBubbleAction => ({
+  type: ADD_TEXT_BUBBLE,
+  textBubble,
+});
+export const removeTextBubble = (id: string): RemoveTextBubbleAction => ({
+  type: REMOVE_TEXT_BUBBLE,
+  id,
 });

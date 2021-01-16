@@ -3,11 +3,11 @@ import React from "react";
 import { setTourModalOpen } from "../../../redux/actionCreators";
 import { RootState } from "../../../redux/store";
 import { connect, ConnectedProps } from "react-redux";
-import { useSpring, animated, useTransition } from "react-spring";
+import { animated, useTransition } from "react-spring";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTimes } from "@fortawesome/free-solid-svg-icons";
 import { useTranslation } from "react-i18next";
-import { tours } from "../../../data/tours";
+import { startTour, tours } from "../../../data/tours";
 
 const mapStateToProps = (state: RootState) => ({
   tourModalOpen: state.ui.tourModalOpen,
@@ -46,7 +46,7 @@ export const TourModal = connector(({ tourModalOpen, setTourModalOpen }: PropsFr
                     className="tour"
                     onClick={() => {
                       setTourModalOpen(false);
-                      tour.startTour();
+                      startTour(tour);
                     }}
                   >
                     {tour.name}

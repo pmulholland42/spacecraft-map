@@ -1,8 +1,10 @@
 import { combineReducers, createStore } from "redux";
 import {
+  ADD_TEXT_BUBBLE,
   DECREMENT_TIME_STEP_INDEX,
   INCREMENT_TIME_STEP_INDEX,
   PAUSE_TIME,
+  REMOVE_TEXT_BUBBLE,
   SET_DETAILS_PANE_OPEN,
   SET_DISPLAY_TIME,
   SET_KEEP_CENTERED,
@@ -24,7 +26,7 @@ import {
   TimeActionTypes,
   UIActionTypes,
 } from "./actionTypes";
-import { AstronomicalObject, Coordinate } from "../interfaces";
+import { AstronomicalObject, Coordinate, ITextBubble } from "../interfaces";
 import { getPausedTimeStepIndex } from "../utilities";
 import { timeSteps } from "../constants";
 
@@ -139,12 +141,14 @@ interface UIState {
   detailsPaneOpen: boolean;
   optionsPaneOpen: boolean;
   tourModalOpen: boolean;
+  textBubbles: ITextBubble[];
 }
 
 const initialUIState: UIState = {
   detailsPaneOpen: false,
   optionsPaneOpen: false,
   tourModalOpen: false,
+  textBubbles: [],
 };
 
 const uiReducer = (state: UIState = initialUIState, action: UIActionTypes) => {
@@ -155,6 +159,14 @@ const uiReducer = (state: UIState = initialUIState, action: UIActionTypes) => {
       return { ...state, optionsPaneOpen: action.open };
     case SET_TOUR_MODAL_OPEN:
       return { ...state, tourModalOpen: action.open };
+    case ADD_TEXT_BUBBLE:
+      if (state.textBubbles.find((textBubble) => textBubble.id === action.textBubble.id) === undefined) {
+        return { ...state, textBubbles: [...state.textBubbles, action.textBubble] };
+      } else {
+        return state;
+      }
+    case REMOVE_TEXT_BUBBLE:
+      return { ...state, textBubbles: state.textBubbles.filter((textBubble) => textBubble.id !== action.id) };
     default:
       return state;
   }

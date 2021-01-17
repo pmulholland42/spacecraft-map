@@ -5,45 +5,41 @@ import { getDistance } from "./calculations";
 
 const animationFrameTime = 70;
 
-let zoomInterval = -1;
-let cancelZoom: ((reason: any) => void) | null = null;
-
-let panInterval = -1;
-let cancelPan: ((reason: any) => void) | null = null;
+let animationInterval = -1;
+let cancelAnimation: (() => void) | null = null;
 
 /**
  * Smoothly zoom in or out
  * @param targetZoom The desired zoom level
  * @param duration Animation duration in ms. Default 500 ms.
+ * @returns a promise that resolves to true if the zoom completed, false if it was interrupted
  */
-export const animateZoom = (targetZoom: number, duration: number = 750): Promise<void> => {
+export const animateZoom = (targetZoom: number, duration: number = 750): Promise<boolean> => {
   const initialZoom = store.getState().map.zoom;
   const deltaZoom = targetZoom - initialZoom;
   if (deltaZoom === 0) {
-    return Promise.resolve();
+    return Promise.resolve(true);
   }
 
   const tStep = animationFrameTime / duration;
   let t = 0;
 
-  clearInterval(zoomInterval);
-  cancelZoom?.("Zoom interrupted by another zoom");
+  clearInterval(animationInterval);
+  cancelAnimation?.();
 
-  return new Promise<void>((resolve, reject) => {
-    cancelZoom = reject;
-    zoomInterval = window.setInterval(() => {
+  return new Promise<boolean>((resolve) => {
+    cancelAnimation = () => resolve(false);
+    animationInterval = window.setInterval(() => {
       t = Math.min(t + tStep, 1);
       const percentage = easeOutSine(t);
 
       const nextZoom = initialZoom + deltaZoom * percentage;
       store.dispatch(setZoom(nextZoom));
       if (t === 1) {
-        clearInterval(zoomInterval);
-        resolve();
+        clearInterval(animationInterval);
+        resolve(true);
       }
     }, animationFrameTime);
-  }).catch((reason) => {
-    console.log(reason);
   });
 };
 
@@ -51,24 +47,26 @@ export const animateZoom = (targetZoom: number, duration: number = 750): Promise
  * Smoothly pan around the map
  * @param targetZoom The desired screen center, in space coords (km)
  * @param duration Animation duration in ms. Default 500 ms.
+ * @returns a promise that resolves to true if the pan completed, false if it was interrupted
  */
-export const animatePan = (targetScreenCenter: Coordinate, duration: number = 750): Promise<void> => {
+export const animatePan = (targetScreenCenter: Coordinate, duration: number = 750): Promise<boolean> => {
   const initialScreenCenter = store.getState().map.screenCenter;
   const deltaX = targetScreenCenter.x - initialScreenCenter.x;
   const deltaY = targetScreenCenter.y - initialScreenCenter.y;
 
   if (deltaX === 0 && deltaY === 0) {
-    return Promise.resolve();
+    return Promise.resolve(true);
   }
 
   const tStep = animationFrameTime / duration;
   let t = 0;
 
-  clearInterval(panInterval);
-  cancelPan?.("Pan interrupted by another pan");
+  clearInterval(animationInterval);
+  cancelAnimation?.();
 
-  return new Promise((resolve) => {
-    panInterval = window.setInterval(() => {
+  return new Promise<boolean>((resolve) => {
+    cancelAnimation = () => resolve(false);
+    animationInterval = window.setInterval(() => {
       t = Math.min(t + tStep, 1);
       const percentage = easeInOutCubic(t);
 
@@ -77,8 +75,8 @@ export const animatePan = (targetScreenCenter: Coordinate, duration: number = 75
       store.dispatch(setScreenCenter({ x, y }));
 
       if (t === 1) {
-        clearInterval(panInterval);
-        resolve();
+        clearInterval(animationInterval);
+        resolve(true);
       }
     }, animationFrameTime);
   });

@@ -148,6 +148,16 @@ export const getDistance = (pointA: Coordinate, pointB: Coordinate) =>
   Math.sqrt(Math.pow(pointA.x - pointB.x, 2) + Math.pow(pointA.y - pointB.y, 2));
 
 /**
+ * Gets the midpoint between two 2D points
+ * @param pointA
+ * @param pointB
+ */
+export const getMidpoint = (pointA: Coordinate, pointB: Coordinate): Coordinate => ({
+  x: (pointA.x + pointB.x) / 2,
+  y: (pointA.y + pointB.y) / 2,
+});
+
+/**
  * Get the index of the time step with value 0
  */
 export const getPausedTimeStepIndex = (timeSteps: TimeStep[]) => {

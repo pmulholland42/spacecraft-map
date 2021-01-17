@@ -10,6 +10,11 @@ export const getScaleFactor = (zoom: number) => {
   return Math.pow(1.5, zoom) / kmPerPixel;
 };
 
+export const getZoomFromScaleFactor = (scaleFactor: number) => {
+  const kmPerPixel = maxWidthDistance / window.innerWidth;
+  return Math.log(scaleFactor * kmPerPixel) / Math.log(1.5);
+};
+
 /**
  * Converts a coordinate in space to a pixel coordinate on the screen
  * @param spaceCoords A set of coordinates in the solar system, measured in kilometers

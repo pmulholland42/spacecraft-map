@@ -36,7 +36,7 @@ export const getShortDescription = (object: AstronomicalObject, t: TFunction) =>
   if (object.parent === undefined) {
     return getObjectTypeName(object.type, t);
   } else {
-    return `${getObjectTypeName(object.type, t)} ${t("orbiting")} ${t(getObjectName(object.parent.id, t))}`;
+    return `${getObjectTypeName(object.type, t)} ${t("orbiting")} ${getObjectName(object.parent.id, t)}`;
   }
 };
 

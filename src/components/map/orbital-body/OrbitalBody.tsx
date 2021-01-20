@@ -81,7 +81,7 @@ export const OrbitalBody = connector(
         {diameter > minPlanetSize ? (
           <img
             id={`${object.id}`}
-            src={`images/${object.image}`}
+            src={object.sprite}
             alt=""
             style={{
               height: `${diameter}px`,

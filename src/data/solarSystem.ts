@@ -5,7 +5,8 @@ export const sun: AstronomicalObject = {
   id: "sun",
   type: "star",
   diameter: 1391016,
-  image: "sun.png",
+  sprite: "images/sprites/sun.png",
+  photo: "https://picsum.photos/320/170",
   color: "#FDB813",
   orbit: {
     epoch: j2000Epoch,
@@ -29,7 +30,8 @@ export const mercury: AstronomicalObject = {
   parent: sun,
   type: "planet",
   diameter: 4879,
-  image: "mercury.png",
+  sprite: "images/sprites/mercury.png",
+  photo: "images/photos/mercury.png",
   color: "#7D7C81",
   orbit: {
     epoch: j2000Epoch,
@@ -53,7 +55,8 @@ export const venus: AstronomicalObject = {
   parent: sun,
   type: "planet",
   diameter: 12104,
-  image: "venus.png",
+  sprite: "images/sprites/venus.png",
+  photo: "images/photos/venus.png",
   color: "#CAC9C7",
   orbit: {
     epoch: j2000Epoch,
@@ -77,7 +80,8 @@ export const earth: AstronomicalObject = {
   parent: sun,
   type: "planet",
   diameter: 12742,
-  image: "earth.png",
+  sprite: "images/sprites/earth.png",
+  photo: "https://picsum.photos/320/170",
   color: "#0066CC",
   orbit: {
     epoch: j2000Epoch,
@@ -101,7 +105,8 @@ export const moon: AstronomicalObject = {
   type: "moon",
   parent: earth,
   diameter: 3474,
-  image: "moon.png",
+  sprite: "images/sprites/moon.png",
+  photo: "https://picsum.photos/320/170",
   color: "#787271",
   orbit: {
     epoch: j2000Epoch,
@@ -125,7 +130,8 @@ export const mars: AstronomicalObject = {
   type: "planet",
   parent: sun,
   diameter: 6779,
-  image: "mars.png",
+  sprite: "images/sprites/mars.png",
+  photo: "https://picsum.photos/320/170",
   color: "#E87C5A",
   orbit: {
     epoch: j2000Epoch,
@@ -149,7 +155,8 @@ export const jupiter: AstronomicalObject = {
   type: "planet",
   parent: sun,
   diameter: 139822,
-  image: "jupiter.png",
+  sprite: "images/sprites/jupiter.png",
+  photo: "https://picsum.photos/320/170",
   color: "#C0A288",
   orbit: {
     epoch: j2000Epoch,
@@ -177,7 +184,8 @@ export const saturn: AstronomicalObject = {
   type: "planet",
   parent: sun,
   diameter: 116464,
-  image: "saturn.png",
+  sprite: "images/sprites/saturn.png",
+  photo: "https://picsum.photos/320/170",
   color: "#DFBC7C",
   orbit: {
     epoch: j2000Epoch,
@@ -204,7 +212,8 @@ export const uranus: AstronomicalObject = {
   type: "planet",
   parent: sun,
   diameter: 50724,
-  image: "uranus.png",
+  sprite: "images/sprites/uranus.png",
+  photo: "https://picsum.photos/320/170",
   color: "#B6DCDF",
   orbit: {
     epoch: j2000Epoch,
@@ -231,7 +240,8 @@ export const neptune: AstronomicalObject = {
   type: "planet",
   parent: sun,
   diameter: 49244,
-  image: "neptune.png",
+  sprite: "images/sprites/neptune.png",
+  photo: "https://picsum.photos/320/170",
   color: "#4264FB",
   orbit: {
     epoch: j2000Epoch,
@@ -259,7 +269,8 @@ export const pluto: AstronomicalObject = {
   type: "dwarf",
   parent: sun,
   diameter: 1188.3,
-  image: "pluto.png",
+  sprite: "images/sprites/pluto.png",
+  photo: "https://picsum.photos/320/170",
   color: "#CAC1B0",
   orbit: {
     epoch: j2000Epoch,

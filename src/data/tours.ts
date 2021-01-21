@@ -143,9 +143,10 @@ const waitForTextBubble = async (textBubble: ITextBubble) => {
 
 const waitForTime = async (time: Date) => {
   return new Promise((resolve) => {
-    store.subscribe(() => {
+    const unsubscribe = store.subscribe(() => {
       if (store.getState().time.displayTime.getTime() > time.getTime()) {
         resolve();
+        unsubscribe();
       }
     });
   });

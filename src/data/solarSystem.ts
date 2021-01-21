@@ -6,7 +6,13 @@ export const sun: AstronomicalObject = {
   type: "star",
   diameter: 1391016,
   sprite: "images/sprites/sun.png",
-  photo: "https://picsum.photos/320/170",
+  photo: {
+    url: "images/photos/sun.png",
+    attribution: {
+      creator: "NASA/SDO (AIA)",
+      licenseName: "Public Domain",
+    },
+  },
   color: "#FDB813",
   orbit: {
     epoch: j2000Epoch,
@@ -31,7 +37,13 @@ export const mercury: AstronomicalObject = {
   type: "planet",
   diameter: 4879,
   sprite: "images/sprites/mercury.png",
-  photo: "images/photos/mercury.png",
+  photo: {
+    url: "images/photos/mercury.png",
+    attribution: {
+      creator: "NASA/Johns Hopkins University Applied Physics Laboratory/Carnegie Institution of Washington",
+      licenseName: "Public Domain",
+    },
+  },
   color: "#7D7C81",
   orbit: {
     epoch: j2000Epoch,
@@ -56,7 +68,13 @@ export const venus: AstronomicalObject = {
   type: "planet",
   diameter: 12104,
   sprite: "images/sprites/venus.png",
-  photo: "images/photos/venus.png",
+  photo: {
+    url: "images/photos/venus.png",
+    attribution: {
+      creator: "NASA/JPL-Caltech",
+      licenseName: "Public Domain",
+    },
+  },
   color: "#CAC9C7",
   orbit: {
     epoch: j2000Epoch,
@@ -81,7 +99,13 @@ export const earth: AstronomicalObject = {
   type: "planet",
   diameter: 12742,
   sprite: "images/sprites/earth.png",
-  photo: "https://picsum.photos/320/170",
+  photo: {
+    url: "images/photos/earth.png",
+    attribution: {
+      creator: "Apollo 17",
+      licenseName: "Public Domain",
+    },
+  },
   color: "#0066CC",
   orbit: {
     epoch: j2000Epoch,
@@ -106,7 +130,14 @@ export const moon: AstronomicalObject = {
   parent: earth,
   diameter: 3474,
   sprite: "images/sprites/moon.png",
-  photo: "https://picsum.photos/320/170",
+  photo: {
+    url: "images/photos/moon.png",
+    attribution: {
+      creator: "Gregory H. Revera",
+      licenseName: "CC BY-SA 3.0",
+      licenseUrl: "https://creativecommons.org/licenses/by-sa/3.0/",
+    },
+  },
   color: "#787271",
   orbit: {
     epoch: j2000Epoch,
@@ -131,7 +162,14 @@ export const mars: AstronomicalObject = {
   parent: sun,
   diameter: 6779,
   sprite: "images/sprites/mars.png",
-  photo: "https://picsum.photos/320/170",
+  photo: {
+    url: "images/photos/mars.png",
+    attribution: {
+      creator: "ESA & MPS for OSIRIS Team MPS/UPD/LAM/IAA/RSSD/INTA/UPM/DASP/IDA",
+      licenseName: "CC BY-SA IGO 3.0",
+      licenseUrl: "https://creativecommons.org/licenses/by-sa/3.0/igo/",
+    },
+  },
   color: "#E87C5A",
   orbit: {
     epoch: j2000Epoch,
@@ -156,7 +194,13 @@ export const jupiter: AstronomicalObject = {
   parent: sun,
   diameter: 139822,
   sprite: "images/sprites/jupiter.png",
-  photo: "https://picsum.photos/320/170",
+  photo: {
+    url: "images/photos/jupiter.png",
+    attribution: {
+      creator: "NASA, ESA, and A. Simon (Goddard Space Flight Center)",
+      licenseName: "Public domain",
+    },
+  },
   color: "#C0A288",
   orbit: {
     epoch: j2000Epoch,
@@ -185,7 +229,13 @@ export const saturn: AstronomicalObject = {
   parent: sun,
   diameter: 116464,
   sprite: "images/sprites/saturn.png",
-  photo: "https://picsum.photos/320/170",
+  photo: {
+    url: "images/photos/saturn.png",
+    attribution: {
+      creator: "NASA / JPL / Space Science Institute",
+      licenseName: "Public domain",
+    },
+  },
   color: "#DFBC7C",
   orbit: {
     epoch: j2000Epoch,
@@ -213,7 +263,13 @@ export const uranus: AstronomicalObject = {
   parent: sun,
   diameter: 50724,
   sprite: "images/sprites/uranus.png",
-  photo: "https://picsum.photos/320/170",
+  photo: {
+    url: "images/photos/uranus.png",
+    attribution: {
+      creator: "NASA/JPL-Caltech",
+      licenseName: "Public domain",
+    },
+  },
   color: "#B6DCDF",
   orbit: {
     epoch: j2000Epoch,
@@ -241,7 +297,14 @@ export const neptune: AstronomicalObject = {
   parent: sun,
   diameter: 49244,
   sprite: "images/sprites/neptune.png",
-  photo: "https://picsum.photos/320/170",
+  photo: {
+    url: "images/photos/neptune.png",
+    attribution: {
+      creator: "Justin Cowart",
+      licenseName: "CC BY 2.0",
+      licenseUrl: "https://creativecommons.org/licenses/by/2.0",
+    },
+  },
   color: "#4264FB",
   orbit: {
     epoch: j2000Epoch,
@@ -270,7 +333,14 @@ export const pluto: AstronomicalObject = {
   parent: sun,
   diameter: 1188.3,
   sprite: "images/sprites/pluto.png",
-  photo: "https://picsum.photos/320/170",
+  photo: {
+    url: "images/photos/pluto.png",
+    attribution: {
+      creator:
+        "NASA/Johns Hopkins University Applied Physics Laboratory/Southwest Research Institute/Alex Parker",
+      licenseName: "Public domain",
+    },
+  },
   color: "#CAC1B0",
   orbit: {
     epoch: j2000Epoch,

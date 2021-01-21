@@ -4,6 +4,7 @@ import {
   setShowOrbits,
   setShowLabels,
   setShowBackgroundStars,
+  setRemoveAnimations,
   setShowDebugInfo,
 } from "../../../redux/actionCreators";
 import { RootState } from "../../../redux/store";
@@ -20,6 +21,7 @@ const mapStateToProps = (state: RootState) => ({
   showOrbits: state.options.showOrbits,
   showLabels: state.options.showLabels,
   showBackgroundStars: state.options.showBackgroundStars,
+  removeAnimations: state.options.removeAnimations,
   showDebugInfo: state.options.showDebugInfo,
 });
 
@@ -28,6 +30,7 @@ const mapDispatchToProps = {
   setShowOrbits,
   setShowLabels,
   setShowBackgroundStars,
+  setRemoveAnimations,
   setShowDebugInfo,
 };
 
@@ -42,10 +45,12 @@ export const OptionsPane = connector(
     showOrbits,
     showLabels,
     showBackgroundStars,
+    removeAnimations,
     showDebugInfo,
     setShowOrbits,
     setShowLabels,
     setShowBackgroundStars,
+    setRemoveAnimations,
     setShowDebugInfo,
   }: PropsFromRedux) => {
     const { t } = useTranslation();
@@ -56,19 +61,6 @@ export const OptionsPane = connector(
       leave: { left: -322 },
       config: { tension: 250, clamp: true },
     });
-
-    const toggleOrbits = (checked: boolean) => {
-      setShowOrbits(checked);
-    };
-    const toggleLabels = (checked: boolean) => {
-      setShowLabels(checked);
-    };
-    const toggleBackgroundStars = (checked: boolean) => {
-      setShowBackgroundStars(checked);
-    };
-    const toggleDebugInfo = (checked: boolean) => {
-      setShowDebugInfo(checked);
-    };
 
     return (
       <div>
@@ -90,19 +82,23 @@ export const OptionsPane = connector(
                 <div className="options-list">
                   <label className="option" title={t("toggleOrbits")}>
                     {t("showOrbits")}
-                    <Switch onChange={toggleOrbits} checked={showOrbits} />
+                    <Switch onChange={setShowOrbits} checked={showOrbits} />
                   </label>
                   <label className="option" title={t("toggleLabels")}>
                     {t("showLabels")}
-                    <Switch onChange={toggleLabels} checked={showLabels} />
+                    <Switch onChange={setShowLabels} checked={showLabels} />
                   </label>
                   <label className="option" title={t("toggleBackgroundStars")}>
                     {t("showBackgroundStars")}
-                    <Switch onChange={toggleBackgroundStars} checked={showBackgroundStars} />
+                    <Switch onChange={setShowBackgroundStars} checked={showBackgroundStars} />
+                  </label>
+                  <label className="option" title={t("toggleAnimations")}>
+                    {t("removeAnimations")}
+                    <Switch onChange={setRemoveAnimations} checked={removeAnimations} />
                   </label>
                   <label className="option" title={t("toggleDebugInfo")}>
                     {t("showDebugInfo")}
-                    <Switch onChange={toggleDebugInfo} checked={showDebugInfo} />
+                    <Switch onChange={setShowDebugInfo} checked={showDebugInfo} />
                   </label>
                 </div>
               </animated.div>

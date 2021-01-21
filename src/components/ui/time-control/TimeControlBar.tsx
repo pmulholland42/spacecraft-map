@@ -55,7 +55,7 @@ export const TimeControlBar = connector(
     useEffect(() => {
       // When the user clicks the fast forward or backward button, the time step bubble is briefly displayed
       setShowTimeStepBubble(true);
-      const timeout = setTimeout(() => setShowTimeStepBubble(false), 1000);
+      const timeout = setTimeout(() => setShowTimeStepBubble(false), 1800);
 
       return () => {
         clearTimeout(timeout);

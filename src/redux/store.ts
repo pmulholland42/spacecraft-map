@@ -10,6 +10,7 @@ import {
   SET_DISPLAY_TIME,
   SET_KEEP_CENTERED,
   SET_OPTIONS_PANE_OPEN,
+  SET_REMOVE_ANIMATIONS,
   SET_SCREEN_CENTER,
   SET_SELECTED_OBJECT,
   SET_SHOW_BACKGROUND_STARS,
@@ -36,6 +37,7 @@ interface OptionsState {
   showOrbits: boolean;
   showLabels: boolean;
   showBackgroundStars: boolean;
+  removeAnimations: boolean;
   showDebugInfo: boolean;
 }
 
@@ -43,6 +45,7 @@ const initialOptionsState: OptionsState = {
   showOrbits: true,
   showLabels: true,
   showBackgroundStars: false,
+  removeAnimations: false,
   showDebugInfo: false,
 };
 
@@ -54,6 +57,8 @@ const optionsReducer = (state: OptionsState = initialOptionsState, action: Optio
       return { ...state, showLabels: action.showLabels };
     case SET_SHOW_BACKGROUND_STARS:
       return { ...state, showBackgroundStars: action.showBackgroundStars };
+    case SET_REMOVE_ANIMATIONS:
+      return { ...state, removeAnimations: action.removeAnimations };
     case SET_SHOW_DEBUG_INFO:
       return { ...state, showDebugInfo: action.showDebugInfo };
     default:

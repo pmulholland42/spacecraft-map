@@ -10,6 +10,7 @@ import {
   SET_DISPLAY_TIME,
   SET_KEEP_CENTERED,
   SET_OPTIONS_PANE_OPEN,
+  SET_REMOVE_ANIMATIONS,
   SET_SCREEN_CENTER,
   SET_SELECTED_OBJECT,
   SET_SHOW_BACKGROUND_STARS,
@@ -34,6 +35,10 @@ export interface SetShowBackgroundStarsAction {
   type: typeof SET_SHOW_BACKGROUND_STARS;
   showBackgroundStars: boolean;
 }
+export interface SetRemoveAnimationsAction {
+  type: typeof SET_REMOVE_ANIMATIONS;
+  removeAnimations: boolean;
+}
 export interface SetShowDebugInfoAction {
   type: typeof SET_SHOW_DEBUG_INFO;
   showDebugInfo: boolean;
@@ -43,6 +48,7 @@ export type OptionsActionTypes =
   | SetShowOrbitsAction
   | SetShowLabelsAction
   | SetShowBackgroundStarsAction
+  | SetRemoveAnimationsAction
   | SetShowDebugInfoAction;
 
 // Object info

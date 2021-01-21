@@ -10,6 +10,7 @@ import {
   SET_DISPLAY_TIME,
   SET_KEEP_CENTERED,
   SET_OPTIONS_PANE_OPEN,
+  SET_REMOVE_ANIMATIONS,
   SET_SCREEN_CENTER,
   SET_SELECTED_OBJECT,
   SET_SHOW_BACKGROUND_STARS,
@@ -40,6 +41,7 @@ import {
   AddTextBubbleAction,
   RemoveTextBubbleAction,
   SetCurrentTourAction,
+  SetRemoveAnimationsAction,
 } from "./actionTypes";
 
 // Options
@@ -56,6 +58,11 @@ export const setShowLabels = (showLabels: boolean): SetShowLabelsAction => ({
 export const setShowBackgroundStars = (showBackgroundStars: boolean): SetShowBackgroundStarsAction => ({
   type: SET_SHOW_BACKGROUND_STARS,
   showBackgroundStars,
+});
+
+export const setRemoveAnimations = (removeAnimations: boolean): SetRemoveAnimationsAction => ({
+  type: SET_REMOVE_ANIMATIONS,
+  removeAnimations,
 });
 
 export const setShowDebugInfo = (showDebugInfo: boolean): SetShowDebugInfoAction => ({

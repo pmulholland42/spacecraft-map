@@ -15,6 +15,11 @@ let cancelAnimation: (() => void) | null = null;
  * @returns a promise that resolves to true if the zoom completed, false if it was interrupted
  */
 export const animateZoom = (targetZoom: number, duration: number = 750): Promise<boolean> => {
+  if (store.getState().options.removeAnimations) {
+    store.dispatch(setZoom(targetZoom));
+    return Promise.resolve(true);
+  }
+
   const initialZoom = store.getState().map.zoom;
   const deltaZoom = targetZoom - initialZoom;
   if (deltaZoom === 0) {
@@ -50,6 +55,10 @@ export const animateZoom = (targetZoom: number, duration: number = 750): Promise
  * @returns a promise that resolves to true if the pan completed, false if it was interrupted
  */
 export const animatePan = (targetScreenCenter: Coordinate, duration: number = 750): Promise<boolean> => {
+  if (store.getState().options.removeAnimations) {
+    store.dispatch(setScreenCenter(targetScreenCenter));
+    return Promise.resolve(true);
+  }
   const initialScreenCenter = store.getState().map.screenCenter;
   const deltaX = targetScreenCenter.x - initialScreenCenter.x;
   const deltaY = targetScreenCenter.y - initialScreenCenter.y;
@@ -87,6 +96,12 @@ export const animatePan = (targetScreenCenter: Coordinate, duration: number = 75
  * @param targetCoords
  */
 export const animateZoomAndPan = async (targetScreenCenter: Coordinate, targetZoom: number) => {
+  if (store.getState().options.removeAnimations) {
+    store.dispatch(setZoom(targetZoom));
+    store.dispatch(setScreenCenter(targetScreenCenter));
+    return Promise.resolve(true);
+  }
+
   const currentZoom = store.getState().map.zoom;
   const currentScreenCenter = store.getState().map.screenCenter;
   const distanceToPan = getDistance(currentScreenCenter, targetScreenCenter);

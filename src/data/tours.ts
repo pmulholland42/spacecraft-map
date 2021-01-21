@@ -94,7 +94,7 @@ export const tours: Tour[] = [
           coords: marsClosestApproachCoords,
           text: t("tourMessages.retrogradeMars.waitForMars"),
           relativeCenter: earthClosestApproachCoords,
-          yOffset: 80,
+          yOffset: 75,
         })
       );
       await waitForTime(new Date(nextClosestApproach.getTime() - oneDay * 120));
@@ -107,7 +107,7 @@ export const tours: Tour[] = [
           coords: marsClosestApproachCoords,
           text: t("tourMessages.retrogradeMars.retrogradeMotion"),
           relativeCenter: earthClosestApproachCoords,
-          yOffset: 100,
+          yOffset: 75,
         })
       );
       await waitForTime(new Date(nextClosestApproach.getTime() + oneDay * 80));

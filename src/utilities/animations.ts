@@ -91,8 +91,8 @@ export const animateZoomAndPan = async (targetScreenCenter: Coordinate, targetZo
   const currentScreenCenter = store.getState().map.screenCenter;
   const distanceToPan = getDistance(currentScreenCenter, targetScreenCenter);
   const zoomedOut = 80000 / Math.sqrt(distanceToPan);
-  await animateZoom(Math.min(zoomedOut, currentZoom), 2000);
-  await animatePan(targetScreenCenter, 2000);
+  await animateZoom(Math.min(zoomedOut, currentZoom, targetZoom), 2000);
+  await animatePan(targetScreenCenter, 1500);
   await animateZoom(targetZoom, 2000);
 };
 

@@ -15,12 +15,14 @@ import { getObjectName, getShortDescription } from "../../../utilities";
 interface SearchSuggestionProps {
   object: AstronomicalObject;
   onSelect: (selectedObject: AstronomicalObject) => void;
+  highlighted: boolean;
 }
 
-export const SearchSuggestion = ({ object, onSelect }: SearchSuggestionProps) => {
+export const SearchSuggestion = ({ object, onSelect, highlighted }: SearchSuggestionProps) => {
   const { t } = useTranslation();
 
   let icon: IconDefinition;
+  let iconSize: "lg" | "1x" = "lg";
 
   switch (object.type) {
     case "planet":
@@ -32,6 +34,10 @@ export const SearchSuggestion = ({ object, onSelect }: SearchSuggestionProps) =>
     case "moon":
       icon = faMoon;
       break;
+    case "dwarf":
+      icon = faGlobeAmericas;
+      iconSize = "1x";
+      break;
     default:
       icon = faQuestion;
       break;
@@ -42,9 +48,9 @@ export const SearchSuggestion = ({ object, onSelect }: SearchSuggestionProps) =>
   };
 
   return (
-    <div className="search-suggestion" onClick={onClick}>
+    <div className={highlighted ? "selected-search-suggestion" : "search-suggestion"} onClick={onClick}>
       <div className="search-suggestion-icon">
-        <FontAwesomeIcon icon={icon} size={"lg"} />
+        <FontAwesomeIcon icon={icon} size={iconSize} />
       </div>
       <div className="search-suggestion-text">
         <span className="search-suggestion-name">{getObjectName(object.id, t)}</span>

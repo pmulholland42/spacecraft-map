@@ -43,6 +43,7 @@ export const SearchBar = connector(
   }: PropsFromRedux) => {
     const [searchText, setSearchText] = useState("");
     const [showSearchSuggestions, setShowSearchSuggestions] = useState(true);
+    const [highlightedIndex, setHighlightedIndex] = useState(-1);
 
     const inputRef = useRef<HTMLInputElement | null>(null);
     const containerRef = useRef<HTMLDivElement | null>(null);
@@ -118,13 +119,20 @@ export const SearchBar = connector(
     const onKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
       if (event.key === "Enter" && searchText.length > 0) {
         if (searchSuggestions.length > 0) {
-          selectObject(searchSuggestions[0]);
+          const indexToSelect = highlightedIndex < 0 ? 0 : highlightedIndex;
+          selectObject(searchSuggestions[indexToSelect]);
         } else {
           selectObject(null);
         }
       } else if (!showSearchSuggestions) {
         // If the user starts typing, search suggestions should be shown
         setShowSearchSuggestions(true);
+      }
+
+      if (event.key === "ArrowDown") {
+        setHighlightedIndex(Math.min(highlightedIndex + 1, searchSuggestions.length - 1));
+      } else if (event.key === "ArrowUp") {
+        setHighlightedIndex(Math.max(highlightedIndex - 1, 0));
       }
     };
 
@@ -161,8 +169,13 @@ export const SearchBar = connector(
         </div>
         {showSearchSuggestions &&
           searchText.length > 0 &&
-          searchSuggestions.map((object) => (
-            <SearchSuggestion key={object.id} object={object} onSelect={selectObject} />
+          searchSuggestions.map((object, index) => (
+            <SearchSuggestion
+              key={object.id}
+              object={object}
+              onSelect={selectObject}
+              highlighted={index === highlightedIndex}
+            />
           ))}
       </div>
     );

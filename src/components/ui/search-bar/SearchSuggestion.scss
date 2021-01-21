@@ -1,3 +1,7 @@
+@mixin highlighted-search-suggestion {
+  background-color: rgb(214, 214, 214);
+}
+
 .search-suggestion {
   background-color: white;
   height: 35px;
@@ -15,8 +19,13 @@
   }
 
   &:hover {
-    background-color: rgb(214, 214, 214);
+    @include highlighted-search-suggestion;
   }
+}
+
+.selected-search-suggestion {
+  @extend .search-suggestion;
+  @include highlighted-search-suggestion();
 }
 
 .search-suggestion-icon {

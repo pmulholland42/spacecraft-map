@@ -83,7 +83,12 @@ export const TimeControlBar = connector(
         {showTimeStepBubble && <div className="time-step-bubble">{t(timeSteps[timeStepIndex].label)}</div>}
 
         <div className="time-control-bar">
-          <button type="button" onClick={resetTime} className="time-control-button">
+          <button
+            type="button"
+            onClick={resetTime}
+            className="time-control-button"
+            title={t("resetToCurrentTime")}
+          >
             <FontAwesomeIcon icon={faClock} size={"lg"} color={"white"} />
           </button>
 
@@ -92,6 +97,7 @@ export const TimeControlBar = connector(
             onClick={decrementTimeStepIndex}
             className="time-control-button"
             disabled={fastBackwardDisabled}
+            title={t("fastBackwardTime")}
           >
             <FontAwesomeIcon
               icon={faFastBackward}
@@ -100,7 +106,7 @@ export const TimeControlBar = connector(
             />
           </button>
 
-          <div className="time-picker">
+          <div className="time-picker" title={t("pickTime")}>
             <DatePicker
               selected={displayTime}
               onChange={setDisplayTime}
@@ -114,6 +120,7 @@ export const TimeControlBar = connector(
             onClick={incrementTimeStepIndex}
             className="time-control-button"
             disabled={fastForwardDisabled}
+            title={t("fastForwardTime")}
           >
             <FontAwesomeIcon
               icon={faFastForward}
@@ -122,7 +129,13 @@ export const TimeControlBar = connector(
             />
           </button>
 
-          <button type="button" onClick={pauseTime} className="time-control-button" disabled={pauseDisabled}>
+          <button
+            type="button"
+            onClick={pauseTime}
+            className="time-control-button"
+            disabled={pauseDisabled}
+            title={t("pauseTime")}
+          >
             <FontAwesomeIcon icon={faPause} size={"lg"} color={pauseDisabled ? "grey" : "white"} />
           </button>
         </div>

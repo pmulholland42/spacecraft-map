@@ -8,6 +8,7 @@ import { faCircle } from "@fortawesome/free-regular-svg-icons";
 import { RootState } from "../../../redux/store";
 import { animateZoom, animatePan } from "../../../utilities/animations";
 import { maxZoomLevel, minZoomLevel } from "../../../constants";
+import { useTranslation } from "react-i18next";
 
 const mapStateToProps = (state: RootState) => ({
   zoom: state.map.zoom,
@@ -23,6 +24,8 @@ const connector = connect(mapStateToProps, mapDispatchToProps);
 type PropsFromRedux = ConnectedProps<typeof connector>;
 
 export const ZoomButtons = connector(({ zoom, keepCentered }: PropsFromRedux) => {
+  const { t } = useTranslation();
+
   const zoomIn = () => {
     animateZoom(Math.min(zoom + 1, maxZoomLevel), 500);
   };
@@ -40,13 +43,13 @@ export const ZoomButtons = connector(({ zoom, keepCentered }: PropsFromRedux) =>
 
   return (
     <div className="button-column">
-      <button type="button" onClick={zoomIn} className="zoom-button">
+      <button type="button" onClick={zoomIn} className="zoom-button" title={t("zoomIn")}>
         <FontAwesomeIcon icon={faPlus} size={"lg"} color={"black"} />
       </button>
-      <button type="button" onClick={zoomOut} className="zoom-button">
+      <button type="button" onClick={zoomOut} className="zoom-button" title={t("zoomOut")}>
         <FontAwesomeIcon icon={faMinus} size={"lg"} color={"black"} />
       </button>
-      <button type="button" onClick={fitToSolarSystem} className="zoom-button">
+      <button type="button" onClick={fitToSolarSystem} className="zoom-button" title={t("fitToSolarSystem")}>
         <FontAwesomeIcon icon={faCircle} size={"lg"} color={"black"} />
       </button>
     </div>

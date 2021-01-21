@@ -1,5 +1,7 @@
 @import "../common.scss";
 
+$search-bar-border-radius: 10px;
+
 .search-bar-container {
   width: 290px;
   position: absolute;
@@ -14,7 +16,7 @@
   flex-direction: row;
   justify-content: center;
   background-color: white;
-  border-radius: 10px;
+  border-radius: $search-bar-border-radius;
   border: 1px solid rgb(180, 180, 180);
 }
 
@@ -26,6 +28,19 @@
   cursor: pointer;
   padding-left: 3px;
   padding-right: 3px;
+  background: none;
+  border: none;
+  font-size: 0.9em;
+
+  &:first-child {
+    border-top-left-radius: $search-bar-border-radius;
+    border-bottom-left-radius: $search-bar-border-radius;
+  }
+
+  &:last-child {
+    border-top-right-radius: $search-bar-border-radius;
+    border-bottom-right-radius: $search-bar-border-radius;
+  }
 }
 
 .search-bar-text-input {

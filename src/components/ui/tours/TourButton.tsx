@@ -22,10 +22,17 @@ type PropsFromRedux = ConnectedProps<typeof connector>;
 export const TourButton = connector(({ currentTour, setTourModalOpen }: PropsFromRedux) => {
   const { t } = useTranslation();
 
+  const buttonLabel = t(currentTour?.title ?? "takeATour");
+
   return (
-    <button className="tour-button" onClick={() => setTourModalOpen(true)} disabled={currentTour !== null}>
+    <button
+      className="tour-button"
+      onClick={() => setTourModalOpen(true)}
+      disabled={currentTour !== null}
+      title={buttonLabel}
+    >
       <FontAwesomeIcon icon={faCompass} size={"2x"} />
-      <p className="tour-button-text">{t(currentTour?.title ?? "takeATour")}</p>
+      <p className="tour-button-text">{buttonLabel}</p>
     </button>
   );
 });

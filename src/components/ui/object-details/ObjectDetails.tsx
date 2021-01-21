@@ -94,7 +94,7 @@ export const ObjectDetails = connector(({ object, keepCentered, setKeepCentered,
 
       <hr />
 
-      <label className="keep-centered-toggle">
+      <label className="keep-centered-toggle" title={t("toggleKeepCentered")}>
         {t("keepCentered")}
         <Switch onChange={setKeepCentered} checked={keepCentered}></Switch>
       </label>

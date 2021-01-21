@@ -78,25 +78,29 @@ export const OptionsPane = connector(
               <animated.div key={key} className="options-pane" style={props}>
                 <span className="options-pane-titlebar">
                   <h3>{t("options")}</h3>
-                  <div className="options-pane-close-button" onClick={() => setOptionsPaneOpen(false)}>
+                  <button
+                    className="options-pane-close-button"
+                    onClick={() => setOptionsPaneOpen(false)}
+                    title={t("closeOptionsPane")}
+                  >
                     <FontAwesomeIcon icon={faAngleDoubleLeft} size={"lg"} />
-                  </div>
+                  </button>
                 </span>
                 <hr className="options-pane-divider" />
                 <div className="options-list">
-                  <label className="option">
+                  <label className="option" title={t("toggleOrbits")}>
                     {t("showOrbits")}
                     <Switch onChange={toggleOrbits} checked={showOrbits} />
                   </label>
-                  <label className="option">
+                  <label className="option" title={t("toggleLabels")}>
                     {t("showLabels")}
                     <Switch onChange={toggleLabels} checked={showLabels} />
                   </label>
-                  <label className="option">
+                  <label className="option" title={t("toggleBackgroundStars")}>
                     {t("showBackgroundStars")}
                     <Switch onChange={toggleBackgroundStars} checked={showBackgroundStars} />
                   </label>
-                  <label className="option">
+                  <label className="option" title={t("toggleDebugInfo")}>
                     {t("showDebugInfo")}
                     <Switch onChange={toggleDebugInfo} checked={showDebugInfo} />
                   </label>

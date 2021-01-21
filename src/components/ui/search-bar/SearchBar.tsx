@@ -145,9 +145,9 @@ export const SearchBar = connector(
             borderBottomRightRadius: borderBottomRadius,
           }}
         >
-          <div className="search-bar-button" onClick={() => setOptionsPaneOpen(true)}>
+          <button className="search-bar-button" onClick={() => setOptionsPaneOpen(true)} title={t("options")}>
             <FontAwesomeIcon icon={faBars} size={"lg"} />
-          </div>
+          </button>
           <input
             className="search-bar-text-input"
             style={{ flex: searchText.length > 0 ? 4 : 5 }}
@@ -158,13 +158,13 @@ export const SearchBar = connector(
             onKeyDown={onKeyDown}
             ref={inputRef}
           />
-          <div className="search-bar-button" onClick={onSearchButtonClick}>
+          <button className="search-bar-button" onClick={onSearchButtonClick} title={t("search")}>
             <FontAwesomeIcon icon={faSearch} size={"lg"} />
-          </div>
+          </button>
           {showCloseButton && (
-            <div className="search-bar-button" onClick={onCloseButtonClick}>
+            <button className="search-bar-button" onClick={onCloseButtonClick} title={t("closeSearch")}>
               <FontAwesomeIcon icon={faTimes} size={"lg"} />
-            </div>
+            </button>
           )}
         </div>
         {showSearchSuggestions &&

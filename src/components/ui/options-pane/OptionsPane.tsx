@@ -60,6 +60,7 @@ export const OptionsPane = connector(
       enter: { left: 0 },
       leave: { left: -322 },
       config: { tension: 250, clamp: true },
+      immediate: removeAnimations,
     });
 
     return (

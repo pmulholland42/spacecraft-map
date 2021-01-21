@@ -10,17 +10,19 @@ import { ObjectDetails } from "../object-details/ObjectDetails";
 const mapStateToProps = (state: RootState) => ({
   selectedObject: state.objectInfo.selectedObject,
   open: state.ui.detailsPaneOpen,
+  removeAnimations: state.options.removeAnimations,
 });
 
 const connector = connect(mapStateToProps);
 
 type PropsFromRedux = ConnectedProps<typeof connector>;
 
-export const DetailsPane = connector(({ open, selectedObject }: PropsFromRedux) => {
+export const DetailsPane = connector(({ open, selectedObject, removeAnimations }: PropsFromRedux) => {
   const transitions = useTransition(open, null, {
     from: { opacity: 0 },
     enter: { opacity: 1 },
     leave: { opacity: 0 },
+    immediate: removeAnimations,
   });
 
   const { t } = useTranslation();

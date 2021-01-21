@@ -1,10 +1,11 @@
-import { AstronomicalObject, Coordinate, ITextBubble } from "../interfaces";
+import { AstronomicalObject, Coordinate, ITextBubble, Tour } from "../interfaces";
 import {
   ADD_TEXT_BUBBLE,
   DECREMENT_TIME_STEP_INDEX,
   INCREMENT_TIME_STEP_INDEX,
   PAUSE_TIME,
   REMOVE_TEXT_BUBBLE,
+  SET_CURRENT_TOUR,
   SET_DETAILS_PANE_OPEN,
   SET_DISPLAY_TIME,
   SET_KEEP_CENTERED,
@@ -38,6 +39,7 @@ import {
   PauseTimeAction,
   AddTextBubbleAction,
   RemoveTextBubbleAction,
+  SetCurrentTourAction,
 } from "./actionTypes";
 
 // Options
@@ -127,4 +129,8 @@ export const addTextBubble = (textBubble: ITextBubble): AddTextBubbleAction => (
 export const removeTextBubble = (id: string): RemoveTextBubbleAction => ({
   type: REMOVE_TEXT_BUBBLE,
   id,
+});
+export const setCurrentTour = (currentTour: Tour | null): SetCurrentTourAction => ({
+  type: SET_CURRENT_TOUR,
+  currentTour,
 });

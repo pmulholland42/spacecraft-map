@@ -1,5 +1,5 @@
-import { oneCentury } from "../constants";
-import { AstronomicalObject, Coordinate, OrbitalPosition, OrbitDefinition, TimeStep } from "../interfaces";
+import { oneCentury, oneDay } from "../constants";
+import { AstronomicalObject, Coordinate, OrbitalPosition, OrbitDefinition } from "../interfaces";
 import { auToKm, toDegrees, toRadians } from "./conversions";
 
 import moize from "moize";
@@ -148,13 +148,48 @@ export const getDistance = (pointA: Coordinate, pointB: Coordinate) =>
   Math.sqrt(Math.pow(pointA.x - pointB.x, 2) + Math.pow(pointA.y - pointB.y, 2));
 
 /**
- * Get the index of the time step with value 0
+ * Gets the space distance (km) between two objects at a given time
+ * @param objectA
+ * @param objectB
+ * @param time
  */
-export const getPausedTimeStepIndex = (timeSteps: TimeStep[]) => {
-  // TODO: move this function somewhere else, maybe a common.ts file?
-  let index = timeSteps.findIndex((step) => step.value === 0);
-  if (index === -1) {
-    index = 0;
+export const getObjectDistance = (
+  objectA: AstronomicalObject,
+  objectB: AstronomicalObject,
+  time: Date
+): number => getDistance(getObjectCoordinates(objectA, time), getObjectCoordinates(objectB, time));
+
+/**
+ * Gets the time of the next closest approach of two objects
+ * @param objectA
+ * @param objectB
+ * @param time The time after which to find the next closest approach
+ */
+export const getNextClosestApproach = (
+  objectA: AstronomicalObject,
+  objectB: AstronomicalObject,
+  time: Date
+): Date => {
+  let timeStep = oneDay * 10;
+  let currentTime = new Date(time);
+  let prevDistance = getObjectDistance(objectA, objectB, currentTime);
+  let gettingCloser: boolean | null = null;
+
+  while (timeStep >= oneDay / 10) {
+    currentTime = new Date(currentTime.getTime() + timeStep);
+    let newDistance = getObjectDistance(objectA, objectB, currentTime);
+    if (newDistance > prevDistance && gettingCloser) {
+      // Passed the closest approach
+      currentTime = new Date(currentTime.getTime() - timeStep);
+      timeStep /= 10;
+    } else if (newDistance > prevDistance) {
+      gettingCloser = false;
+    } else {
+      gettingCloser = true;
+    }
+
+    prevDistance = newDistance;
   }
-  return index;
+
+  return currentTime;
 };

@@ -5,6 +5,7 @@ import {
   INCREMENT_TIME_STEP_INDEX,
   PAUSE_TIME,
   REMOVE_TEXT_BUBBLE,
+  SET_CURRENT_TOUR,
   SET_DETAILS_PANE_OPEN,
   SET_DISPLAY_TIME,
   SET_KEEP_CENTERED,
@@ -26,7 +27,7 @@ import {
   TimeActionTypes,
   UIActionTypes,
 } from "./actionTypes";
-import { AstronomicalObject, Coordinate, ITextBubble } from "../interfaces";
+import { AstronomicalObject, Coordinate, ITextBubble, Tour } from "../interfaces";
 import { getPausedTimeStepIndex } from "../utilities";
 import { timeSteps } from "../constants";
 
@@ -142,6 +143,7 @@ interface UIState {
   optionsPaneOpen: boolean;
   tourModalOpen: boolean;
   textBubbles: ITextBubble[];
+  currentTour: Tour | null;
 }
 
 const initialUIState: UIState = {
@@ -149,6 +151,7 @@ const initialUIState: UIState = {
   optionsPaneOpen: false,
   tourModalOpen: false,
   textBubbles: [],
+  currentTour: null,
 };
 
 const uiReducer = (state: UIState = initialUIState, action: UIActionTypes) => {
@@ -167,6 +170,8 @@ const uiReducer = (state: UIState = initialUIState, action: UIActionTypes) => {
       }
     case REMOVE_TEXT_BUBBLE:
       return { ...state, textBubbles: state.textBubbles.filter((textBubble) => textBubble.id !== action.id) };
+    case SET_CURRENT_TOUR:
+      return { ...state, currentTour: action.currentTour };
     default:
       return state;
   }

@@ -11,25 +11,13 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { useTranslation } from "react-i18next";
 import { getObjectName, getShortDescription } from "../../../utilities";
-import { setSelectedObject } from "../../../redux/actionCreators";
-import { connect, ConnectedProps } from "react-redux";
 
 interface SearchSuggestionProps {
   object: AstronomicalObject;
   onSelect: (selectedObject: AstronomicalObject) => void;
 }
 
-const mapDispatchToProps = {
-  setSelectedObject,
-};
-
-const connector = connect(null, mapDispatchToProps);
-
-type PropsFromRedux = ConnectedProps<typeof connector>;
-
-type Props = SearchSuggestionProps & PropsFromRedux;
-
-export const SearchSuggestion = connector(({ object, onSelect, setSelectedObject }: Props) => {
+export const SearchSuggestion = ({ object, onSelect }: SearchSuggestionProps) => {
   const { t } = useTranslation();
 
   let icon: IconDefinition;
@@ -50,8 +38,6 @@ export const SearchSuggestion = connector(({ object, onSelect, setSelectedObject
   }
 
   const onClick = () => {
-    // TODO: move this redux logic up a couple components?
-    setSelectedObject(object);
     onSelect(object);
   };
 
@@ -66,4 +52,4 @@ export const SearchSuggestion = connector(({ object, onSelect, setSelectedObject
       </div>
     </div>
   );
-});
+};

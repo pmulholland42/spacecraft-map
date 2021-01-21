@@ -43,9 +43,11 @@
     "negativeTenYears": "-10 years/s",
     "negativeOneYear": "-1 year/s",
     "negativeThirtyDays": "-30 days/s",
+    "negativeTenDays": "-10 days/s",
     "negativeOneDay": "-1 day/s",
     "paused": "Paused",
     "oneDay": "1 day/s",
+    "tenDays": "10 days/s",
     "thirtyDays": "30 days/s",
     "oneYear": "1 yr/s",
     "tenYears": "10 yrs/s"
@@ -62,6 +64,12 @@
       "uranus": "This is Uranus!",
       "neptune": "This is Neptune!",
       "pluto": "This is Pluto!"
+    },
+    "retrogradeMars": {
+      "title": "Retrograde Motion of Mars",
+      "waitForMars": "Wait for Mars to be about here...",
+      "retrogradeMotion": "Retrograde motion!",
+      "explanation": "Mars exhibits apparent retrograde motion about every two years. We can see it on the map by keeping Earth centered and fast forwarding through time."
     }
   }
 }

@@ -5,7 +5,7 @@ import { minPlanetSize } from "../../../constants";
 import { AstronomicalObject, Coordinate } from "../../../interfaces";
 import { RootState } from "../../../redux/store";
 import { setSelectedObject, setDetailsPaneOpen } from "../../../redux/actionCreators";
-import { toScreenCoords, toScreenDistance } from "../../../utilities";
+import { animatePan, toScreenCoords, toScreenDistance } from "../../../utilities";
 import { Label } from "../label/Label";
 
 interface OrbitalBodyProps {
@@ -60,12 +60,13 @@ export const OrbitalBody = connector(
           showLabel = true;
         }
       } else if (object.type === "star") {
-        showLabel = zoom > 7;
+        showLabel = zoom >= 6;
       }
     }
 
     const onClick = () => {
       setSelectedObject(object);
+      animatePan(coords);
       setDetailsPaneOpen(true);
     };
 

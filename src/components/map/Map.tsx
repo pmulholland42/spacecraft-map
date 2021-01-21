@@ -1,20 +1,20 @@
 import React, { useEffect, useRef, useState } from "react";
 import { connect, ConnectedProps } from "react-redux";
 import { RootState } from "../../redux/store";
-import { setZoom, setScreenCenter, setKeepCentered } from "../../redux/actionCreators";
+import { setZoom, setScreenCenter } from "../../redux/actionCreators";
 import { OrbitalEllipse } from "./orbital-ellipse/OrbitalEllipse";
 import {
   getOrbitalPosition,
   getObjectCoordinates,
   toSpaceCoords,
   toSpaceDistance,
-  animateZoomAndPan,
+  toScreenDistance,
 } from "../../utilities";
 import { Coordinate } from "../../interfaces";
 import solarSystem from "../../data/solarSystem";
 import { OrbitalBody } from "./orbital-body/OrbitalBody";
 import { usePrevious } from "../../hooks/usePrevious";
-import { defaultPlanetZoom, maxZoomLevel, minZoomLevel } from "../../constants";
+import { maxZoomLevel, minZoomLevel } from "../../constants";
 import { TextBubble } from "./text-bubble/TextBubble";
 
 const mapStateToProps = (state: RootState) => ({
@@ -30,7 +30,6 @@ const mapStateToProps = (state: RootState) => ({
 const mapDispatchToProps = {
   setZoom,
   setScreenCenter,
-  setKeepCentered,
 };
 
 const connector = connect(mapStateToProps, mapDispatchToProps);
@@ -52,21 +51,10 @@ export const Map = connector(
     textBubbles,
     setZoom,
     setScreenCenter,
-    setKeepCentered,
   }: PropsFromRedux) => {
     const [isDragging, setIsDragging] = useState(false);
     const prevMousePositionRef = useRef<Coordinate | null>(null);
     const prevSelectedObject = usePrevious(selectedObject);
-
-    useEffect(() => {
-      // Center the screen on the newly selected object
-      if (selectedObject !== null && selectedObject !== prevSelectedObject) {
-        setKeepCentered(false);
-
-        const coords = getObjectCoordinates(selectedObject, displayTime);
-        animateZoomAndPan(coords, defaultPlanetZoom);
-      }
-    }, [selectedObject, prevSelectedObject, setScreenCenter, displayTime, setKeepCentered]);
 
     useEffect(() => {
       // Keep the selected object centered
@@ -178,15 +166,29 @@ export const Map = connector(
       >
         {showOrbits && orbits}
         {objects}
-        {textBubbles.map((textBubble) => (
-          <TextBubble
-            object={textBubble.object}
-            text={textBubble.text}
-            promptText={textBubble.promptText}
-            onPromptClick={textBubble.onPromptClick}
-            key={textBubble.id}
-          />
-        ))}
+        {textBubbles.map((textBubble) => {
+          let coords: Coordinate | undefined = undefined;
+          if (textBubble.coords !== undefined) {
+            coords = textBubble.coords;
+          } else if (textBubble.object !== undefined) {
+            coords = getObjectCoordinates(textBubble.object, displayTime);
+          }
+          let yOffset = textBubble.yOffset ?? 5;
+          if (textBubble.object !== undefined) {
+            yOffset += toScreenDistance(textBubble.object.diameter / 2, zoom);
+          }
+          return (
+            <TextBubble
+              coords={coords}
+              text={textBubble.text}
+              promptText={textBubble.promptText}
+              onPromptClick={textBubble.onPromptClick}
+              key={textBubble.id}
+              yOffset={yOffset}
+              relativeCenter={textBubble.relativeCenter}
+            />
+          );
+        })}
       </div>
     );
   }

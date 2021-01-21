@@ -1,13 +1,13 @@
 import "./TourModal.scss";
 import React from "react";
-import { setTourModalOpen } from "../../../redux/actionCreators";
+import { setTourModalOpen, setCurrentTour } from "../../../redux/actionCreators";
 import { RootState } from "../../../redux/store";
 import { connect, ConnectedProps } from "react-redux";
 import { animated, useTransition } from "react-spring";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTimes } from "@fortawesome/free-solid-svg-icons";
 import { useTranslation } from "react-i18next";
-import { startTour, tours } from "../../../data/tours";
+import { tours } from "../../../data/tours";
 
 const mapStateToProps = (state: RootState) => ({
   tourModalOpen: state.ui.tourModalOpen,
@@ -15,13 +15,14 @@ const mapStateToProps = (state: RootState) => ({
 
 const mapDispatchToProps = {
   setTourModalOpen,
+  setCurrentTour,
 };
 
 const connector = connect(mapStateToProps, mapDispatchToProps);
 
 type PropsFromRedux = ConnectedProps<typeof connector>;
 
-export const TourModal = connector(({ tourModalOpen, setTourModalOpen }: PropsFromRedux) => {
+export const TourModal = connector(({ tourModalOpen, setTourModalOpen, setCurrentTour }: PropsFromRedux) => {
   const transitions = useTransition(tourModalOpen, null, {
     from: { opacity: 0 },
     enter: { opacity: 1 },
@@ -41,15 +42,18 @@ export const TourModal = connector(({ tourModalOpen, setTourModalOpen }: PropsFr
                     <FontAwesomeIcon icon={faTimes} size={"2x"} />
                   </button>
                 </div>
-                {tours.map((tour) => (
+                {tours.map((tour, index) => (
                   <button
+                    key={index}
                     className="tour"
-                    onClick={() => {
+                    onClick={async () => {
                       setTourModalOpen(false);
-                      startTour(tour, t);
+                      setCurrentTour(tour);
+                      await tour.runTour(t);
+                      setCurrentTour(null);
                     }}
                   >
-                    {t(tour.name)}
+                    {t(tour.title)}
                   </button>
                 ))}
               </div>

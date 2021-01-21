@@ -6,14 +6,16 @@ import solarSystem from "../../../data/solarSystem";
 import { SearchSuggestion } from "./SearchSuggestion";
 import { useTranslation } from "react-i18next";
 import { AstronomicalObject } from "../../../interfaces";
-import { getObjectName } from "../../../utilities";
+import { animateZoomAndPan, getObjectCoordinates, getObjectName } from "../../../utilities";
 import { setSelectedObject, setDetailsPaneOpen, setOptionsPaneOpen } from "../../../redux/actionCreators";
 import { connect, ConnectedProps } from "react-redux";
 import { RootState } from "../../../redux/store";
+import { defaultPlanetZoom } from "../../../constants";
 
 const mapStateToProps = (state: RootState) => ({
   selectedObject: state.objectInfo.selectedObject,
   detailsPaneOpen: state.ui.detailsPaneOpen,
+  displayTime: state.time.displayTime,
 });
 const mapDispatchToProps = {
   setSelectedObject,
@@ -37,6 +39,7 @@ export const SearchBar = connector(
     setOptionsPaneOpen,
     selectedObject,
     setSelectedObject,
+    displayTime,
   }: PropsFromRedux) => {
     const [searchText, setSearchText] = useState("");
     const [showSearchSuggestions, setShowSearchSuggestions] = useState(true);
@@ -89,6 +92,11 @@ export const SearchBar = connector(
      */
     const selectObject = (object: AstronomicalObject | null) => {
       setSelectedObject(object);
+      if (object !== null) {
+        const coords = getObjectCoordinates(object, displayTime);
+        animateZoomAndPan(coords, defaultPlanetZoom);
+      }
+
       setShowSearchSuggestions(false);
       setDetailsPaneOpen(true);
     };

@@ -5,7 +5,7 @@ import { connect, ConnectedProps } from "react-redux";
 import { RootState } from "../../../redux/store";
 import { useTranslation } from "react-i18next";
 
-import { ObjectDetails } from "../object-details/ObjectDetails";
+import { ObjectDetails } from "./ObjectDetails";
 import { getPausedTimeStepIndex } from "../../../utilities";
 import { timeSteps } from "../../../constants";
 

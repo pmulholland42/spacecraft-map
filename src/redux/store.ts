@@ -128,7 +128,7 @@ interface MapState {
 
 const initialMapState: MapState = {
   screenCenter: { x: 0, y: 0 },
-  zoom: 10,
+  zoom: 7,
 };
 
 const mapReducer = (state: MapState = initialMapState, action: MapActionTypes) => {

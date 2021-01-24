@@ -17,7 +17,7 @@ import { useTranslation } from "react-i18next";
 import DatePicker from "react-datepicker";
 import { getPausedTimeStepIndex } from "../../../utilities";
 
-const interval = 100;
+const interval = 60;
 
 const mapStateToProps = (state: RootState) => ({
   displayTime: state.time.displayTime,

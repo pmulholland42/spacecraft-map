@@ -3,7 +3,7 @@ import { setZoom, setScreenCenter } from "../redux/actionCreators";
 import { Coordinate } from "../interfaces";
 import { getDistance } from "./calculations";
 
-const animationFrameTime = 70;
+const animationFrameTime = 40;
 
 let animationInterval = -1;
 let cancelAnimation: (() => void) | null = null;

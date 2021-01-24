@@ -15,6 +15,8 @@ import { faAngleDoubleLeft } from "@fortawesome/free-solid-svg-icons";
 import { useTranslation } from "react-i18next";
 import { animated, useTransition } from "react-spring";
 import Switch from "react-switch";
+import { timeSteps } from "../../../constants";
+import { getPausedTimeStepIndex } from "../../../utilities";
 
 const mapStateToProps = (state: RootState) => ({
   open: state.ui.optionsPaneOpen,
@@ -23,6 +25,7 @@ const mapStateToProps = (state: RootState) => ({
   showBackgroundStars: state.options.showBackgroundStars,
   removeAnimations: state.options.removeAnimations,
   showDebugInfo: state.options.showDebugInfo,
+  timeStepIndex: state.time.timeStepIndex,
 });
 
 const mapDispatchToProps = {
@@ -52,6 +55,7 @@ export const OptionsPane = connector(
     setShowBackgroundStars,
     setRemoveAnimations,
     setShowDebugInfo,
+    timeStepIndex,
   }: PropsFromRedux) => {
     const { t } = useTranslation();
 
@@ -60,7 +64,7 @@ export const OptionsPane = connector(
       enter: { left: 0 },
       leave: { left: -322 },
       config: { tension: 250, clamp: true },
-      immediate: removeAnimations,
+      immediate: removeAnimations || timeStepIndex !== getPausedTimeStepIndex(timeSteps),
     });
 
     return (

@@ -8,10 +8,13 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTimes } from "@fortawesome/free-solid-svg-icons";
 import { useTranslation } from "react-i18next";
 import { tours } from "../../../data/tours";
+import { getPausedTimeStepIndex } from "../../../utilities";
+import { timeSteps } from "../../../constants";
 
 const mapStateToProps = (state: RootState) => ({
   tourModalOpen: state.ui.tourModalOpen,
   removeAnimations: state.options.removeAnimations,
+  timeStepIndex: state.time.timeStepIndex,
 });
 
 const mapDispatchToProps = {
@@ -24,12 +27,12 @@ const connector = connect(mapStateToProps, mapDispatchToProps);
 type PropsFromRedux = ConnectedProps<typeof connector>;
 
 export const TourModal = connector(
-  ({ tourModalOpen, setTourModalOpen, setCurrentTour, removeAnimations }: PropsFromRedux) => {
+  ({ tourModalOpen, setTourModalOpen, setCurrentTour, removeAnimations, timeStepIndex }: PropsFromRedux) => {
     const transitions = useTransition(tourModalOpen, null, {
       from: { opacity: 0 },
       enter: { opacity: 1 },
       leave: { opacity: 0 },
-      immediate: removeAnimations,
+      immediate: removeAnimations || timeStepIndex !== getPausedTimeStepIndex(timeSteps),
     });
     const { t } = useTranslation();
     return (

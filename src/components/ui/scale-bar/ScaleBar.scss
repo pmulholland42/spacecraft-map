@@ -1,0 +1,23 @@
+@import "../common.scss";
+
+.scale-bar-container {
+  position: absolute;
+  right: 5vh;
+  bottom: 5vh;
+  z-index: $scale-bar-z-index;
+  transform: translate(0%, 50%);
+  display: flex;
+  align-items: center;
+}
+
+.scale-bar-label {
+  color: white;
+  font-size: 0.7em;
+  padding-right: 10px;
+}
+
+.scale-bar {
+  border: 1px solid white;
+  border-top: none;
+  height: $scale-bar-height;
+}

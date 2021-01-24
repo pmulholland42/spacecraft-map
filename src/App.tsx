@@ -11,6 +11,7 @@ import { ZoomButtons } from "./components/ui/zoom-buttons/ZoomButtons";
 import { DebugPanel } from "./components/ui/debug-panel/DebugPanel";
 import { TourButton } from "./components/ui/tours/TourButton";
 import { TourModal } from "./components/ui/tours/TourModal";
+import { ScaleBar } from "./components/ui/scale-bar/ScaleBar";
 
 function App() {
   return (
@@ -26,6 +27,7 @@ function App() {
           <DebugPanel initialPosition={{ x: 1000, y: 200 }} />
           <TourButton />
           <TourModal />
+          <ScaleBar />
         </div>
       </Provider>
     </Suspense>

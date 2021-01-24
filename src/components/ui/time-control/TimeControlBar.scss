@@ -1,9 +1,11 @@
 @import "../common.scss";
 
+$time-control-bar-height: 40px;
+
 .time-control-container {
   position: absolute;
   left: 50%;
-  bottom: 20px;
+  bottom: calc(5vh - (#{$time-control-bar-height}) / 2);
   transform: translate(-50%);
   z-index: $time-bar-z-index;
   display: flex;
@@ -19,7 +21,7 @@
   padding: 5px;
   margin-left: 10px;
   margin-right: 10px;
-  height: 40px;
+  height: $time-control-bar-height;
   border: none;
   border-radius: 2px;
   cursor: pointer;

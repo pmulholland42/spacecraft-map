@@ -74,15 +74,15 @@
   "tourMessages": {
     "meetThePlanets": {
       "title": "Meet the Planets",
-      "mercury": "This is Mercury!",
-      "venus": "This is Venus!",
-      "earth": "This is Earth!",
-      "mars": "This is Mars!",
-      "jupiter": "This is Jupiter!",
-      "saturn": "This is Saturn!",
-      "uranus": "This is Uranus!",
-      "neptune": "This is Neptune!",
-      "pluto": "This is Pluto!"
+      "mercury": "Mercury is the smallest planet in the Solar System, and the closest to the Sun.",
+      "venus": "Venus is almost the same size as Earth, giving it the title of Earth's \"sister planet\". It rotates about its axis in the opposite direction to most of the other planets.",
+      "earth": "Earth is the largest of the inner planets, and the densest planet in the whole system.",
+      "mars": "Mars has a similar rotational period to Earth. This means one day on Mars, called a Sol, only about 39 minutes longer than a day on Earth. The planet is also inhabited entirely by robots.",
+      "jupiter": "Jupiter is over three times further from the Sun than Mars. It's also the largest planet in the system, with over twice the mass of all the rest of the planets combined.",
+      "saturn": "Saturn is the second-largest planet in the system, but it's also the least dense - even less dense than water.",
+      "uranus": "Uranus has an axis of rotation that's tilted sideways relative to the rest of the system. This means the poles get more sunlight than the equator!",
+      "neptune": "Neptune is too far away to be seen without a telescope. It was only discovered because of its gravitational effects on Uranus.",
+      "pluto": "Pluto is no longer considered a planet because it doesn't dominate its orbit. It's part of the Kuiper Belt along with thousands of other objects. In the time between its discovery and its designation as a dwarf planet, Pluto didn't even complete one orbit around the Sun."
     },
     "retrogradeMars": {
       "title": "Retrograde Motion of Mars",

@@ -4,6 +4,7 @@ import {
   decrementTimeStepIndex,
   pauseTime,
   removeTextBubble,
+  setDetailsPaneOpen,
   setDisplayTime,
   setKeepCentered,
   setSelectedObject,
@@ -46,10 +47,14 @@ export const tours: Tour[] = [
         if (planet === null) {
           return Promise.resolve(false);
         }
+        store.dispatch(setKeepCentered(false));
         await animateZoomAndPan(
           getObjectCoordinates(planet, store.getState().time.displayTime),
           defaultPlanetZoom
         );
+        store.dispatch(setDetailsPaneOpen(true));
+        store.dispatch(setSelectedObject(planet));
+        store.dispatch(setKeepCentered(true));
         await waitForTextBubble({
           object: planet,
           id: textBubbleId,
@@ -142,7 +147,7 @@ const waitForTextBubble = async (textBubble: ITextBubble) => {
 };
 
 const waitForTime = async (time: Date) => {
-  return new Promise((resolve) => {
+  return new Promise<void>((resolve) => {
     const unsubscribe = store.subscribe(() => {
       if (store.getState().time.displayTime.getTime() > time.getTime()) {
         resolve();

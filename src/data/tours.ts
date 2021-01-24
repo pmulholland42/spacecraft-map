@@ -62,6 +62,7 @@ export const tours: Tour[] = [
           promptText: t(i !== planetIds.length - 1 ? "continue" : "finish"),
         });
       }
+      store.dispatch(setKeepCentered(false));
       return true;
     },
   },

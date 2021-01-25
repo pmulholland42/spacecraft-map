@@ -31,6 +31,9 @@ export const sun: AstronomicalObject = {
   },
 };
 
+// Mercury
+// --------------------------------------------------------
+
 export const mercury: AstronomicalObject = {
   id: "mercury",
   parent: sun,
@@ -62,6 +65,9 @@ export const mercury: AstronomicalObject = {
   },
 };
 
+// Venus
+// --------------------------------------------------------
+
 export const venus: AstronomicalObject = {
   id: "venus",
   parent: sun,
@@ -92,6 +98,9 @@ export const venus: AstronomicalObject = {
     longitudeOfAscendingNodeRate: -0.27274174,
   },
 };
+
+// Earth
+// --------------------------------------------------------
 
 export const earth: AstronomicalObject = {
   id: "earth",
@@ -141,20 +150,23 @@ export const moon: AstronomicalObject = {
   color: "#787271",
   orbit: {
     epoch: j2000Epoch,
-    semiMajorAxis: 0.00256954861,
-    semiMajorAxisRate: 0,
-    eccentricity: 0.0549,
-    eccentricityRate: 0,
-    inclination: 5.145,
-    inclinationRate: 0,
-    meanLongitude: 0,
-    meanLongitudeRate: 479122.86243729,
-    longitudeOfPeriapsis: 0,
-    longitudeOfPeriapsisRate: 2133.35276271,
-    longitudeOfAscendingNode: 0,
-    longitudeOfAscendingNodeRate: -1934.44384739,
+    semiMajorAxis: 0.002548289534512777,
+    semiMajorAxisRate: 0.000005823945400744088,
+    eccentricity: 0.06476694137484437,
+    eccentricityRate: -0.03465308043342892,
+    inclination: 5.240010960708354,
+    inclinationRate: -0.19070605241874716,
+    meanLongitude: 572.8598631710847,
+    meanLongitudeRate: 481256.6, // based on sidereal period (360 degrees / 27.321661 days to degrees/century)
+    longitudeOfPeriapsis: 432.11960627615787,
+    longitudeOfPeriapsisRate: 110.16678118691738,
+    longitudeOfAscendingNode: 123.9837037681769,
+    longitudeOfAscendingNodeRate: 224.43685873727298,
   },
 };
+
+// Mars
+// --------------------------------------------------------
 
 export const mars: AstronomicalObject = {
   id: "mars",
@@ -187,6 +199,71 @@ export const mars: AstronomicalObject = {
     longitudeOfAscendingNodeRate: -0.26852431,
   },
 };
+
+export const phobos: AstronomicalObject = {
+  id: "phobos",
+  type: "moon",
+  parent: mars,
+  diameter: 22.5334,
+  sprite: "images/sprites/phobos.png",
+  photo: {
+    url: "images/photos/phobos.png",
+    attribution: {
+      creator: "NASA / JPL-Caltech / University of Arizona",
+      licenseName: "Public Domain",
+    },
+  },
+  color: "#A29286",
+  orbit: {
+    epoch: j2000Epoch,
+    semiMajorAxis: 0.00006268997572179157,
+    semiMajorAxisRate: -6.173026970639857e-10,
+    eccentricity: 0.01541577713745092,
+    eccentricityRate: -0.0006879517156543405,
+    inclination: 26.05134469392531,
+    inclinationRate: 1.3474817919771311,
+    meanLongitude: 772.9975290578709,
+    meanLongitudeRate: 4.123019e7,
+    longitudeOfPeriapsis: 427.18716317989197,
+    longitudeOfPeriapsisRate: -303.83630361652075,
+    longitudeOfAscendingNode: 84.81060423679303,
+    longitudeOfAscendingNodeRate: -0.2952705426118456,
+  },
+};
+
+export const deimos: AstronomicalObject = {
+  id: "deimos",
+  type: "moon",
+  parent: mars,
+  diameter: 12, // approximate
+  sprite: "images/sprites/deimos.png",
+  photo: {
+    url: "images/photos/deimos.png",
+    attribution: {
+      creator: "NASA / JPL-Caltech / University of Arizona",
+      licenseName: "Public Domain",
+    },
+  },
+  color: "#C4BCA3",
+  orbit: {
+    epoch: j2000Epoch,
+    semiMajorAxis: 0.000156812982683631,
+    semiMajorAxisRate: 5.193697700915396e-9,
+    eccentricity: 0.0002419395670375644,
+    eccentricityRate: 0.0000525939663146936,
+    inclination: 27.57017394063173,
+    inclinationRate: -1.1344640042807583,
+    meanLongitude: 518.064667766238,
+    meanLongitudeRate: 10414327.960917689,
+    longitudeOfPeriapsis: 273.9006515930637,
+    longitudeOfPeriapsisRate: -56.00319909809886,
+    longitudeOfAscendingNode: 83.6637869299841,
+    longitudeOfAscendingNodeRate: 2.76435060152383,
+  },
+};
+
+// Jupiter
+// --------------------------------------------------------
 
 export const jupiter: AstronomicalObject = {
   id: "jupiter",
@@ -223,6 +300,131 @@ export const jupiter: AstronomicalObject = {
   },
 };
 
+export const io: AstronomicalObject = {
+  id: "io",
+  type: "moon",
+  parent: jupiter,
+  diameter: 3643.2,
+  sprite: "images/sprites/io.png",
+  photo: {
+    url: "images/photos/io.png",
+    attribution: {
+      creator: "",
+      licenseName: "",
+    },
+  },
+  color: "#FCF590",
+  orbit: {
+    epoch: j2000Epoch,
+    semiMajorAxis: 0.002821035643390086,
+    semiMajorAxisRate: 1.5866187311024127e-8,
+    eccentricity: 0.003763519423862818,
+    eccentricityRate: 0.0001986809274285642,
+    inclination: 2.212652137532374,
+    inclinationRate: -0.012493484705005997,
+    meanLongitude: 636.4244467435615,
+    meanLongitudeRate: 7423369.202075594,
+    longitudeOfPeriapsis: 399.8086960847625,
+    longitudeOfPeriapsisRate: 6.133801896882858,
+    longitudeOfAscendingNode: 336.8509510943547,
+    longitudeOfAscendingNodeRate: 2.043859001732528,
+  },
+};
+export const europa: AstronomicalObject = {
+  id: "europa",
+  type: "moon",
+  parent: jupiter,
+  diameter: 3121.6,
+  sprite: "images/sprites/europa.png",
+  photo: {
+    url: "images/photos/europa.png",
+    attribution: {
+      creator: "",
+      licenseName: "",
+    },
+  },
+  color: "#A1976B",
+  orbit: {
+    epoch: j2000Epoch,
+    semiMajorAxis: 0.004486870762804388,
+    semiMajorAxisRate: 1.0376761162139703e-8,
+    eccentricity: 0.00970612065536221,
+    eccentricityRate: -0.0001319468092575507,
+    inclination: 1.790911124265613,
+    inclinationRate: 0.4097576995410541,
+    meanLongitude: 882.0144268671047,
+    meanLongitudeRate: 3700784.992677322,
+    longitudeOfPeriapsis: 586.9518864045856,
+    longitudeOfPeriapsisRate: -11.57431653972992,
+    longitudeOfAscendingNode: 332.6272961174866,
+    longitudeOfAscendingNodeRate: 17.310650352972516,
+  },
+};
+export const ganymede: AstronomicalObject = {
+  id: "ganymede",
+  type: "moon",
+  parent: jupiter,
+  diameter: 5268.2,
+  sprite: "images/sprites/ganymede.png",
+  photo: {
+    url: "images/photos/ganymede.png",
+    attribution: {
+      creator: "",
+      licenseName: "",
+    },
+  },
+  color: "#A28E7F",
+  orbit: {
+    epoch: j2000Epoch,
+    semiMajorAxis: 0.00715740531545755,
+    semiMajorAxisRate: -1.2741482097351764e-7,
+    eccentricity: 0.001384943898452968,
+    eccentricityRate: -0.00015438163298890618,
+    inclination: 2.214130331143583,
+    inclinationRate: -0.27683282954118815,
+    meanLongitude: 914.8717767515656,
+    meanLongitudeRate: 1836907.282456154,
+    longitudeOfPeriapsis: 654.4007099402094,
+    longitudeOfPeriapsisRate: -185.3687091363738,
+    longitudeOfAscendingNode: 343.1729450213451,
+    longitudeOfAscendingNodeRate: -5.832073260542245,
+  },
+};
+
+export const callisto: AstronomicalObject = {
+  id: "callisto",
+  type: "moon",
+  parent: jupiter,
+  diameter: 4820.6,
+  sprite: "images/sprites/callisto.png",
+  photo: {
+    url: "images/photos/callisto.png",
+    attribution: {
+      creator: "",
+      licenseName: "",
+    },
+  },
+  color: "#8A9B8A",
+  orbit: {
+    epoch: j2000Epoch,
+    semiMajorAxis: 0.01258352077014205,
+    semiMajorAxisRate: 0.0000070359432572594804,
+    eccentricity: 0.007346727058787971,
+    eccentricityRate: -0.00033256705366318737,
+    inclination: 2.016916477462703,
+    inclinationRate: -0.19445637903393376,
+    meanLongitude: 428.41083849559135,
+    meanLongitudeRate: 787975.5743564531,
+    longitudeOfPeriapsis: 352.9490047316904,
+    longitudeOfPeriapsisRate: 64.43107068298269,
+    longitudeOfAscendingNode: 337.9430831023029,
+    longitudeOfAscendingNodeRate: -3.1966557574745025,
+  },
+};
+
+// Saturn
+// --------------------------------------------------------
+
 export const saturn: AstronomicalObject = {
   id: "saturn",
   type: "planet",
@@ -257,6 +459,280 @@ export const saturn: AstronomicalObject = {
     f: 38.35125,
   },
 };
+export const mimas: AstronomicalObject = {
+  id: "mimas",
+  type: "moon",
+  parent: saturn,
+  diameter: 396.4,
+  sprite: "images/sprites/mimas.png",
+  photo: {
+    url: "images/photos/mimas.png",
+    attribution: {
+      creator: "",
+      licenseName: "",
+    },
+  },
+  color: "#A9A9A9",
+  orbit: {
+    epoch: j2000Epoch,
+    semiMajorAxis: 0.001243370280103714,
+    semiMajorAxisRate: -1.618636910703103e-8,
+    eccentricity: 0.01760778936130747,
+    eccentricityRate: 0.00048499772589280163,
+    inclination: 26.99187083574384,
+    inclinationRate: 2.6018354940351394,
+    meanLongitude: 487.1708765629167,
+    meanLongitudeRate: 13881490.450897705,
+    longitudeOfPeriapsis: 271.1207983040349,
+    longitudeOfPeriapsisRate: 208.73699818917316,
+    longitudeOfAscendingNode: 172.038418328353,
+    longitudeOfAscendingNodeRate: -3.227900141006103,
+  },
+};
+export const enceladus: AstronomicalObject = {
+  id: "enceladus",
+  type: "moon",
+  parent: saturn,
+  diameter: 504.2,
+  sprite: "images/sprites/enceladus.png",
+  photo: {
+    url: "images/photos/enceladus.png",
+    attribution: {
+      creator: "",
+      licenseName: "",
+    },
+  },
+  color: "#FFFFFF",
+  orbit: {
+    epoch: j2000Epoch,
+    semiMajorAxis: 0.001593657972219693,
+    semiMajorAxisRate: 1.4715581988849688e-8,
+    eccentricity: 0.004131700455813154,
+    eccentricityRate: 0.00047765442430032067,
+    inclination: 28.05206499221688,
+    inclinationRate: -0.010523990988389187,
+    meanLongitude: 540.5760975350925,
+    meanLongitudeRate: 9566303.82055729,
+    longitudeOfPeriapsis: 284.0315456206472,
+    longitudeOfPeriapsisRate: 103.38679838118696,
+    longitudeOfAscendingNode: 169.5066654229833,
+    longitudeOfAscendingNodeRate: -0.0000768346245081375,
+  },
+};
+export const tethys: AstronomicalObject = {
+  id: "tethys",
+  type: "moon",
+  parent: saturn,
+  diameter: 1062,
+  sprite: "images/sprites/tethys.png",
+  photo: {
+    url: "images/photos/tethys.png",
+    attribution: {
+      creator: "",
+      licenseName: "",
+    },
+  },
+  color: "#CAC9C7",
+  orbit: {
+    epoch: j2000Epoch,
+    semiMajorAxis: 0.001971788601147789,
+    semiMajorAxisRate: 1.286169052901534e-8,
+    eccentricity: 0.0008448086607326789,
+    eccentricityRate: 0.000257827864978399,
+    inclination: 27.2219037928291,
+    inclinationRate: -0.2295983931944896,
+    meanLongitude: 221.09289282260085,
+    meanLongitudeRate: 6950987.641264667,
+    longitudeOfPeriapsis: 215.78366167188864,
+    longitudeOfPeriapsisRate: -37.91571570241081,
+    longitudeOfAscendingNode: 167.9925555751118,
+    longitudeOfAscendingNodeRate: 0.955049035794616,
+  },
+};
+export const dione: AstronomicalObject = {
+  id: "dione",
+  type: "moon",
+  parent: saturn,
+  diameter: 1122.8,
+  sprite: "images/sprites/dione.png",
+  photo: {
+    url: "images/photos/dione.png",
+    attribution: {
+      creator: "",
+      licenseName: "",
+    },
+  },
+  color: "#CAC9C7",
+  orbit: {
+    epoch: j2000Epoch,
+    semiMajorAxis: 0.002524410457917032,
+    semiMajorAxisRate: 6.045127552397125e-8,
+    eccentricity: 0.002334335089067216,
+    eccentricityRate: -0.0009478002665748602,
+    inclination: 28.04146894686649,
+    inclinationRate: 0.028043899808928074,
+    meanLongitude: 600.6919112323524,
+    meanLongitudeRate: 4798409.082312997,
+    longitudeOfPeriapsis: 326.2824701603978,
+    longitudeOfPeriapsisRate: -141.60497837384204,
+    longitudeOfAscendingNode: 169.4701673412187,
+    longitudeOfAscendingNodeRate: 0.09220398712747624,
+  },
+};
+export const rhea: AstronomicalObject = {
+  id: "rhea",
+  type: "moon",
+  parent: saturn,
+  diameter: 1527.6,
+  sprite: "images/sprites/rhea.png",
+  photo: {
+    url: "images/photos/rhea.png",
+    attribution: {
+      creator: "",
+      licenseName: "",
+    },
+  },
+  color: "#CAC9C7",
+  orbit: {
+    epoch: j2000Epoch,
+    semiMajorAxis: 0.003524538018215857,
+    semiMajorAxisRate: -2.3830705515306624e-7,
+    eccentricity: 0.0007278372192779856,
+    eccentricityRate: -0.00008608127297616739,
+    inclination: 28.24147688381066,
+    inclinationRate: 0.07421450735742141,
+    meanLongitude: 501.8265103901099,
+    meanLongitudeRate: 2908602.612207992,
+    longitudeOfPeriapsis: 349.6602683154281,
+    longitudeOfPeriapsisRate: 28.717497601466334,
+    longitudeOfAscendingNode: 168.984145124407,
+    longitudeOfAscendingNodeRate: 0.7833766891293976,
+  },
+};
+export const titan: AstronomicalObject = {
+  id: "titan",
+  type: "moon",
+  parent: saturn,
+  diameter: 5149.5,
+  sprite: "images/sprites/titan.png",
+  photo: {
+    url: "images/photos/titan.png",
+    attribution: {
+      creator: "",
+      licenseName: "",
+    },
+  },
+  color: "#CAC9C7",
+  orbit: {
+    epoch: j2000Epoch,
+    semiMajorAxis: 0.008168249007016033,
+    semiMajorAxisRate: -4.570250696812883e-8,
+    eccentricity: 0.02859115464814493,
+    eccentricityRate: 0.00031445024053905826,
+    inclination: 27.71834457100986,
+    inclinationRate: -0.1639766357840422,
+    meanLongitude: 485.796156693232,
+    meanLongitudeRate: 824507.7583136847,
+    longitudeOfPeriapsis: 333.6800090895506,
+    longitudeOfPeriapsisRate: 51.409766858310945,
+    longitudeOfAscendingNode: 169.2391482326885,
+    longitudeOfAscendingNodeRate: -0.4768469927020931,
+  },
+};
+export const hyperion: AstronomicalObject = {
+  id: "hyperion",
+  type: "moon",
+  parent: saturn,
+  diameter: 270,
+  sprite: "images/sprites/hyperion.png",
+  photo: {
+    url: "images/photos/hyperion.png",
+    attribution: {
+      creator: "",
+      licenseName: "",
+    },
+  },
+  color: "#CAC9C7",
+  orbit: {
+    epoch: j2000Epoch,
+    semiMajorAxis: 0.009927226066749782,
+    semiMajorAxisRate: 0.000004451339793976744,
+    eccentricity: 0.1267862392220397,
+    eccentricityRate: -0.01891828173229408,
+    inclination: 27.20915472891182,
+    inclinationRate: 0.8257415296635386,
+    meanLongitude: 419.17244774553444,
+    meanLongitudeRate: 615311.3726280382,
+    longitudeOfPeriapsis: 356.9970037696197,
+    longitudeOfPeriapsisRate: -49.58872663538352,
+    longitudeOfAscendingNode: 168.304780343334,
+    longitudeOfAscendingNodeRate: 0.015664574693516897,
+  },
+};
+export const iapetus: AstronomicalObject = {
+  id: "iapetus",
+  type: "moon",
+  parent: saturn,
+  diameter: 1469,
+  sprite: "images/sprites/iapetus.png",
+  photo: {
+    url: "images/photos/iapetus.png",
+    attribution: {
+      creator: "",
+      licenseName: "",
+    },
+  },
+  color: "#CAC9C7",
+  orbit: {
+    epoch: j2000Epoch,
+    semiMajorAxis: 0.02381116859149325,
+    semiMajorAxisRate: 0.000021338930020247532,
+    eccentricity: 0.02797192702416067,
+    eccentricityRate: 0.0022584986843565587,
+    inclination: 17.23800848729772,
+    inclinationRate: -1.1116430683865381,
+    meanLongitude: 575.0974571563327,
+    meanLongitudeRate: 165640.46184634432,
+    longitudeOfPeriapsis: 369.51597699960564,
+    longitudeOfPeriapsisRate: 7.881989324271331,
+    longitudeOfAscendingNode: 139.6890499714332,
+    longitudeOfAscendingNodeRate: -3.3899773006264127,
+  },
+};
+export const phoebe: AstronomicalObject = {
+  id: "phoebe",
+  type: "moon",
+  parent: saturn,
+  diameter: 213,
+  sprite: "images/sprites/phoebe.png",
+  photo: {
+    url: "images/photos/phoebe.png",
+    attribution: {
+      creator: "",
+      licenseName: "",
+    },
+  },
+  color: "#CAC9C7",
+  orbit: {
+    epoch: j2000Epoch,
+    semiMajorAxis: 0.08654795907191702,
+    semiMajorAxisRate: -0.00020756741740994566,
+    eccentricity: 0.1655499593364438,
+    eccentricityRate: -0.0022750208038138098,
+    inclination: 173.2594812899735,
+    inclinationRate: -0.585597023752598,
+    meanLongitude: 675.2799028569362,
+    meanLongitudeRate: 23902.953384216242,
+    longitudeOfPeriapsis: 617.0376001114878,
+    longitudeOfPeriapsisRate: -269.64712837146766,
+    longitudeOfAscendingNode: 263.2170592637282,
+    longitudeOfAscendingNodeRate: 31.43512482434585,
+  },
+};
+
+// Uranus
+// --------------------------------------------------------
+
 export const uranus: AstronomicalObject = {
   id: "uranus",
   type: "planet",
@@ -291,6 +767,10 @@ export const uranus: AstronomicalObject = {
     f: 7.67025,
   },
 };
+
+// Neptune
+// --------------------------------------------------------
+
 export const neptune: AstronomicalObject = {
   id: "neptune",
   type: "planet",
@@ -327,6 +807,9 @@ export const neptune: AstronomicalObject = {
   },
 };
 
+// Pluto
+// --------------------------------------------------------
+
 export const pluto: AstronomicalObject = {
   id: "pluto",
   type: "dwarf",
@@ -360,5 +843,32 @@ export const pluto: AstronomicalObject = {
   },
 };
 
-const solarSystem = [sun, mercury, venus, earth, moon, mars, jupiter, saturn, uranus, neptune, pluto];
+const solarSystem = [
+  sun,
+  mercury,
+  venus,
+  earth,
+  moon,
+  mars,
+  phobos,
+  deimos,
+  jupiter,
+  io,
+  europa,
+  ganymede,
+  callisto,
+  saturn,
+  mimas,
+  enceladus,
+  tethys,
+  dione,
+  rhea,
+  titan,
+  hyperion,
+  iapetus,
+  phoebe,
+  uranus,
+  neptune,
+  pluto,
+];
 export default solarSystem;

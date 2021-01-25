@@ -51,7 +51,7 @@ export const OrbitalBody = connector(
     let showLabel = false;
     if (showLabels) {
       if (object.type === "moon") {
-        showLabel = diameter > 0.1;
+        showLabel = zoom > 14;
       } else if (object.type === "planet" || object.type === "dwarf") {
         const innerPlanets = ["mercury", "venus", "earth", "mars"];
         if (innerPlanets.includes(object.id)) {

@@ -12,5 +12,7 @@ export const oneDay = 86400000;
 export const oneYear = oneDay * 365.25;
 /** Number of milliseconds in a century */
 export const oneCentury = oneYear * 100;
+/** Number of days in one century */
+export const daysInACentury = oneCentury / oneDay;
 /** Ratio between the circumference and radius of a circle */
 export const tau = Math.PI * 2;

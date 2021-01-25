@@ -12,7 +12,7 @@ export const minZoomLevel = -1.5;
 /** Maximum zoom level - zoomed in really close */
 export const maxZoomLevel = 40;
 /** Zoom in to this level when selecting a planet */
-export const defaultPlanetZoom = 25;
+export const defaultPlanetZoom = 26;
 
 export const timeSteps: TimeStep[] = [
   { label: "timeSteps.negativeTenYears", value: -oneYear * 10 },

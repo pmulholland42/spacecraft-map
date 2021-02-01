@@ -40,11 +40,15 @@ export const TourModal = connector(
         {transitions.map(
           ({ item, key, props }) =>
             item && (
-              <animated.div key={key} style={props} className="tour-modal-container">
-                <div className="tour-modal">
-                  <div className="tour-modal-header">
+              <animated.div key={key} style={props} className="modal-container">
+                <div className="modal">
+                  <div className="modal-header">
                     <h3>{t("tours")}</h3>
-                    <button onClick={() => setTourModalOpen(false)} className="close-button">
+                    <button
+                      onClick={() => setTourModalOpen(false)}
+                      className="modal-close-button"
+                      title={t("closeModal")}
+                    >
                       <FontAwesomeIcon icon={faTimes} size={"2x"} />
                     </button>
                   </div>

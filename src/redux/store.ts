@@ -5,6 +5,7 @@ import {
   INCREMENT_TIME_STEP_INDEX,
   PAUSE_TIME,
   REMOVE_TEXT_BUBBLE,
+  SET_CREDITS_MODAL_OPEN,
   SET_CURRENT_TOUR,
   SET_DETAILS_PANE_OPEN,
   SET_DISPLAY_TIME,
@@ -147,6 +148,7 @@ interface UIState {
   detailsPaneOpen: boolean;
   optionsPaneOpen: boolean;
   tourModalOpen: boolean;
+  creditsModalOpen: boolean;
   textBubbles: ITextBubble[];
   currentTour: Tour | null;
 }
@@ -155,6 +157,7 @@ const initialUIState: UIState = {
   detailsPaneOpen: false,
   optionsPaneOpen: false,
   tourModalOpen: false,
+  creditsModalOpen: false,
   textBubbles: [],
   currentTour: null,
 };
@@ -166,7 +169,11 @@ const uiReducer = (state: UIState = initialUIState, action: UIActionTypes) => {
     case SET_OPTIONS_PANE_OPEN:
       return { ...state, optionsPaneOpen: action.open };
     case SET_TOUR_MODAL_OPEN:
-      return { ...state, tourModalOpen: action.open };
+      const creditsModalOpen = action.open ? false : state.creditsModalOpen;
+      return { ...state, tourModalOpen: action.open, creditsModalOpen };
+    case SET_CREDITS_MODAL_OPEN:
+      const tourModalOpen = action.open ? false : state.tourModalOpen;
+      return { ...state, creditsModalOpen: action.open, tourModalOpen };
     case ADD_TEXT_BUBBLE:
       if (state.textBubbles.find((textBubble) => textBubble.id === action.textBubble.id) === undefined) {
         return { ...state, textBubbles: [...state.textBubbles, action.textBubble] };

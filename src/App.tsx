@@ -12,6 +12,8 @@ import { DebugPanel } from "./components/ui/debug-panel/DebugPanel";
 import { TourButton } from "./components/ui/tours/TourButton";
 import { TourModal } from "./components/ui/tours/TourModal";
 import { ScaleBar } from "./components/ui/scale-bar/ScaleBar";
+import { InfoButton } from "./components/ui/credits/InfoButton";
+import { CreditsModal } from "./components/ui/credits/CreditsModal";
 
 function App() {
   return (
@@ -28,6 +30,8 @@ function App() {
           <TourButton />
           <TourModal />
           <ScaleBar />
+          <InfoButton />
+          <CreditsModal />
         </div>
       </Provider>
     </Suspense>

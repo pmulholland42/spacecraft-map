@@ -8,7 +8,44 @@ $details-pane-z-index: 3;
 $search-bar-z-index: 4;
 $options-pane-z-index: 5;
 $text-bubble-z-index: 6;
-$tour-modal-z-index: 7;
+$modal-z-index: 7;
+$info-button-z-index: 8;
 
 $tour-button-height: 45px;
 $scale-bar-height: 8px;
+
+.modal-container {
+  margin: auto;
+  position: absolute;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.modal {
+  z-index: $modal-z-index;
+  background-color: white;
+  width: 30vw;
+  min-height: 25vh;
+  max-height: 90vh;
+  overflow: scroll;
+  border-radius: 10px;
+  padding: 15px;
+}
+
+.modal-header {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  margin-bottom: 10px;
+}
+
+.modal-close-button {
+  border: none;
+  cursor: pointer;
+  background-color: white;
+}

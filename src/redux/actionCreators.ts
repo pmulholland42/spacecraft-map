@@ -5,6 +5,7 @@ import {
   INCREMENT_TIME_STEP_INDEX,
   PAUSE_TIME,
   REMOVE_TEXT_BUBBLE,
+  SET_CREDITS_MODAL_OPEN,
   SET_CURRENT_TOUR,
   SET_DETAILS_PANE_OPEN,
   SET_DISPLAY_TIME,
@@ -42,6 +43,7 @@ import {
   RemoveTextBubbleAction,
   SetCurrentTourAction,
   SetRemoveAnimationsAction,
+  SetCreditsModalOpenAction,
 } from "./actionTypes";
 
 // Options
@@ -127,6 +129,10 @@ export const setOptionsPaneOpen = (open: boolean): SetOptionsPaneOpenAction => (
 
 export const setTourModalOpen = (open: boolean): SetTourModalOpenAction => ({
   type: SET_TOUR_MODAL_OPEN,
+  open,
+});
+export const setCreditsModalOpen = (open: boolean): SetCreditsModalOpenAction => ({
+  type: SET_CREDITS_MODAL_OPEN,
   open,
 });
 export const addTextBubble = (textBubble: ITextBubble): AddTextBubbleAction => ({

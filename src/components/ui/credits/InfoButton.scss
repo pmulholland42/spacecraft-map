@@ -1,0 +1,11 @@
+@import "../common.scss";
+
+.info-button {
+  position: absolute;
+  bottom: 5vh;
+  left: 5vh;
+  cursor: pointer;
+  background: none;
+  border: none;
+  z-index: $info-button-z-index;
+}

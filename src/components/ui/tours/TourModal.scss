@@ -1,33 +1,5 @@
 @import "../common.scss";
 
-.tour-modal-container {
-  margin: auto;
-  position: absolute;
-  top: 0;
-  left: 0;
-  bottom: 0;
-  right: 0;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.tour-modal {
-  z-index: $tour-modal-z-index;
-  background-color: white;
-  width: 30vw;
-  min-height: 25vh;
-  border-radius: 10px;
-  padding: 15px;
-}
-
-.tour-modal-header {
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-  margin-bottom: 10px;
-}
-
 .tour {
   height: 40px;
   display: flex;
@@ -37,10 +9,4 @@
   background-color: white;
   font-size: 1em;
   margin: 5px;
-}
-
-.close-button {
-  border: none;
-  cursor: pointer;
-  background-color: white;
 }

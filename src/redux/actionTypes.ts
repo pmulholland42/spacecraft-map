@@ -5,6 +5,7 @@ import {
   INCREMENT_TIME_STEP_INDEX,
   PAUSE_TIME,
   REMOVE_TEXT_BUBBLE,
+  SET_CREDITS_MODAL_OPEN,
   SET_CURRENT_TOUR,
   SET_DETAILS_PANE_OPEN,
   SET_DISPLAY_TIME,
@@ -111,6 +112,11 @@ export interface SetOptionsPaneOpenAction {
   type: typeof SET_OPTIONS_PANE_OPEN;
   open: boolean;
 }
+
+export interface SetCreditsModalOpenAction {
+  type: typeof SET_CREDITS_MODAL_OPEN;
+  open: boolean;
+}
 export interface SetTourModalOpenAction {
   type: typeof SET_TOUR_MODAL_OPEN;
   open: boolean;
@@ -132,6 +138,7 @@ export type UIActionTypes =
   | SetDetailsPaneOpenAction
   | SetOptionsPaneOpenAction
   | SetTourModalOpenAction
+  | SetCreditsModalOpenAction
   | AddTextBubbleAction
   | RemoveTextBubbleAction
   | SetCurrentTourAction;

@@ -65,8 +65,47 @@ export const CreditsModal = connector(
                     </Collapsible>
                   </div>
                   <div className="info-section">
+                    <Collapsible trigger={t("dataSources")}>
+                      <p>
+                        {t("planetaryPositionsData")}
+                        <a
+                          href="https://ssd.jpl.nasa.gov/txt/aprx_pos_planets.pdf"
+                          target="_blank"
+                          rel="noreferrer nofollow"
+                        >
+                          Keplerian Elements for Approximate Positions of the Major Planets.
+                        </a>
+                      </p>
+                      <p>
+                        {t("dataForOtherObjects")}
+                        <a
+                          href="https://ssd.jpl.nasa.gov/horizons.cgi"
+                          target="_blank"
+                          rel="noreferrer nofollow"
+                        >
+                          JPL's HORIZONS system.
+                        </a>
+                      </p>
+                    </Collapsible>
+                  </div>
+                  <div className="info-section">
                     <Collapsible trigger={t("inaccuracies")}>
-                      <p>...</p>
+                      <ul>
+                        <li>{t("earthBarycenterInaccuracy")}</li>
+                        <li>{t("time3000Inaccuracy")}</li>
+                        <li>{t("time2000Inaccuracy")}</li>
+                        <li>{t("phoebeInaccuracy")}</li>
+                      </ul>
+                      <p>
+                        {t("ifYouNoticeInaccuracies")}
+                        <a
+                          href="https://github.com/pmulholland42/spacecraft-map/issues/new"
+                          target="_blank"
+                          rel="noreferrer nofollow"
+                        >
+                          {t("createAnIssue")}
+                        </a>
+                      </p>
                     </Collapsible>
                   </div>
                   <div className="info-section">

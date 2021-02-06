@@ -8,14 +8,21 @@
 //The content within the collaspable area
 .Collapsible__contentInner {
   padding: 10px;
+  font-size: 14px;
+  line-height: 20px;
 
   p {
     margin-bottom: 10px;
-    font-size: 14px;
-    line-height: 20px;
 
     &:last-child {
       margin-bottom: 0;
+    }
+  }
+
+  ul {
+    margin-left: 5px;
+    li {
+      margin-bottom: 10px;
     }
   }
 }

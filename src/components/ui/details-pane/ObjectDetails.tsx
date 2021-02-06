@@ -86,7 +86,7 @@ export const ObjectDetails = connector(({ object, keepCentered, setKeepCentered,
         <h2>{objectName}</h2>
         <h3 className="short-description">{getShortDescription(object, t)}</h3>
         <p className="long-description">
-          <a href={getWikiLink(object, t, language)} target="_blank" rel="noreferrer">
+          <a href={getWikiLink(object, t, language)} target="_blank" rel="noreferrer nofollow">
             {t("wikipedia")}
           </a>
         </p>

@@ -3,9 +3,6 @@ import { setZoom, setScreenCenter } from "../redux/actionCreators";
 import { Coordinate } from "../interfaces";
 import { getDistance } from "./calculations";
 
-const animationFrameTime = 40;
-
-let animationInterval = -1;
 let cancelAnimation: (() => void) | null = null;
 
 /**
@@ -26,25 +23,28 @@ export const animateZoom = (targetZoom: number, duration: number = 750): Promise
     return Promise.resolve(true);
   }
 
-  const tStep = animationFrameTime / duration;
-  let t = 0;
-
-  clearInterval(animationInterval);
   cancelAnimation?.();
-
   return new Promise<boolean>((resolve) => {
     cancelAnimation = () => resolve(false);
-    animationInterval = window.setInterval(() => {
-      t = Math.min(t + tStep, 1);
-      const percentage = easeOutSine(t);
+    let start = -1;
+    const animate = (timestamp: number) => {
+      if (start === -1) {
+        start = timestamp;
+      }
+      const elapsed = timestamp - start;
 
+      const percentage = easeOutSine(Math.min(elapsed / duration, 1));
       const nextZoom = initialZoom + deltaZoom * percentage;
       store.dispatch(setZoom(nextZoom));
-      if (t === 1) {
-        clearInterval(animationInterval);
+
+      if (elapsed < duration) {
+        window.requestAnimationFrame(animate);
+      } else {
+        // Stop the animation
         resolve(true);
       }
-    }, animationFrameTime);
+    };
+    window.requestAnimationFrame(animate);
   });
 };
 
@@ -59,6 +59,7 @@ export const animatePan = (targetScreenCenter: Coordinate, duration: number = 75
     store.dispatch(setScreenCenter(targetScreenCenter));
     return Promise.resolve(true);
   }
+
   const initialScreenCenter = store.getState().map.screenCenter;
   const deltaX = targetScreenCenter.x - initialScreenCenter.x;
   const deltaY = targetScreenCenter.y - initialScreenCenter.y;
@@ -67,27 +68,30 @@ export const animatePan = (targetScreenCenter: Coordinate, duration: number = 75
     return Promise.resolve(true);
   }
 
-  const tStep = animationFrameTime / duration;
-  let t = 0;
-
-  clearInterval(animationInterval);
   cancelAnimation?.();
 
   return new Promise<boolean>((resolve) => {
     cancelAnimation = () => resolve(false);
-    animationInterval = window.setInterval(() => {
-      t = Math.min(t + tStep, 1);
-      const percentage = easeInOutCubic(t);
+    let start = -1;
+    const animate = (timestamp: number) => {
+      if (start === -1) {
+        start = timestamp;
+      }
+      const elapsed = timestamp - start;
 
+      const percentage = easeInOutCubic(Math.min(elapsed / duration, 1));
       const x = initialScreenCenter.x + deltaX * percentage;
       const y = initialScreenCenter.y + deltaY * percentage;
       store.dispatch(setScreenCenter({ x, y }));
 
-      if (t === 1) {
-        clearInterval(animationInterval);
+      if (elapsed < duration) {
+        window.requestAnimationFrame(animate);
+      } else {
+        // Stop the animation
         resolve(true);
       }
-    }, animationFrameTime);
+    };
+    window.requestAnimationFrame(animate);
   });
 };
 

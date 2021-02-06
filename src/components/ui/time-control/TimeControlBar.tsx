@@ -76,15 +76,15 @@ export const TimeControlBar = connector(
 
           addToDisplayTime(timeStep * ((now - then) / oneSecond));
           then = now;
-          handle = requestAnimationFrame(step);
+          handle = window.requestAnimationFrame(step);
         }
       };
       if (timeStepIndex !== pausedTimeStepIndex) {
-        handle = requestAnimationFrame(step);
+        handle = window.requestAnimationFrame(step);
       }
 
       return () => {
-        cancelAnimationFrame(handle);
+        window.cancelAnimationFrame(handle);
         continueStepping = false;
       };
     }, [addToDisplayTime, timeStepIndex, pausedTimeStepIndex, timeStep]);

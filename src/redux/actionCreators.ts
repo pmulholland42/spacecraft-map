@@ -1,6 +1,7 @@
 import { AstronomicalObject, Coordinate, ITextBubble, Tour } from "../interfaces";
 import {
   ADD_TEXT_BUBBLE,
+  ADD_TO_DISPLAY_TIME,
   DECREMENT_TIME_STEP_INDEX,
   INCREMENT_TIME_STEP_INDEX,
   PAUSE_TIME,
@@ -44,6 +45,7 @@ import {
   SetCurrentTourAction,
   SetRemoveAnimationsAction,
   SetCreditsModalOpenAction,
+  AddToDisplayTimeAction,
 } from "./actionTypes";
 
 // Options
@@ -87,6 +89,10 @@ export const setSelectedObject = (selectedObject: AstronomicalObject | null): Se
 export const setDisplayTime = (displayTime: Date): SetDisplayTimeAction => ({
   type: SET_DISPLAY_TIME,
   displayTime,
+});
+export const addToDisplayTime = (milliseconds: number): AddToDisplayTimeAction => ({
+  type: ADD_TO_DISPLAY_TIME,
+  milliseconds,
 });
 
 export const setTimeStepIndex = (timeStepIndex: number): SetTimeStepIndexAction => ({

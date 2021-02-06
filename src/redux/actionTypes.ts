@@ -1,6 +1,7 @@
 import { AstronomicalObject, Coordinate, ITextBubble, Tour } from "../interfaces";
 import {
   ADD_TEXT_BUBBLE,
+  ADD_TO_DISPLAY_TIME,
   DECREMENT_TIME_STEP_INDEX,
   INCREMENT_TIME_STEP_INDEX,
   PAUSE_TIME,
@@ -69,6 +70,10 @@ export interface SetDisplayTimeAction {
   type: typeof SET_DISPLAY_TIME;
   displayTime: Date;
 }
+export interface AddToDisplayTimeAction {
+  type: typeof ADD_TO_DISPLAY_TIME;
+  milliseconds: number;
+}
 export interface SetTimeStepIndexAction {
   type: typeof SET_TIME_STEP_INDEX;
   timeStepIndex: number;
@@ -85,6 +90,7 @@ export interface PauseTimeAction {
 
 export type TimeActionTypes =
   | SetDisplayTimeAction
+  | AddToDisplayTimeAction
   | SetTimeStepIndexAction
   | IncrementTimeStepIndexAction
   | DecrementTimeStepIndexAction

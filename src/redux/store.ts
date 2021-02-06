@@ -1,6 +1,7 @@
 import { combineReducers, createStore } from "redux";
 import {
   ADD_TEXT_BUBBLE,
+  ADD_TO_DISPLAY_TIME,
   DECREMENT_TIME_STEP_INDEX,
   INCREMENT_TIME_STEP_INDEX,
   PAUSE_TIME,
@@ -108,6 +109,8 @@ const timeReducer = (state: TimeState = initialTimeState, action: TimeActionType
   switch (action.type) {
     case SET_DISPLAY_TIME:
       return { ...state, displayTime: action.displayTime };
+    case ADD_TO_DISPLAY_TIME:
+      return { ...state, displayTime: new Date(state.displayTime.getTime() + action.milliseconds) };
     case SET_TIME_STEP_INDEX:
       return { ...state, timeStepIndex: action.timeStepIndex };
     case INCREMENT_TIME_STEP_INDEX:

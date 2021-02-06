@@ -4,20 +4,18 @@ import { oneSecond, timeSteps } from "../../../constants";
 import { RootState } from "../../../redux/store";
 import {
   setDisplayTime,
+  addToDisplayTime,
   incrementTimeStepIndex,
   decrementTimeStepIndex,
   pauseTime,
 } from "../../../redux/actionCreators";
 import React, { useEffect, useState } from "react";
 import { connect, ConnectedProps } from "react-redux";
-import useInterval from "use-interval";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPause, faFastForward, faFastBackward, faClock } from "@fortawesome/free-solid-svg-icons";
 import { useTranslation } from "react-i18next";
 import DatePicker from "react-datepicker";
 import { getPausedTimeStepIndex } from "../../../utilities";
-
-const interval = 60;
 
 const mapStateToProps = (state: RootState) => ({
   displayTime: state.time.displayTime,
@@ -26,6 +24,7 @@ const mapStateToProps = (state: RootState) => ({
 
 const mapDispatchToProps = {
   setDisplayTime,
+  addToDisplayTime,
   incrementTimeStepIndex,
   decrementTimeStepIndex,
   pauseTime,
@@ -39,6 +38,7 @@ export const TimeControlBar = connector(
   ({
     displayTime,
     setDisplayTime,
+    addToDisplayTime,
     timeStepIndex,
     incrementTimeStepIndex,
     decrementTimeStepIndex,
@@ -64,10 +64,30 @@ export const TimeControlBar = connector(
 
     const { t } = useTranslation();
 
-    useInterval(() => {
-      const newTime = new Date(displayTime.getTime() + timeStep * (interval / oneSecond));
-      setDisplayTime(newTime);
-    }, interval);
+    useEffect(() => {
+      let then = -1;
+      let handle = -1;
+      let continueStepping = true;
+      const step = (now: number) => {
+        if (continueStepping) {
+          if (then === -1) {
+            then = now;
+          }
+
+          addToDisplayTime(timeStep * ((now - then) / oneSecond));
+          then = now;
+          handle = requestAnimationFrame(step);
+        }
+      };
+      if (timeStepIndex !== pausedTimeStepIndex) {
+        handle = requestAnimationFrame(step);
+      }
+
+      return () => {
+        cancelAnimationFrame(handle);
+        continueStepping = false;
+      };
+    }, [addToDisplayTime, timeStepIndex, pausedTimeStepIndex, timeStep]);
 
     const resetTime = () => {
       pauseTime();

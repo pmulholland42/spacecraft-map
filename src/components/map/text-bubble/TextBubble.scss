@@ -13,7 +13,7 @@
 
 .object-text-bubble {
   @extend .text-bubble;
-  translate: -50% calc(-100% - 10px);
+  transform: translate(-50%, calc(-100% - 10px));
   &:after {
     position: absolute;
     top: 100%;

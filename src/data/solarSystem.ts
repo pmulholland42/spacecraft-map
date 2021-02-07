@@ -722,7 +722,7 @@ export const phoebe: AstronomicalObject = {
     inclination: 173.2594812899735,
     inclinationRate: -0.585597023752598,
     meanLongitude: 675.2799028569362,
-    meanLongitudeRate: 23902.953384216242,
+    meanLongitudeRate: -23902.953384216242,
     longitudeOfPeriapsis: 617.0376001114878,
     longitudeOfPeriapsisRate: -269.64712837146766,
     longitudeOfAscendingNode: 263.2170592637282,

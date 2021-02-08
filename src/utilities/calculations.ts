@@ -3,6 +3,7 @@ import { AstronomicalObject, Coordinate, OrbitalPosition, OrbitDefinition } from
 import { auToKm, toDegrees, toRadians } from "./conversions";
 
 import moize from "moize";
+import solarSystem from "../data/solarSystem";
 
 export const getOrbitalPosition = moize.deep(
   /**
@@ -74,6 +75,12 @@ export const getOrbitalPosition = moize.deep(
       eccentricAnomaly,
       trueAnomaly,
     };
+  },
+  {
+    // Memoization really only helps when zooming/panning, because then the map is re-rendering but the orbital positions aren't changing.
+    // When time warping, the positions are changing so fast that we never get the same one twice, so the memoization cache is useless.
+    // So we only need one cache entry per object, to remember each of their positions while zooming/panning. Hence this maxSize:
+    maxSize: solarSystem.length,
   }
 );
 
@@ -86,30 +93,28 @@ export const getPeriod = (orbit: OrbitDefinition) => {
   return 360 / (orbit.meanLongitudeRate / 36525);
 };
 
-export const getRelativeCoordinates = moize(
-  /**
-   * Returns the polar coordinates of an object in space, relative to its parent (radians, km)
-   * @param semiMajorAxis The semi-major axis of the object's orbit (AU)
-   * @param eccentricity The eccentricity of the object's orbit
-   * @param eccentricAnomaly The eccentric anomaly of the object's orbit (degrees)
-   * @param trueAnomaly The true anomaly of the object's orbit (degrees)
-   * @param longitudeOfPeriapsis The longitude of periapsis of the object's orbit (degrees)
-   */
-  (
-    semiMajorAxis: number,
-    eccentricity: number,
-    eccentricAnomaly: number,
-    trueAnomaly: number,
-    longitudeOfPeriapsis: number
-  ): { angle: number; distanceFromParent: number } => {
-    const distanceFromParent = auToKm(
-      semiMajorAxis * (1 - eccentricity * Math.cos(toRadians(eccentricAnomaly)))
-    );
-    const angle = toRadians(trueAnomaly + longitudeOfPeriapsis);
+/**
+ * Returns the polar coordinates of an object in space, relative to its parent (radians, km)
+ * @param semiMajorAxis The semi-major axis of the object's orbit (AU)
+ * @param eccentricity The eccentricity of the object's orbit
+ * @param eccentricAnomaly The eccentric anomaly of the object's orbit (degrees)
+ * @param trueAnomaly The true anomaly of the object's orbit (degrees)
+ * @param longitudeOfPeriapsis The longitude of periapsis of the object's orbit (degrees)
+ */
+export const getRelativeCoordinates = (
+  semiMajorAxis: number,
+  eccentricity: number,
+  eccentricAnomaly: number,
+  trueAnomaly: number,
+  longitudeOfPeriapsis: number
+): { angle: number; distanceFromParent: number } => {
+  const distanceFromParent = auToKm(
+    semiMajorAxis * (1 - eccentricity * Math.cos(toRadians(eccentricAnomaly)))
+  );
+  const angle = toRadians(trueAnomaly + longitudeOfPeriapsis);
 
-    return { angle, distanceFromParent };
-  }
-);
+  return { angle, distanceFromParent };
+};
 
 /**
  * Gets the coords (in km) of an object in space via recursion

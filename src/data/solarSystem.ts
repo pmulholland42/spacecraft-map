@@ -309,8 +309,8 @@ export const io: AstronomicalObject = {
   photo: {
     url: "images/photos/io.png",
     attribution: {
-      creator: "",
-      licenseName: "",
+      creator: "NASA / JPL / University of Arizona",
+      licenseName: "Public domain",
     },
   },
   color: "#FCF590",
@@ -339,8 +339,8 @@ export const europa: AstronomicalObject = {
   photo: {
     url: "images/photos/europa.png",
     attribution: {
-      creator: "",
-      licenseName: "",
+      creator: "NASA/JPL/DLR",
+      licenseName: "Public domain",
     },
   },
   color: "#A1976B",
@@ -369,8 +369,8 @@ export const ganymede: AstronomicalObject = {
   photo: {
     url: "images/photos/ganymede.png",
     attribution: {
-      creator: "",
-      licenseName: "",
+      creator: "NASA/JPL (edited by PlanetUser)",
+      licenseName: "Public domain",
     },
   },
   color: "#A28E7F",
@@ -400,8 +400,8 @@ export const callisto: AstronomicalObject = {
   photo: {
     url: "images/photos/callisto.png",
     attribution: {
-      creator: "",
-      licenseName: "",
+      creator: "NASA/JPL/DLR(German Aerospace Center)",
+      licenseName: "Public domain",
     },
   },
   color: "#8A9B8A",
@@ -468,8 +468,8 @@ export const mimas: AstronomicalObject = {
   photo: {
     url: "images/photos/mimas.png",
     attribution: {
-      creator: "",
-      licenseName: "",
+      creator: "NASA / JPL-Caltech / Space Science Institute",
+      licenseName: "Public domain",
     },
   },
   color: "#A9A9A9",
@@ -498,8 +498,8 @@ export const enceladus: AstronomicalObject = {
   photo: {
     url: "images/photos/enceladus.png",
     attribution: {
-      creator: "",
-      licenseName: "",
+      creator: "NASA / JPL",
+      licenseName: "Public domain",
     },
   },
   color: "#FFFFFF",
@@ -528,8 +528,8 @@ export const tethys: AstronomicalObject = {
   photo: {
     url: "images/photos/tethys.png",
     attribution: {
-      creator: "",
-      licenseName: "",
+      creator: "NASA/JPL-Caltech/Space Science Institute",
+      licenseName: "Public domain",
     },
   },
   color: "#CAC9C7",
@@ -558,8 +558,8 @@ export const dione: AstronomicalObject = {
   photo: {
     url: "images/photos/dione.png",
     attribution: {
-      creator: "",
-      licenseName: "",
+      creator: "NASA",
+      licenseName: "Public domain",
     },
   },
   color: "#CAC9C7",
@@ -588,8 +588,8 @@ export const rhea: AstronomicalObject = {
   photo: {
     url: "images/photos/rhea.png",
     attribution: {
-      creator: "",
-      licenseName: "",
+      creator: "NASA/JPL/Space Science Institute",
+      licenseName: "Public domain",
     },
   },
   color: "#CAC9C7",
@@ -618,8 +618,8 @@ export const titan: AstronomicalObject = {
   photo: {
     url: "images/photos/titan.png",
     attribution: {
-      creator: "",
-      licenseName: "",
+      creator: "NASA",
+      licenseName: "Public domain",
     },
   },
   color: "#CAC9C7",
@@ -648,8 +648,8 @@ export const hyperion: AstronomicalObject = {
   photo: {
     url: "images/photos/hyperion.png",
     attribution: {
-      creator: "",
-      licenseName: "",
+      creator: "NASA / JPL / SSI / Gordan Ugarkovic",
+      licenseName: "Public domain",
     },
   },
   color: "#CAC9C7",
@@ -678,8 +678,8 @@ export const iapetus: AstronomicalObject = {
   photo: {
     url: "images/photos/iapetus.png",
     attribution: {
-      creator: "",
-      licenseName: "",
+      creator: "NASA/JPL/Space Science Institute",
+      licenseName: "Public domain",
     },
   },
   color: "#CAC9C7",
@@ -708,8 +708,8 @@ export const phoebe: AstronomicalObject = {
   photo: {
     url: "images/photos/phoebe.png",
     attribution: {
-      creator: "",
-      licenseName: "",
+      creator: "NASA/JPL/Space Science Institute",
+      licenseName: "Public domain",
     },
   },
   color: "#CAC9C7",

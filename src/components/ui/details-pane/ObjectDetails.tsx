@@ -9,6 +9,7 @@ import {
   getOrbitalPosition,
   getPeriod,
   getRelativeCoordinates,
+  getImagePath,
 } from "../../../utilities";
 import Switch from "react-switch";
 import { RootState } from "../../../redux/store";
@@ -66,7 +67,13 @@ export const ObjectDetails = connector(({ object, keepCentered, setKeepCentered,
 
   return (
     <div className="object-details">
-      <img src={object.photo.url} width="320px" height="170px" alt={objectName} title={objectName} />
+      <img
+        src={getImagePath(object.photo.url)}
+        width="320px"
+        height="170px"
+        alt={objectName}
+        title={objectName}
+      />
       {object.photo.attribution && (
         <div className="attribution">
           {`${t("photoBy")} ${object.photo.attribution.creator}, `}

@@ -70,3 +70,11 @@ export const parseHorizonsData = (csv: string): OrbitDefinition => {
 
 // eslint-disable-next-line
 (window as any).parseHorizonsData = parseHorizonsData;
+
+export const getImagePath = (path: string) => {
+  if (process.env.NODE_ENV === "production") {
+    return `images/${path}`;
+  } else {
+    return `solarsystemmap/images/${path}`;
+  }
+};

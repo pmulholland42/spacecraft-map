@@ -5,7 +5,7 @@ import { minPlanetSize } from "../../../constants";
 import { AstronomicalObject, Coordinate } from "../../../interfaces";
 import { RootState } from "../../../redux/store";
 import { setSelectedObject, setDetailsPaneOpen } from "../../../redux/actionCreators";
-import { animatePan, toScreenCoords, toScreenDistance } from "../../../utilities";
+import { animatePan, getImagePath, toScreenCoords, toScreenDistance } from "../../../utilities";
 import { Label } from "../label/Label";
 
 interface OrbitalBodyProps {
@@ -77,18 +77,19 @@ export const OrbitalBody = connector(
           top: screenCoords.y,
           left: screenCoords.x,
         }}
-        onClick={onClick}
+        id={`${object.id}-container`}
       >
         {diameter > minPlanetSize ? (
           <img
             id={`${object.id}`}
-            src={object.sprite}
+            src={getImagePath(object.sprite)}
             alt=""
             style={{
               height: `${diameter}px`,
               width: `${diameter}px`,
             }}
             className="orbital-body"
+            onClick={onClick}
           />
         ) : (
           <div

@@ -5,9 +5,9 @@ export const sun: AstronomicalObject = {
   id: "sun",
   type: "star",
   diameter: 1391016,
-  sprite: "images/sprites/sun.png",
+  sprite: "sprites/sun.png",
   photo: {
-    url: "images/photos/sun.png",
+    url: "photos/sun.png",
     attribution: {
       creator: "NASA/SDO (AIA)",
       licenseName: "Public Domain",
@@ -39,9 +39,9 @@ export const mercury: AstronomicalObject = {
   parent: sun,
   type: "planet",
   diameter: 4879,
-  sprite: "images/sprites/mercury.png",
+  sprite: "sprites/mercury.png",
   photo: {
-    url: "images/photos/mercury.png",
+    url: "photos/mercury.png",
     attribution: {
       creator: "NASA/Johns Hopkins University Applied Physics Laboratory/Carnegie Institution of Washington",
       licenseName: "Public Domain",
@@ -73,9 +73,9 @@ export const venus: AstronomicalObject = {
   parent: sun,
   type: "planet",
   diameter: 12104,
-  sprite: "images/sprites/venus.png",
+  sprite: "sprites/venus.png",
   photo: {
-    url: "images/photos/venus.png",
+    url: "photos/venus.png",
     attribution: {
       creator: "NASA/JPL-Caltech",
       licenseName: "Public Domain",
@@ -107,9 +107,9 @@ export const earth: AstronomicalObject = {
   parent: sun,
   type: "planet",
   diameter: 12742,
-  sprite: "images/sprites/earth.png",
+  sprite: "sprites/earth.png",
   photo: {
-    url: "images/photos/earth.png",
+    url: "photos/earth.png",
     attribution: {
       creator: "Apollo 17",
       licenseName: "Public Domain",
@@ -138,9 +138,9 @@ export const moon: AstronomicalObject = {
   type: "moon",
   parent: earth,
   diameter: 3474,
-  sprite: "images/sprites/moon.png",
+  sprite: "sprites/moon.png",
   photo: {
-    url: "images/photos/moon.png",
+    url: "photos/moon.png",
     attribution: {
       creator: "Gregory H. Revera",
       licenseName: "CC BY-SA 3.0",
@@ -173,9 +173,9 @@ export const mars: AstronomicalObject = {
   type: "planet",
   parent: sun,
   diameter: 6779,
-  sprite: "images/sprites/mars.png",
+  sprite: "sprites/mars.png",
   photo: {
-    url: "images/photos/mars.png",
+    url: "photos/mars.png",
     attribution: {
       creator: "ESA & MPS for OSIRIS Team MPS/UPD/LAM/IAA/RSSD/INTA/UPM/DASP/IDA",
       licenseName: "CC BY-SA IGO 3.0",
@@ -205,9 +205,9 @@ export const phobos: AstronomicalObject = {
   type: "moon",
   parent: mars,
   diameter: 22.5334,
-  sprite: "images/sprites/phobos.png",
+  sprite: "sprites/phobos.png",
   photo: {
-    url: "images/photos/phobos.png",
+    url: "photos/phobos.png",
     attribution: {
       creator: "NASA / JPL-Caltech / University of Arizona",
       licenseName: "Public Domain",
@@ -236,9 +236,9 @@ export const deimos: AstronomicalObject = {
   type: "moon",
   parent: mars,
   diameter: 12, // approximate
-  sprite: "images/sprites/deimos.png",
+  sprite: "sprites/deimos.png",
   photo: {
-    url: "images/photos/deimos.png",
+    url: "photos/deimos.png",
     attribution: {
       creator: "NASA / JPL-Caltech / University of Arizona",
       licenseName: "Public Domain",
@@ -270,9 +270,9 @@ export const jupiter: AstronomicalObject = {
   type: "planet",
   parent: sun,
   diameter: 139822,
-  sprite: "images/sprites/jupiter.png",
+  sprite: "sprites/jupiter.png",
   photo: {
-    url: "images/photos/jupiter.png",
+    url: "photos/jupiter.png",
     attribution: {
       creator: "NASA, ESA, and A. Simon (Goddard Space Flight Center)",
       licenseName: "Public domain",
@@ -305,9 +305,9 @@ export const io: AstronomicalObject = {
   type: "moon",
   parent: jupiter,
   diameter: 3643.2,
-  sprite: "images/sprites/io.png",
+  sprite: "sprites/io.png",
   photo: {
-    url: "images/photos/io.png",
+    url: "photos/io.png",
     attribution: {
       creator: "NASA / JPL / University of Arizona",
       licenseName: "Public domain",
@@ -335,9 +335,9 @@ export const europa: AstronomicalObject = {
   type: "moon",
   parent: jupiter,
   diameter: 3121.6,
-  sprite: "images/sprites/europa.png",
+  sprite: "sprites/europa.png",
   photo: {
-    url: "images/photos/europa.png",
+    url: "photos/europa.png",
     attribution: {
       creator: "NASA/JPL/DLR",
       licenseName: "Public domain",
@@ -365,9 +365,9 @@ export const ganymede: AstronomicalObject = {
   type: "moon",
   parent: jupiter,
   diameter: 5268.2,
-  sprite: "images/sprites/ganymede.png",
+  sprite: "sprites/ganymede.png",
   photo: {
-    url: "images/photos/ganymede.png",
+    url: "photos/ganymede.png",
     attribution: {
       creator: "NASA/JPL (edited by PlanetUser)",
       licenseName: "Public domain",
@@ -396,9 +396,9 @@ export const callisto: AstronomicalObject = {
   type: "moon",
   parent: jupiter,
   diameter: 4820.6,
-  sprite: "images/sprites/callisto.png",
+  sprite: "sprites/callisto.png",
   photo: {
-    url: "images/photos/callisto.png",
+    url: "photos/callisto.png",
     attribution: {
       creator: "NASA/JPL/DLR(German Aerospace Center)",
       licenseName: "Public domain",
@@ -430,9 +430,9 @@ export const saturn: AstronomicalObject = {
   type: "planet",
   parent: sun,
   diameter: 116464,
-  sprite: "images/sprites/saturn.png",
+  sprite: "sprites/saturn.png",
   photo: {
-    url: "images/photos/saturn.png",
+    url: "photos/saturn.png",
     attribution: {
       creator: "NASA / JPL / Space Science Institute",
       licenseName: "Public domain",
@@ -464,9 +464,9 @@ export const mimas: AstronomicalObject = {
   type: "moon",
   parent: saturn,
   diameter: 396.4,
-  sprite: "images/sprites/mimas.png",
+  sprite: "sprites/mimas.png",
   photo: {
-    url: "images/photos/mimas.png",
+    url: "photos/mimas.png",
     attribution: {
       creator: "NASA / JPL-Caltech / Space Science Institute",
       licenseName: "Public domain",
@@ -494,9 +494,9 @@ export const enceladus: AstronomicalObject = {
   type: "moon",
   parent: saturn,
   diameter: 504.2,
-  sprite: "images/sprites/enceladus.png",
+  sprite: "sprites/enceladus.png",
   photo: {
-    url: "images/photos/enceladus.png",
+    url: "photos/enceladus.png",
     attribution: {
       creator: "NASA / JPL",
       licenseName: "Public domain",
@@ -524,9 +524,9 @@ export const tethys: AstronomicalObject = {
   type: "moon",
   parent: saturn,
   diameter: 1062,
-  sprite: "images/sprites/tethys.png",
+  sprite: "sprites/tethys.png",
   photo: {
-    url: "images/photos/tethys.png",
+    url: "photos/tethys.png",
     attribution: {
       creator: "NASA/JPL-Caltech/Space Science Institute",
       licenseName: "Public domain",
@@ -554,9 +554,9 @@ export const dione: AstronomicalObject = {
   type: "moon",
   parent: saturn,
   diameter: 1122.8,
-  sprite: "images/sprites/dione.png",
+  sprite: "sprites/dione.png",
   photo: {
-    url: "images/photos/dione.png",
+    url: "photos/dione.png",
     attribution: {
       creator: "NASA",
       licenseName: "Public domain",
@@ -584,9 +584,9 @@ export const rhea: AstronomicalObject = {
   type: "moon",
   parent: saturn,
   diameter: 1527.6,
-  sprite: "images/sprites/rhea.png",
+  sprite: "sprites/rhea.png",
   photo: {
-    url: "images/photos/rhea.png",
+    url: "photos/rhea.png",
     attribution: {
       creator: "NASA/JPL/Space Science Institute",
       licenseName: "Public domain",
@@ -614,9 +614,9 @@ export const titan: AstronomicalObject = {
   type: "moon",
   parent: saturn,
   diameter: 5149.5,
-  sprite: "images/sprites/titan.png",
+  sprite: "sprites/titan.png",
   photo: {
-    url: "images/photos/titan.png",
+    url: "photos/titan.png",
     attribution: {
       creator: "NASA",
       licenseName: "Public domain",
@@ -644,9 +644,9 @@ export const hyperion: AstronomicalObject = {
   type: "moon",
   parent: saturn,
   diameter: 270,
-  sprite: "images/sprites/hyperion.png",
+  sprite: "sprites/hyperion.png",
   photo: {
-    url: "images/photos/hyperion.png",
+    url: "photos/hyperion.png",
     attribution: {
       creator: "NASA / JPL / SSI / Gordan Ugarkovic",
       licenseName: "Public domain",
@@ -674,9 +674,9 @@ export const iapetus: AstronomicalObject = {
   type: "moon",
   parent: saturn,
   diameter: 1469,
-  sprite: "images/sprites/iapetus.png",
+  sprite: "sprites/iapetus.png",
   photo: {
-    url: "images/photos/iapetus.png",
+    url: "photos/iapetus.png",
     attribution: {
       creator: "NASA/JPL/Space Science Institute",
       licenseName: "Public domain",
@@ -704,9 +704,9 @@ export const phoebe: AstronomicalObject = {
   type: "moon",
   parent: saturn,
   diameter: 213,
-  sprite: "images/sprites/phoebe.png",
+  sprite: "sprites/phoebe.png",
   photo: {
-    url: "images/photos/phoebe.png",
+    url: "photos/phoebe.png",
     attribution: {
       creator: "NASA/JPL/Space Science Institute",
       licenseName: "Public domain",
@@ -738,9 +738,9 @@ export const uranus: AstronomicalObject = {
   type: "planet",
   parent: sun,
   diameter: 50724,
-  sprite: "images/sprites/uranus.png",
+  sprite: "sprites/uranus.png",
   photo: {
-    url: "images/photos/uranus.png",
+    url: "photos/uranus.png",
     attribution: {
       creator: "NASA/JPL-Caltech",
       licenseName: "Public domain",
@@ -776,9 +776,9 @@ export const neptune: AstronomicalObject = {
   type: "planet",
   parent: sun,
   diameter: 49244,
-  sprite: "images/sprites/neptune.png",
+  sprite: "sprites/neptune.png",
   photo: {
-    url: "images/photos/neptune.png",
+    url: "photos/neptune.png",
     attribution: {
       creator: "Justin Cowart",
       licenseName: "CC BY 2.0",
@@ -815,9 +815,9 @@ export const pluto: AstronomicalObject = {
   type: "dwarf",
   parent: sun,
   diameter: 1188.3,
-  sprite: "images/sprites/pluto.png",
+  sprite: "sprites/pluto.png",
   photo: {
-    url: "images/photos/pluto.png",
+    url: "photos/pluto.png",
     attribution: {
       creator:
         "NASA/Johns Hopkins University Applied Physics Laboratory/Southwest Research Institute/Alex Parker",

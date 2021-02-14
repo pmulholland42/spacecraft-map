@@ -1,11 +1,10 @@
 import "./ObjectDetails.scss";
 import React, { useMemo } from "react";
 import { AstronomicalObject } from "../../../interfaces";
-import { useTranslation, getI18n } from "react-i18next";
+import { useTranslation } from "react-i18next";
 import {
   getObjectName,
   getShortDescription,
-  getWikiLink,
   getOrbitalPosition,
   getPeriod,
   getRelativeCoordinates,
@@ -40,7 +39,6 @@ type Props = PropsFromRedux & ObjectDetailsProps;
 
 export const ObjectDetails = connector(({ object, keepCentered, setKeepCentered, displayTime }: Props) => {
   const { t } = useTranslation();
-  const { language } = getI18n();
 
   const {
     semiMajorAxis,
@@ -93,7 +91,7 @@ export const ObjectDetails = connector(({ object, keepCentered, setKeepCentered,
         <h2>{objectName}</h2>
         <h3 className="short-description">{getShortDescription(object, t)}</h3>
         <p className="long-description">
-          <a href={getWikiLink(object, t, language)} target="_blank" rel="noreferrer nofollow">
+          <a href={object.wikiURL} target="_blank" rel="noreferrer nofollow">
             {t("wikipedia")}
           </a>
         </p>

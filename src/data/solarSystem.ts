@@ -13,6 +13,7 @@ export const sun: AstronomicalObject = {
       licenseName: "Public Domain",
     },
   },
+  wikiURL: "https://en.wikipedia.org/wiki/Sun",
   color: "#FDB813",
   orbit: {
     epoch: j2000Epoch,
@@ -47,6 +48,7 @@ export const mercury: AstronomicalObject = {
       licenseName: "Public Domain",
     },
   },
+  wikiURL: "https://en.wikipedia.org/wiki/Mercury_(planet)",
   color: "#7D7C81",
   orbit: {
     epoch: j2000Epoch,
@@ -81,6 +83,7 @@ export const venus: AstronomicalObject = {
       licenseName: "Public Domain",
     },
   },
+  wikiURL: "https://en.wikipedia.org/wiki/Venus",
   color: "#CAC9C7",
   orbit: {
     epoch: j2000Epoch,
@@ -115,6 +118,7 @@ export const earth: AstronomicalObject = {
       licenseName: "Public Domain",
     },
   },
+  wikiURL: "https://en.wikipedia.org/wiki/Earth",
   color: "#0066CC",
   orbit: {
     epoch: j2000Epoch,
@@ -147,6 +151,7 @@ export const moon: AstronomicalObject = {
       licenseUrl: "https://creativecommons.org/licenses/by-sa/3.0/",
     },
   },
+  wikiURL: "https://en.wikipedia.org/wiki/Moon",
   color: "#787271",
   orbit: {
     epoch: j2000Epoch,
@@ -182,6 +187,7 @@ export const mars: AstronomicalObject = {
       licenseUrl: "https://creativecommons.org/licenses/by-sa/3.0/igo/",
     },
   },
+  wikiURL: "https://en.wikipedia.org/wiki/Mars",
   color: "#E87C5A",
   orbit: {
     epoch: j2000Epoch,
@@ -213,6 +219,7 @@ export const phobos: AstronomicalObject = {
       licenseName: "Public Domain",
     },
   },
+  wikiURL: "https://en.wikipedia.org/wiki/Phobos_(moon)",
   color: "#A29286",
   orbit: {
     epoch: j2000Epoch,
@@ -244,6 +251,7 @@ export const deimos: AstronomicalObject = {
       licenseName: "Public Domain",
     },
   },
+  wikiURL: "https://en.wikipedia.org/wiki/Deimos_(moon)",
   color: "#C4BCA3",
   orbit: {
     epoch: j2000Epoch,
@@ -278,6 +286,7 @@ export const jupiter: AstronomicalObject = {
       licenseName: "Public domain",
     },
   },
+  wikiURL: "https://en.wikipedia.org/wiki/Jupiter",
   color: "#C0A288",
   orbit: {
     epoch: j2000Epoch,
@@ -313,6 +322,7 @@ export const io: AstronomicalObject = {
       licenseName: "Public domain",
     },
   },
+  wikiURL: "https://en.wikipedia.org/wiki/Io_(moon)",
   color: "#FCF590",
   orbit: {
     epoch: j2000Epoch,
@@ -343,6 +353,7 @@ export const europa: AstronomicalObject = {
       licenseName: "Public domain",
     },
   },
+  wikiURL: "https://en.wikipedia.org/wiki/Europa_(moon)",
   color: "#A1976B",
   orbit: {
     epoch: j2000Epoch,
@@ -373,6 +384,7 @@ export const ganymede: AstronomicalObject = {
       licenseName: "Public domain",
     },
   },
+  wikiURL: "https://en.wikipedia.org/wiki/Ganymede_(moon)",
   color: "#A28E7F",
   orbit: {
     epoch: j2000Epoch,
@@ -404,6 +416,7 @@ export const callisto: AstronomicalObject = {
       licenseName: "Public domain",
     },
   },
+  wikiURL: "https://en.wikipedia.org/wiki/Callisto_(moon)",
   color: "#8A9B8A",
   orbit: {
     epoch: j2000Epoch,
@@ -438,6 +451,7 @@ export const saturn: AstronomicalObject = {
       licenseName: "Public domain",
     },
   },
+  wikiURL: "https://en.wikipedia.org/wiki/Saturn",
   color: "#DFBC7C",
   orbit: {
     epoch: j2000Epoch,
@@ -472,6 +486,7 @@ export const mimas: AstronomicalObject = {
       licenseName: "Public domain",
     },
   },
+  wikiURL: "https://en.wikipedia.org/wiki/Mimas_(moon)",
   color: "#A9A9A9",
   orbit: {
     epoch: j2000Epoch,
@@ -502,6 +517,7 @@ export const enceladus: AstronomicalObject = {
       licenseName: "Public domain",
     },
   },
+  wikiURL: "https://en.wikipedia.org/wiki/Enceladus",
   color: "#FFFFFF",
   orbit: {
     epoch: j2000Epoch,
@@ -532,6 +548,7 @@ export const tethys: AstronomicalObject = {
       licenseName: "Public domain",
     },
   },
+  wikiURL: "https://en.wikipedia.org/wiki/Tethys_(moon)",
   color: "#CAC9C7",
   orbit: {
     epoch: j2000Epoch,
@@ -562,6 +579,7 @@ export const dione: AstronomicalObject = {
       licenseName: "Public domain",
     },
   },
+  wikiURL: "https://en.wikipedia.org/wiki/Dione_(moon)",
   color: "#CAC9C7",
   orbit: {
     epoch: j2000Epoch,
@@ -592,6 +610,7 @@ export const rhea: AstronomicalObject = {
       licenseName: "Public domain",
     },
   },
+  wikiURL: "https://en.wikipedia.org/wiki/Rhea_(moon)",
   color: "#CAC9C7",
   orbit: {
     epoch: j2000Epoch,
@@ -622,6 +641,7 @@ export const titan: AstronomicalObject = {
       licenseName: "Public domain",
     },
   },
+  wikiURL: "https://en.wikipedia.org/wiki/Titan_(moon)",
   color: "#CAC9C7",
   orbit: {
     epoch: j2000Epoch,
@@ -652,6 +672,7 @@ export const hyperion: AstronomicalObject = {
       licenseName: "Public domain",
     },
   },
+  wikiURL: "https://en.wikipedia.org/wiki/Hyperion_(moon)",
   color: "#CAC9C7",
   orbit: {
     epoch: j2000Epoch,
@@ -682,6 +703,7 @@ export const iapetus: AstronomicalObject = {
       licenseName: "Public domain",
     },
   },
+  wikiURL: "https://en.wikipedia.org/wiki/Iapetus_(moon)",
   color: "#CAC9C7",
   orbit: {
     epoch: j2000Epoch,
@@ -712,6 +734,7 @@ export const phoebe: AstronomicalObject = {
       licenseName: "Public domain",
     },
   },
+  wikiURL: "https://en.wikipedia.org/wiki/Phoebe_(moon)",
   color: "#CAC9C7",
   orbit: {
     epoch: j2000Epoch,
@@ -746,6 +769,7 @@ export const uranus: AstronomicalObject = {
       licenseName: "Public domain",
     },
   },
+  wikiURL: "https://en.wikipedia.org/wiki/Uranus",
   color: "#B6DCDF",
   orbit: {
     epoch: j2000Epoch,
@@ -785,6 +809,7 @@ export const neptune: AstronomicalObject = {
       licenseUrl: "https://creativecommons.org/licenses/by/2.0",
     },
   },
+  wikiURL: "https://en.wikipedia.org/wiki/Neptune",
   color: "#4264FB",
   orbit: {
     epoch: j2000Epoch,
@@ -824,6 +849,7 @@ export const pluto: AstronomicalObject = {
       licenseName: "Public domain",
     },
   },
+  wikiURL: "https://en.wikipedia.org/wiki/Pluto",
   color: "#CAC1B0",
   orbit: {
     epoch: j2000Epoch,

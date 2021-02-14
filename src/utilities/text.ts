@@ -39,19 +39,3 @@ export const getShortDescription = (object: AstronomicalObject, t: TFunction) =>
     return `${getObjectTypeName(object.type, t)} ${t("orbiting")} ${getObjectName(object.parent.id, t)}`;
   }
 };
-
-/**
- * Returns the URL of the object's wikipedia page
- * @param object The object to get the URL for
- * @param t i18n function
- * @param language The i18n language code (e.g. "en")
- */
-export const getWikiLink = (object: AstronomicalObject, t: TFunction, language: string) => {
-  if (language.includes("-")) {
-    language = language.split("-")[0];
-  }
-  return `https://${language}.wikipedia.org/wiki/${getObjectName(object.id, t)}_(${getObjectTypeName(
-    object.type,
-    t
-  )})`;
-};

@@ -93,7 +93,7 @@ export const OptionsPane = connector(
                     {t("showLabels")}
                     <Switch onChange={setShowLabels} checked={showLabels} />
                   </label>
-                  <label className="option" title={t("toggleBackgroundStars")}>
+                  <label className="option" title={t("toggleBackgroundStars")} style={{ display: "none" }}>
                     {t("showBackgroundStars")}
                     <Switch onChange={setShowBackgroundStars} checked={showBackgroundStars} />
                   </label>

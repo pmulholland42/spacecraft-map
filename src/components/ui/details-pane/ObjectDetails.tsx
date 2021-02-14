@@ -14,6 +14,8 @@ import Switch from "react-switch";
 import { RootState } from "../../../redux/store";
 import { setKeepCentered } from "../../../redux/actionCreators";
 import { ConnectedProps, connect } from "react-redux";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faExternalLinkAlt } from "@fortawesome/free-solid-svg-icons";
 
 const mapStateToProps = (state: RootState) => ({
   keepCentered: state.objectInfo.keepCentered,
@@ -92,7 +94,7 @@ export const ObjectDetails = connector(({ object, keepCentered, setKeepCentered,
         <h3 className="short-description">{getShortDescription(object, t)}</h3>
         <p className="long-description">
           <a href={object.wikiURL} target="_blank" rel="noreferrer nofollow">
-            {t("wikipedia")}
+            {t("wikipedia")} <FontAwesomeIcon icon={faExternalLinkAlt} size={"sm"} />
           </a>
         </p>
       </div>

@@ -104,7 +104,7 @@ export const OrbitalBody = connector(
             className="orbital-body"
           />
         )}
-        {showLabel && <Label objectId={object.id} />}
+        {showLabel && <Label objectId={object.id} onClick={onClick} />}
       </div>
     );
   }

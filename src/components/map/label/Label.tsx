@@ -5,9 +5,14 @@ import { getObjectName } from "../../../utilities";
 
 interface LabelProps {
   objectId: string;
+  onClick: () => void;
 }
 
-export const Label = ({ objectId }: LabelProps) => {
+export const Label = ({ objectId, onClick }: LabelProps) => {
   const { t } = useTranslation();
-  return <div className="label-text">{getObjectName(objectId, t)}</div>;
+  return (
+    <div className="label-text" onClick={onClick}>
+      {getObjectName(objectId, t)}
+    </div>
+  );
 };

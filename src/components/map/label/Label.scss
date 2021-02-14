@@ -3,4 +3,7 @@
   font-size: 0.7em;
   user-select: none;
   transform: translate(-15px, -30%);
+  pointer-events: all;
+  cursor: pointer;
+  max-height: 30px;
 }

@@ -85,7 +85,16 @@
     "oberon": "Oberon",
     "miranda": "Miranda",
     "neptune": "Neptune",
-    "pluto": "Pluto"
+    "triton": "Triton",
+    "nereid": "Nereid",
+    "naiad": "Naiad",
+    "thalassa": "Thalassa",
+    "despina": "Despina",
+    "galatea": "Galatea",
+    "larissa": "Larissa",
+    "proteus": "Proteus",
+    "pluto": "Pluto",
+    "charon": "Charon"
   },
   "objectTypes": {
     "dwarfPlanet": "Dwarf planet",

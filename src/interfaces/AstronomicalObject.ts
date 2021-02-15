@@ -12,7 +12,7 @@ export interface AstronomicalObject {
   /** The path of the sprite to be displayed on the map */
   sprite: string;
   /** The photo to be displayed on the details pane */
-  photo: {
+  photo?: {
     /** Photo source URL */
     url: string;
     /** Attribution information for copyright purposes */

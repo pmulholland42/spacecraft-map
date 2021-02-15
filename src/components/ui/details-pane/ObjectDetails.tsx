@@ -67,14 +67,17 @@ export const ObjectDetails = connector(({ object, keepCentered, setKeepCentered,
 
   return (
     <div className="object-details">
-      <img
-        src={getImagePath(object.photo.url)}
-        width="320px"
-        height="170px"
-        alt={objectName}
-        title={objectName}
-      />
-      {object.photo.attribution && (
+      {object.photo && (
+        <img
+          src={getImagePath(object.photo.url)}
+          width="320px"
+          height="170px"
+          alt={objectName}
+          title={objectName}
+        />
+      )}
+
+      {object.photo?.attribution && (
         <div className="attribution">
           {`${t("photoBy")} ${object.photo.attribution.creator}, `}
           <a

@@ -442,8 +442,8 @@ export const saturn: AstronomicalObject = {
   id: "saturn",
   type: "planet",
   parent: sun,
-  diameter: 116464,
-  sprite: "sprites/saturn.png",
+  diameter: 270000,
+  sprite: "sprites/saturn-with-rings.png",
   photo: {
     url: "photos/saturn.png",
     attribution: {

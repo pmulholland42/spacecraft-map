@@ -54,7 +54,7 @@ export const OrbitalBody = connector(
         if (object.parent?.id === "uranus") {
           showLabel = zoom > 18;
         } else if (object.parent?.id === "neptune") {
-          showLabel = zoom > 23;
+          showLabel = zoom > 22;
         } else if (object.parent?.id === "mars") {
           showLabel = zoom > 23;
         } else {

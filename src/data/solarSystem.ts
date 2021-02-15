@@ -1013,7 +1013,7 @@ export const triton: AstronomicalObject = {
     inclination: 130.2554881022924,
     inclinationRate: -1.464483956604198 * 2,
     meanLongitude: 259.8506647056733,
-    meanLongitudeRate: 2237328.5897713406,
+    meanLongitudeRate: -2237328.5897713406,
     longitudeOfPeriapsis: 224.92581449363172,
     longitudeOfPeriapsisRate: 286.3119857888678 * 2,
     longitudeOfAscendingNode: 215.8514909835699,

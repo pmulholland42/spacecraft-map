@@ -49,8 +49,12 @@ export const getOrbitalPosition = moize.deep(
     // where M is mean anomaly, E is eccentric anomaly
     let eccentricAnomaly = meanAnomaly;
     const eStar = eccentricity * 57.29578;
-    for (let i = 0; i < 5; i++) {
+    for (let i = 0; i < 100; i++) {
+      let prevE = eccentricAnomaly;
       eccentricAnomaly = meanAnomaly + eStar * Math.sin(toRadians(eccentricAnomaly));
+      if (Math.abs(prevE - eccentricAnomaly) < 10e-6) {
+        break;
+      }
     }
 
     let trueAnomaly = toDegrees(

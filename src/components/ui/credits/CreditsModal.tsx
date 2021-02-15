@@ -95,6 +95,7 @@ export const CreditsModal = connector(
                         <li>{t("earthBarycenterInaccuracy")}</li>
                         <li>{t("time3000Inaccuracy")}</li>
                         <li>{t("time2000Inaccuracy")}</li>
+                        <li>{t("inclinationInaccuracy")}</li>
                       </ul>
                       <p>
                         {t("ifYouNoticeInaccuracies")}

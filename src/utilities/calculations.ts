@@ -13,6 +13,8 @@ export const getOrbitalPosition = moize.deep(
    */
   (orbit: OrbitDefinition, time: Date): OrbitalPosition => {
     const centuriesSinceEpoch = (time.getTime() - orbit.epoch.getTime()) / oneCentury;
+
+    // Compute the value of each of that planet's six elements
     const semiMajorAxis = orbit.semiMajorAxis + orbit.semiMajorAxisRate * centuriesSinceEpoch;
     const eccentricity = orbit.eccentricity + orbit.eccentricityRate * centuriesSinceEpoch;
     const inclination = orbit.inclination + orbit.inclinationRate * centuriesSinceEpoch;
@@ -24,6 +26,7 @@ export const getOrbitalPosition = moize.deep(
     const semiMinorAxis = semiMajorAxis * Math.sqrt(1 - Math.pow(eccentricity, 2));
     const distanceFromCenterToFocus = Math.sqrt(Math.pow(semiMajorAxis, 2) - Math.pow(semiMinorAxis, 2)); // c^2 = a^2 - b^2
 
+    // Compute the argument of perihelion and the mean anomaly
     const argumentOfPeriapsis = longitudeOfPeriapsis - longitudeOfAscendingNode;
 
     let meanAnomaly = meanLongitude - longitudeOfPeriapsis;
@@ -39,15 +42,15 @@ export const getOrbitalPosition = moize.deep(
       meanAnomaly += orbit.s * Math.sin(toRadians(orbit.f * centuriesSinceEpoch));
     }
 
-    meanAnomaly = meanAnomaly % 360;
+    meanAnomaly = meanAnomaly % 360; //- 180;
 
     // Use Newton's method to approximate the eccentric anomaly
+    // This solves Kepler's equation: M = E - e* sin(E)
+    // where M is mean anomaly, E is eccentric anomaly
     let eccentricAnomaly = meanAnomaly;
+    const eStar = eccentricity * 57.29578;
     for (let i = 0; i < 5; i++) {
-      let delta =
-        (eccentricAnomaly - eccentricity * Math.sin(toRadians(eccentricAnomaly)) - meanAnomaly) /
-        (1 - eccentricity * Math.cos(toRadians(eccentricAnomaly)));
-      eccentricAnomaly -= delta;
+      eccentricAnomaly = meanAnomaly + eStar * Math.sin(toRadians(eccentricAnomaly));
     }
 
     let trueAnomaly = toDegrees(

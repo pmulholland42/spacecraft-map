@@ -5,7 +5,7 @@ import { RootState } from "../../../redux/store";
 import { connect, ConnectedProps } from "react-redux";
 import { animated, useTransition } from "react-spring";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faTimes } from "@fortawesome/free-solid-svg-icons";
+import { faExternalLinkAlt, faTimes } from "@fortawesome/free-solid-svg-icons";
 import { useTranslation } from "react-i18next";
 import { getPausedTimeStepIndex } from "../../../utilities";
 import { timeSteps } from "../../../constants";
@@ -55,7 +55,7 @@ export const CreditsModal = connector(
                     <p>
                       {t("siteCreatedBy")}&nbsp;
                       <a href="https://github.com/pmulholland42" target="_blank" rel="noreferrer nofollow">
-                        Peter Mulholland
+                        Peter Mulholland <FontAwesomeIcon icon={faExternalLinkAlt} size={"sm"} />
                       </a>
                     </p>
                   </div>
@@ -73,7 +73,8 @@ export const CreditsModal = connector(
                           target="_blank"
                           rel="noreferrer nofollow"
                         >
-                          Keplerian Elements for Approximate Positions of the Major Planets.
+                          Keplerian Elements for Approximate Positions of the Major Planets.{" "}
+                          <FontAwesomeIcon icon={faExternalLinkAlt} size={"sm"} />
                         </a>
                       </p>
                       <p>
@@ -83,7 +84,7 @@ export const CreditsModal = connector(
                           target="_blank"
                           rel="noreferrer nofollow"
                         >
-                          JPL's HORIZONS system.
+                          JPL's HORIZONS system. <FontAwesomeIcon icon={faExternalLinkAlt} size={"sm"} />
                         </a>
                       </p>
                     </Collapsible>
@@ -94,7 +95,7 @@ export const CreditsModal = connector(
                         <li>{t("earthBarycenterInaccuracy")}</li>
                         <li>{t("time3000Inaccuracy")}</li>
                         <li>{t("time2000Inaccuracy")}</li>
-                        <li>{t("phoebeInaccuracy")}</li>
+                        <li>{t("inclinationInaccuracy")}</li>
                       </ul>
                       <p>
                         {t("ifYouNoticeInaccuracies")}
@@ -103,7 +104,7 @@ export const CreditsModal = connector(
                           target="_blank"
                           rel="noreferrer nofollow"
                         >
-                          {t("createAnIssue")}
+                          {t("createAnIssue")} <FontAwesomeIcon icon={faExternalLinkAlt} size={"sm"} />
                         </a>
                       </p>
                     </Collapsible>

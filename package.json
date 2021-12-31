@@ -1,5 +1,6 @@
 {
   "name": "spacecraft-map",
+  "homepage": "http://petermulholland.co/solarsystemmap",
   "version": "0.1.0",
   "private": true,
   "dependencies": {

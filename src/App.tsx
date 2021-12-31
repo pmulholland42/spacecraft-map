@@ -14,7 +14,11 @@ import { TourModal } from "./components/ui/tours/TourModal";
 import { ScaleBar } from "./components/ui/scale-bar/ScaleBar";
 import { InfoButton } from "./components/ui/credits/InfoButton";
 import { CreditsModal } from "./components/ui/credits/CreditsModal";
+import { isMobile } from "./utilities";
 
+if (isMobile()) {
+  alert("This site is not currently designed to support mobile browsers.");
+}
 function App() {
   return (
     <Suspense fallback="loading i18n...">

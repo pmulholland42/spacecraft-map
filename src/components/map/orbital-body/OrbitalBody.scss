@@ -3,13 +3,16 @@
 @mixin orbital-body-container {
   position: absolute;
   display: flex;
+  pointer-events: none;
 }
 
 .orbital-body {
-  translate: -50% -50%;
+  transform: translate(-50%, -50%);
   border-radius: 50%;
   padding: 10px;
   background-clip: content-box;
+  pointer-events: all;
+  cursor: pointer;
 }
 
 .planet-container {

@@ -1,19 +1,21 @@
 import "./ObjectDetails.scss";
 import React, { useMemo } from "react";
 import { AstronomicalObject } from "../../../interfaces";
-import { useTranslation, getI18n } from "react-i18next";
+import { useTranslation } from "react-i18next";
 import {
   getObjectName,
   getShortDescription,
-  getWikiLink,
   getOrbitalPosition,
   getPeriod,
   getRelativeCoordinates,
+  getImagePath,
 } from "../../../utilities";
 import Switch from "react-switch";
 import { RootState } from "../../../redux/store";
 import { setKeepCentered } from "../../../redux/actionCreators";
 import { ConnectedProps, connect } from "react-redux";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faExternalLinkAlt } from "@fortawesome/free-solid-svg-icons";
 
 const mapStateToProps = (state: RootState) => ({
   keepCentered: state.objectInfo.keepCentered,
@@ -39,7 +41,6 @@ type Props = PropsFromRedux & ObjectDetailsProps;
 
 export const ObjectDetails = connector(({ object, keepCentered, setKeepCentered, displayTime }: Props) => {
   const { t } = useTranslation();
-  const { language } = getI18n();
 
   const {
     semiMajorAxis,
@@ -66,8 +67,17 @@ export const ObjectDetails = connector(({ object, keepCentered, setKeepCentered,
 
   return (
     <div className="object-details">
-      <img src={object.photo.url} width="320px" height="170px" alt={objectName} title={objectName} />
-      {object.photo.attribution && (
+      {object.photo && (
+        <img
+          src={getImagePath(object.photo.url)}
+          width="320px"
+          height="170px"
+          alt={objectName}
+          title={objectName}
+        />
+      )}
+
+      {object.photo?.attribution && (
         <div className="attribution">
           {`${t("photoBy")} ${object.photo.attribution.creator}, `}
           <a
@@ -86,8 +96,8 @@ export const ObjectDetails = connector(({ object, keepCentered, setKeepCentered,
         <h2>{objectName}</h2>
         <h3 className="short-description">{getShortDescription(object, t)}</h3>
         <p className="long-description">
-          <a href={getWikiLink(object, t, language)} target="_blank" rel="noreferrer nofollow">
-            {t("wikipedia")}
+          <a href={object.wikiURL} target="_blank" rel="noreferrer nofollow">
+            {t("wikipedia")} <FontAwesomeIcon icon={faExternalLinkAlt} size={"sm"} />
           </a>
         </p>
       </div>

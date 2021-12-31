@@ -25,6 +25,15 @@ i18n
     interpolation: {
       escapeValue: false, // not needed for react as it escapes by default
     },
+    backend: {
+      loadPath: () => {
+        if (process.env.NODE_ENV === "production") {
+          return "locales/{{lng}}/{{ns}}.json";
+        } else {
+          return "solarsystemmap/locales/{{lng}}/{{ns}}.json";
+        }
+      },
+    },
   });
 
 export default i18n;

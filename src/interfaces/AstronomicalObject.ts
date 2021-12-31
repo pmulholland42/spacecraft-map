@@ -12,7 +12,7 @@ export interface AstronomicalObject {
   /** The path of the sprite to be displayed on the map */
   sprite: string;
   /** The photo to be displayed on the details pane */
-  photo: {
+  photo?: {
     /** Photo source URL */
     url: string;
     /** Attribution information for copyright purposes */
@@ -25,6 +25,8 @@ export interface AstronomicalObject {
       licenseUrl?: string;
     };
   };
+  /** URL of the Wikipedia page for this object */
+  wikiURL: string;
   /** The color to display when the planet is small enough that it's just a dot */
   color: string;
   /** The diameter of the object (km) */

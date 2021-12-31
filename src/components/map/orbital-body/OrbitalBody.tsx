@@ -5,7 +5,7 @@ import { minPlanetSize } from "../../../constants";
 import { AstronomicalObject, Coordinate } from "../../../interfaces";
 import { RootState } from "../../../redux/store";
 import { setSelectedObject, setDetailsPaneOpen } from "../../../redux/actionCreators";
-import { animatePan, toScreenCoords, toScreenDistance } from "../../../utilities";
+import { animatePan, getImagePath, toScreenCoords, toScreenDistance } from "../../../utilities";
 import { Label } from "../label/Label";
 
 interface OrbitalBodyProps {
@@ -51,7 +51,15 @@ export const OrbitalBody = connector(
     let showLabel = false;
     if (showLabels) {
       if (object.type === "moon") {
-        showLabel = zoom > 14;
+        if (object.parent?.id === "uranus") {
+          showLabel = zoom > 18;
+        } else if (object.parent?.id === "neptune") {
+          showLabel = zoom > 22;
+        } else if (object.parent?.id === "mars") {
+          showLabel = zoom > 23;
+        } else {
+          showLabel = zoom > 17;
+        }
       } else if (object.type === "planet" || object.type === "dwarf") {
         const innerPlanets = ["mercury", "venus", "earth", "mars"];
         if (innerPlanets.includes(object.id)) {
@@ -77,18 +85,19 @@ export const OrbitalBody = connector(
           top: screenCoords.y,
           left: screenCoords.x,
         }}
-        onClick={onClick}
+        id={`${object.id}-container`}
       >
         {diameter > minPlanetSize ? (
           <img
             id={`${object.id}`}
-            src={object.sprite}
+            src={getImagePath(object.sprite)}
             alt=""
             style={{
               height: `${diameter}px`,
               width: `${diameter}px`,
             }}
             className="orbital-body"
+            onClick={onClick}
           />
         ) : (
           <div
@@ -103,7 +112,7 @@ export const OrbitalBody = connector(
             className="orbital-body"
           />
         )}
-        {showLabel && <Label objectId={object.id} />}
+        {showLabel && <Label objectId={object.id} onClick={onClick} />}
       </div>
     );
   }

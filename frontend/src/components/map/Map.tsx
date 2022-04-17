@@ -9,13 +9,16 @@ import {
   toSpaceCoords,
   toSpaceDistance,
   toScreenDistance,
+  getSpacecraftCoords,
 } from "../../utilities";
-import { Coordinate } from "../../interfaces";
-import solarSystem from "../../data/solarSystem";
+import { Coordinate, OrbitalPosition } from "../../interfaces";
+import solarSystem, { pluto, sun } from "../../data/solarSystem";
 import { OrbitalBody } from "./orbital-body/OrbitalBody";
 import { usePrevious } from "../../hooks/usePrevious";
 import { maxZoomLevel, minZoomLevel } from "../../constants";
 import { TextBubble } from "./text-bubble/TextBubble";
+import { getOrbitalData } from "../../utilities/api";
+import { add } from "date-fns";
 
 const mapStateToProps = (state: RootState) => ({
   showOrbits: state.options.showOrbits,
@@ -36,6 +39,8 @@ const connector = connect(mapStateToProps, mapDispatchToProps);
 
 type PropsFromRedux = ConnectedProps<typeof connector>;
 
+let startDate = new Date();
+
 /**
  * The map takes up the entire screen, and is responsible for rendering all orbits, planets, etc.
  * It also handles zooming and panning.
@@ -53,8 +58,15 @@ export const Map = connector(
     setScreenCenter,
   }: PropsFromRedux) => {
     const [isDragging, setIsDragging] = useState(false);
+    const [jwst, setJWST] = useState<OrbitalPosition[]>([]);
     const prevMousePositionRef = useRef<Coordinate | null>(null);
     const prevSelectedObject = usePrevious(selectedObject);
+
+    useEffect(() => {
+      let stopDate = add(startDate, { days: 30 });
+
+      getOrbitalData(-170, "500@10", startDate, stopDate, "1d").then((data) => setJWST(data));
+    }, []);
 
     useEffect(() => {
       // Keep the selected object centered
@@ -154,6 +166,11 @@ export const Map = connector(
 
       objects.push(<OrbitalBody key={object.id} object={object} coords={objectCoords} />);
     });
+
+    if (jwst.length > 0) {
+      const coords = getSpacecraftCoords(jwst[0], startDate);
+      objects.push(<OrbitalBody key={"jwst"} object={pluto} coords={coords} />);
+    }
 
     return (
       <div

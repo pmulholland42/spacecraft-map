@@ -3,7 +3,50 @@ import { AstronomicalObject, Coordinate, OrbitalPosition, OrbitDefinition } from
 import { auToKm, toDegrees, toRadians } from "./conversions";
 
 import moize from "moize";
-import solarSystem from "../data/solarSystem";
+import solarSystem, { sun } from "../data/solarSystem";
+
+export const getSemiMinorAxis = (semiMajorAxis: number, eccentricity: number) =>
+  semiMajorAxis * Math.sqrt(1 - Math.pow(eccentricity, 2));
+
+export const getDistanceFromCenterToFocus = (semiMajorAxis: number, semiMinorAxis: number) =>
+  Math.sqrt(Math.pow(semiMajorAxis, 2) - Math.pow(semiMinorAxis, 2)); // c^2 = a^2 - b^2
+
+export const getArgumentOfPeriapsis = (longitudeOfPeriapsis: number, longitudeOfAscendingNode: number) =>
+  longitudeOfPeriapsis - longitudeOfAscendingNode;
+
+export const getMeanAnomaly = (meanLongitude: number, longitudeOfPeriapsis: number) =>
+  meanLongitude - longitudeOfPeriapsis;
+
+export const getEccentricAnomaly = (meanAnomaly: number, eccentricity: number, iterations: number = 100) => {
+  // Use Newton's method to approximate the eccentric anomaly
+  // This solves Kepler's equation: M = E - e* sin(E)
+  // where M is mean anomaly, E is eccentric anomaly
+  let eccentricAnomaly = meanAnomaly;
+  const eStar = eccentricity * 57.29578;
+  for (let i = 0; i < 100; i++) {
+    let prevE = eccentricAnomaly;
+    eccentricAnomaly = meanAnomaly + eStar * Math.sin(toRadians(eccentricAnomaly));
+    if (Math.abs(prevE - eccentricAnomaly) < 10e-6) {
+      break;
+    }
+  }
+  return eccentricAnomaly;
+};
+
+export const getTrueAnomaly = (eccentricity: number, eccentricAnomaly: number) => {
+  let trueAnomaly = toDegrees(
+    2 *
+      Math.atan(
+        Math.sqrt((1 + eccentricity) / (1 - eccentricity)) * Math.tan(toRadians(eccentricAnomaly / 2))
+      )
+  );
+
+  if (trueAnomaly < 0) {
+    trueAnomaly += 360;
+  }
+
+  return trueAnomaly;
+};
 
 export const getOrbitalPosition = moize.deep(
   /**
@@ -23,13 +66,13 @@ export const getOrbitalPosition = moize.deep(
       orbit.longitudeOfPeriapsis + orbit.longitudeOfPeriapsisRate * centuriesSinceEpoch;
     const longitudeOfAscendingNode =
       orbit.longitudeOfAscendingNode + orbit.longitudeOfAscendingNodeRate * centuriesSinceEpoch;
-    const semiMinorAxis = semiMajorAxis * Math.sqrt(1 - Math.pow(eccentricity, 2));
-    const distanceFromCenterToFocus = Math.sqrt(Math.pow(semiMajorAxis, 2) - Math.pow(semiMinorAxis, 2)); // c^2 = a^2 - b^2
+    const semiMinorAxis = getSemiMinorAxis(semiMajorAxis, eccentricity);
+    const distanceFromCenterToFocus = getDistanceFromCenterToFocus(semiMajorAxis, semiMinorAxis);
 
     // Compute the argument of perihelion and the mean anomaly
-    const argumentOfPeriapsis = longitudeOfPeriapsis - longitudeOfAscendingNode;
+    const argumentOfPeriapsis = getArgumentOfPeriapsis(longitudeOfPeriapsis, longitudeOfAscendingNode);
 
-    let meanAnomaly = meanLongitude - longitudeOfPeriapsis;
+    let meanAnomaly = getMeanAnomaly(meanLongitude, longitudeOfPeriapsis);
 
     // Correction factor needed for outer planets
     if (orbit.b !== undefined) {
@@ -44,29 +87,9 @@ export const getOrbitalPosition = moize.deep(
 
     meanAnomaly = meanAnomaly % 360; //- 180;
 
-    // Use Newton's method to approximate the eccentric anomaly
-    // This solves Kepler's equation: M = E - e* sin(E)
-    // where M is mean anomaly, E is eccentric anomaly
-    let eccentricAnomaly = meanAnomaly;
-    const eStar = eccentricity * 57.29578;
-    for (let i = 0; i < 100; i++) {
-      let prevE = eccentricAnomaly;
-      eccentricAnomaly = meanAnomaly + eStar * Math.sin(toRadians(eccentricAnomaly));
-      if (Math.abs(prevE - eccentricAnomaly) < 10e-6) {
-        break;
-      }
-    }
+    const eccentricAnomaly = getEccentricAnomaly(meanAnomaly, eccentricity);
 
-    let trueAnomaly = toDegrees(
-      2 *
-        Math.atan(
-          Math.sqrt((1 + eccentricity) / (1 - eccentricity)) * Math.tan(toRadians(eccentricAnomaly / 2))
-        )
-    );
-
-    if (trueAnomaly < 0) {
-      trueAnomaly += 360;
-    }
+    const trueAnomaly = getTrueAnomaly(eccentricity, eccentricAnomaly);
 
     return {
       semiMajorAxis,
@@ -149,6 +172,25 @@ export const getObjectCoordinates = (object: AstronomicalObject | undefined, tim
 
     return { x, y };
   }
+};
+
+export const getSpacecraftCoords = (position: OrbitalPosition, time: Date) => {
+  const parentCoords = getObjectCoordinates(sun, time);
+
+  const { angle, distanceFromParent } = getRelativeCoordinates(
+    position.semiMajorAxis,
+    position.eccentricity,
+    position.eccentricAnomaly,
+    position.trueAnomaly,
+    position.longitudeOfPeriapsis
+  );
+
+  // The distance and angle are the polar coordinates of the object relative to its parent
+  // Convert them to cartesian coords and add the parent's position to get the actual coords of the object
+  const x = parentCoords.x + Math.cos(angle) * distanceFromParent;
+  const y = parentCoords.y - Math.sin(angle) * distanceFromParent;
+
+  return { x, y };
 };
 
 /**

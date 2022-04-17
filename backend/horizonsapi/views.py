@@ -4,6 +4,7 @@ from django.http import HttpResponse
 from django.core import serializers
 
 from datetime import datetime
+import pytz
 
 import urllib.request
 
@@ -13,8 +14,6 @@ from .models import OrbitalPosition, OrbitalBody
 
 def index(request):
     return HttpResponse("Hello world!")
-
-#, orbital_body_id, center, start_time, stop_time, step
 
 def orbital_position(request):
     orbital_body_id = request.GET.get('orbital_body_id', '')
@@ -65,7 +64,7 @@ def parse_elements_data(response, orbital_body_id):
             elements = line.split(b',')
             orbital_position = OrbitalPosition()
             orbital_position.orbital_body_id = orbital_body_id
-            orbital_position.time = datetime.strptime(elements[1].decode("utf-8").strip(), "A.D. %Y-%b-%d %H:%M:%S.0000")
+            orbital_position.time = pytz.utc.localize(datetime.strptime(elements[1].decode("utf-8").strip(), "A.D. %Y-%b-%d %H:%M:%S.0000"))
             orbital_position.semimajor_axis = float(elements[11])
             orbital_position.eccentricity = float(elements[2])
             orbital_position.inclination = float(elements[4])

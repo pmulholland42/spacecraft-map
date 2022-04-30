@@ -1,5 +1,6 @@
 import { ObjectType } from "./ObjectType";
 import { OrbitDefinition } from "./OrbitDefinition";
+import { Photo } from "./Photo";
 
 /** A star, planet, moon, asteroid, etc. */
 export interface AstronomicalObject {
@@ -12,19 +13,7 @@ export interface AstronomicalObject {
   /** The path of the sprite to be displayed on the map */
   sprite: string;
   /** The photo to be displayed on the details pane */
-  photo?: {
-    /** Photo source URL */
-    url: string;
-    /** Attribution information for copyright purposes */
-    attribution?: {
-      /** Name of photo creator */
-      creator: string;
-      /** Name of photo license */
-      licenseName: string;
-      /** URL of photo license description */
-      licenseUrl?: string;
-    };
-  };
+  photo?: Photo;
   /** URL of the Wikipedia page for this object */
   wikiURL: string;
   /** The color to display when the planet is small enough that it's just a dot */
@@ -33,4 +22,6 @@ export interface AstronomicalObject {
   diameter: number;
   /** The orbit of the object */
   orbit: OrbitDefinition;
+  /** Used by NASA Horizons API to identity this object */
+  horizonsId: string;
 }

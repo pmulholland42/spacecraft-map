@@ -3,6 +3,7 @@ import { j2000Epoch } from "../constants/scientific";
 
 export const sun: AstronomicalObject = {
   id: "sun",
+  horizonsId: "500@10",
   type: "star",
   diameter: 1391016,
   sprite: "sprites/sun.png",
@@ -37,6 +38,7 @@ export const sun: AstronomicalObject = {
 
 export const mercury: AstronomicalObject = {
   id: "mercury",
+  horizonsId: "",
   parent: sun,
   type: "planet",
   diameter: 4879,
@@ -72,6 +74,7 @@ export const mercury: AstronomicalObject = {
 
 export const venus: AstronomicalObject = {
   id: "venus",
+  horizonsId: "",
   parent: sun,
   type: "planet",
   diameter: 12104,
@@ -107,6 +110,7 @@ export const venus: AstronomicalObject = {
 
 export const earth: AstronomicalObject = {
   id: "earth",
+  horizonsId: "",
   parent: sun,
   type: "planet",
   diameter: 12742,
@@ -139,6 +143,7 @@ export const earth: AstronomicalObject = {
 
 export const moon: AstronomicalObject = {
   id: "moon",
+  horizonsId: "",
   type: "moon",
   parent: earth,
   diameter: 3474,
@@ -175,6 +180,7 @@ export const moon: AstronomicalObject = {
 
 export const mars: AstronomicalObject = {
   id: "mars",
+  horizonsId: "",
   type: "planet",
   parent: sun,
   diameter: 6779,
@@ -208,6 +214,7 @@ export const mars: AstronomicalObject = {
 
 export const phobos: AstronomicalObject = {
   id: "phobos",
+  horizonsId: "",
   type: "moon",
   parent: mars,
   diameter: 22.5334,
@@ -240,6 +247,7 @@ export const phobos: AstronomicalObject = {
 
 export const deimos: AstronomicalObject = {
   id: "deimos",
+  horizonsId: "",
   type: "moon",
   parent: mars,
   diameter: 12, // approximate
@@ -275,6 +283,7 @@ export const deimos: AstronomicalObject = {
 
 export const jupiter: AstronomicalObject = {
   id: "jupiter",
+  horizonsId: "",
   type: "planet",
   parent: sun,
   diameter: 139822,
@@ -311,6 +320,7 @@ export const jupiter: AstronomicalObject = {
 
 export const io: AstronomicalObject = {
   id: "io",
+  horizonsId: "",
   type: "moon",
   parent: jupiter,
   diameter: 3643.2,
@@ -342,6 +352,7 @@ export const io: AstronomicalObject = {
 };
 export const europa: AstronomicalObject = {
   id: "europa",
+  horizonsId: "",
   type: "moon",
   parent: jupiter,
   diameter: 3121.6,
@@ -373,6 +384,7 @@ export const europa: AstronomicalObject = {
 };
 export const ganymede: AstronomicalObject = {
   id: "ganymede",
+  horizonsId: "",
   type: "moon",
   parent: jupiter,
   diameter: 5268.2,
@@ -405,6 +417,7 @@ export const ganymede: AstronomicalObject = {
 
 export const callisto: AstronomicalObject = {
   id: "callisto",
+  horizonsId: "",
   type: "moon",
   parent: jupiter,
   diameter: 4820.6,
@@ -440,6 +453,7 @@ export const callisto: AstronomicalObject = {
 
 export const saturn: AstronomicalObject = {
   id: "saturn",
+  horizonsId: "",
   type: "planet",
   parent: sun,
   diameter: 270000,
@@ -475,6 +489,7 @@ export const saturn: AstronomicalObject = {
 };
 export const mimas: AstronomicalObject = {
   id: "mimas",
+  horizonsId: "",
   type: "moon",
   parent: saturn,
   diameter: 396.4,
@@ -506,6 +521,7 @@ export const mimas: AstronomicalObject = {
 };
 export const enceladus: AstronomicalObject = {
   id: "enceladus",
+  horizonsId: "",
   type: "moon",
   parent: saturn,
   diameter: 504.2,
@@ -537,6 +553,7 @@ export const enceladus: AstronomicalObject = {
 };
 export const tethys: AstronomicalObject = {
   id: "tethys",
+  horizonsId: "",
   type: "moon",
   parent: saturn,
   diameter: 1062,
@@ -568,6 +585,7 @@ export const tethys: AstronomicalObject = {
 };
 export const dione: AstronomicalObject = {
   id: "dione",
+  horizonsId: "",
   type: "moon",
   parent: saturn,
   diameter: 1122.8,
@@ -599,6 +617,7 @@ export const dione: AstronomicalObject = {
 };
 export const rhea: AstronomicalObject = {
   id: "rhea",
+  horizonsId: "",
   type: "moon",
   parent: saturn,
   diameter: 1527.6,
@@ -630,6 +649,7 @@ export const rhea: AstronomicalObject = {
 };
 export const titan: AstronomicalObject = {
   id: "titan",
+  horizonsId: "",
   type: "moon",
   parent: saturn,
   diameter: 5149.5,
@@ -661,6 +681,7 @@ export const titan: AstronomicalObject = {
 };
 export const hyperion: AstronomicalObject = {
   id: "hyperion",
+  horizonsId: "",
   type: "moon",
   parent: saturn,
   diameter: 270,
@@ -692,6 +713,7 @@ export const hyperion: AstronomicalObject = {
 };
 export const iapetus: AstronomicalObject = {
   id: "iapetus",
+  horizonsId: "",
   type: "moon",
   parent: saturn,
   diameter: 1469,
@@ -723,6 +745,7 @@ export const iapetus: AstronomicalObject = {
 };
 export const phoebe: AstronomicalObject = {
   id: "phoebe",
+  horizonsId: "",
   type: "moon",
   parent: saturn,
   diameter: 213,
@@ -758,6 +781,7 @@ export const phoebe: AstronomicalObject = {
 
 export const uranus: AstronomicalObject = {
   id: "uranus",
+  horizonsId: "",
   type: "planet",
   parent: sun,
   diameter: 50724,
@@ -794,6 +818,7 @@ export const uranus: AstronomicalObject = {
 
 export const ariel: AstronomicalObject = {
   id: "ariel",
+  horizonsId: "",
   type: "moon",
   parent: uranus,
   diameter: 1157.8,
@@ -825,6 +850,7 @@ export const ariel: AstronomicalObject = {
 };
 export const umbriel: AstronomicalObject = {
   id: "umbriel",
+  horizonsId: "",
   type: "moon",
   parent: uranus,
   diameter: 1169.4,
@@ -856,6 +882,7 @@ export const umbriel: AstronomicalObject = {
 };
 export const titania: AstronomicalObject = {
   id: "titania",
+  horizonsId: "",
   type: "moon",
   parent: uranus,
   diameter: 1576.8,
@@ -887,6 +914,7 @@ export const titania: AstronomicalObject = {
 };
 export const oberon: AstronomicalObject = {
   id: "oberon",
+  horizonsId: "",
   type: "moon",
   parent: uranus,
   diameter: 1522.8,
@@ -918,6 +946,7 @@ export const oberon: AstronomicalObject = {
 };
 export const miranda: AstronomicalObject = {
   id: "miranda",
+  horizonsId: "",
   type: "moon",
   parent: uranus,
   diameter: 471.6,
@@ -953,6 +982,7 @@ export const miranda: AstronomicalObject = {
 
 export const neptune: AstronomicalObject = {
   id: "neptune",
+  horizonsId: "",
   type: "planet",
   parent: sun,
   diameter: 49244,
@@ -989,6 +1019,7 @@ export const neptune: AstronomicalObject = {
 };
 export const triton: AstronomicalObject = {
   id: "triton",
+  horizonsId: "",
   type: "moon",
   parent: neptune,
   diameter: 2706.8,
@@ -1022,6 +1053,7 @@ export const triton: AstronomicalObject = {
 };
 export const nereid: AstronomicalObject = {
   id: "nereid",
+  horizonsId: "",
   type: "moon",
   parent: neptune,
   diameter: 714,
@@ -1046,6 +1078,7 @@ export const nereid: AstronomicalObject = {
 };
 export const naiad: AstronomicalObject = {
   id: "naiad",
+  horizonsId: "",
   type: "moon",
   parent: neptune,
   diameter: 60.2,
@@ -1070,6 +1103,7 @@ export const naiad: AstronomicalObject = {
 };
 export const thalassa: AstronomicalObject = {
   id: "thalassa",
+  horizonsId: "",
   type: "moon",
   parent: neptune,
   diameter: 81.4,
@@ -1094,6 +1128,7 @@ export const thalassa: AstronomicalObject = {
 };
 export const despina: AstronomicalObject = {
   id: "despina",
+  horizonsId: "",
   type: "moon",
   parent: neptune,
   diameter: 156,
@@ -1118,6 +1153,7 @@ export const despina: AstronomicalObject = {
 };
 export const galatea: AstronomicalObject = {
   id: "galatea",
+  horizonsId: "",
   type: "moon",
   parent: neptune,
   diameter: 174.8,
@@ -1142,6 +1178,7 @@ export const galatea: AstronomicalObject = {
 };
 export const larissa: AstronomicalObject = {
   id: "larissa",
+  horizonsId: "",
   type: "moon",
   parent: neptune,
   diameter: 194,
@@ -1173,6 +1210,7 @@ export const larissa: AstronomicalObject = {
 };
 export const proteus: AstronomicalObject = {
   id: "proteus",
+  horizonsId: "",
   type: "moon",
   parent: neptune,
   diameter: 420,
@@ -1208,6 +1246,7 @@ export const proteus: AstronomicalObject = {
 
 export const pluto: AstronomicalObject = {
   id: "pluto",
+  horizonsId: "",
   type: "dwarf",
   parent: sun,
   diameter: 2376.6,
@@ -1241,6 +1280,7 @@ export const pluto: AstronomicalObject = {
 };
 export const charon: AstronomicalObject = {
   id: "charon",
+  horizonsId: "",
   type: "moon",
   parent: pluto,
   diameter: 1212,

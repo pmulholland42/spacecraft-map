@@ -13,7 +13,7 @@ const dateFormat = "yyyy-MM-dd";
 const baseUrl = "http://127.0.0.1:8000";
 
 export const getOrbitalData = async (
-  orbitalBodyId: number,
+  orbitalBodyId: string,
   center: string,
   startTime: Date,
   stopTime: Date,

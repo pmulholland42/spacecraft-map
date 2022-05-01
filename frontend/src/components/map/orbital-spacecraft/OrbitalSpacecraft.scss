@@ -1,0 +1,12 @@
+@import "../../ui/common.scss";
+
+.orbital-spacecraft-container {
+  @include map-object-container();
+  z-index: $spacecraft-z-index;
+}
+
+.orbital-spacecraft {
+  @include map-object();
+  height: 10px;
+  width: 10px;
+}

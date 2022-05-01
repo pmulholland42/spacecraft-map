@@ -19,6 +19,8 @@ import { maxZoomLevel, minZoomLevel } from "../../constants";
 import { TextBubble } from "./text-bubble/TextBubble";
 import { getOrbitalData } from "../../utilities/api";
 import { add } from "date-fns";
+import { jwst } from "../../data/spacecraft";
+import { OrbitalSpacecraft } from "./orbital-spacecraft/OrbitalSpacecraft";
 
 const mapStateToProps = (state: RootState) => ({
   showOrbits: state.options.showOrbits,
@@ -58,14 +60,16 @@ export const Map = connector(
     setScreenCenter,
   }: PropsFromRedux) => {
     const [isDragging, setIsDragging] = useState(false);
-    const [jwst, setJWST] = useState<OrbitalPosition[]>([]);
+    const [spacecraftOrbits, setSpacecraftOrbits] = useState<OrbitalPosition[]>([]);
     const prevMousePositionRef = useRef<Coordinate | null>(null);
     const prevSelectedObject = usePrevious(selectedObject);
 
     useEffect(() => {
       let stopDate = add(startDate, { days: 30 });
 
-      getOrbitalData(-170, "500@10", startDate, stopDate, "1d").then((data) => setJWST(data));
+      getOrbitalData(jwst.horizonsId, jwst.parent.horizonsId, startDate, stopDate, "1d").then((data) =>
+        setSpacecraftOrbits(data)
+      );
     }, []);
 
     useEffect(() => {
@@ -167,9 +171,9 @@ export const Map = connector(
       objects.push(<OrbitalBody key={object.id} object={object} coords={objectCoords} />);
     });
 
-    if (jwst.length > 0) {
-      const coords = getSpacecraftCoords(jwst[0], startDate);
-      objects.push(<OrbitalBody key={"jwst"} object={pluto} coords={coords} />);
+    if (spacecraftOrbits.length > 0) {
+      const coords = getSpacecraftCoords(spacecraftOrbits[0], startDate);
+      objects.push(<OrbitalSpacecraft key={"jwst"} spacecraft={jwst} coords={coords} />);
     }
 
     return (

@@ -26,4 +26,6 @@ export interface OrbitalPosition {
   eccentricAnomaly: number;
   /** The current true anomaly of the orbit (degrees) */
   trueAnomaly: number;
+  /** The time that this orbital position is describing. Only necessary for spacecraft. */
+  time?: Date;
 }

@@ -8,3 +8,5 @@ export const jwst: Spacecraft = {
   wikiURL: "https://en.wikipedia.org/wiki/James_Webb_Space_Telescope",
   sprite: "sprites/pluto.png", // TODO: make sprite
 };
+
+export const spacecraftList = [jwst];

@@ -1,4 +1,4 @@
-import { format } from "date-fns";
+import { format, parse } from "date-fns";
 import { OrbitalPosition } from "../interfaces/OrbitalPosition";
 import {
   getArgumentOfPeriapsis,
@@ -31,6 +31,7 @@ export const getOrbitalData = async (
     const longitudeOfPeriapsis = position.fields.longitude_of_periapsis;
     const meanLongitude = position.fields.mean_longitude;
     const semiMajorAxis = position.fields.semimajor_axis;
+    const time = parse(position.fields.time, "yyyy-MM-dd'T'HH:mm:ssX", new Date());
     const semiMinorAxis = getSemiMinorAxis(semiMajorAxis, eccentricity);
     const distanceFromCenterToFocus = getDistanceFromCenterToFocus(semiMajorAxis, semiMinorAxis);
     const argumentOfPeriapsis = getArgumentOfPeriapsis(longitudeOfPeriapsis, longitudeOfAscendingNode);
@@ -51,6 +52,7 @@ export const getOrbitalData = async (
       meanAnomaly,
       eccentricAnomaly,
       trueAnomaly,
+      time,
     };
   });
 

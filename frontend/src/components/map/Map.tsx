@@ -9,17 +9,17 @@ import {
   toSpaceCoords,
   toSpaceDistance,
   toScreenDistance,
-  getSpacecraftCoords,
+  getInterpolatedSpacecraftCoords,
 } from "../../utilities";
-import { Coordinate, OrbitalPosition } from "../../interfaces";
-import solarSystem, { pluto, sun } from "../../data/solarSystem";
+import { Coordinate, OrbitalPosition, Spacecraft } from "../../interfaces";
+import solarSystem from "../../data/solarSystem";
 import { OrbitalBody } from "./orbital-body/OrbitalBody";
 import { usePrevious } from "../../hooks/usePrevious";
 import { maxZoomLevel, minZoomLevel } from "../../constants";
 import { TextBubble } from "./text-bubble/TextBubble";
 import { getOrbitalData } from "../../utilities/api";
 import { add } from "date-fns";
-import { jwst } from "../../data/spacecraft";
+import { spacecraftList } from "../../data/spacecraft";
 import { OrbitalSpacecraft } from "./orbital-spacecraft/OrbitalSpacecraft";
 
 const mapStateToProps = (state: RootState) => ({
@@ -41,13 +41,11 @@ const connector = connect(mapStateToProps, mapDispatchToProps);
 
 type PropsFromRedux = ConnectedProps<typeof connector>;
 
-let startDate = new Date();
-
 /**
  * The map takes up the entire screen, and is responsible for rendering all orbits, planets, etc.
  * It also handles zooming and panning.
  */
-export const Map = connector(
+export const SpaceMap = connector(
   ({
     showOrbits,
     keepCentered,
@@ -60,16 +58,32 @@ export const Map = connector(
     setScreenCenter,
   }: PropsFromRedux) => {
     const [isDragging, setIsDragging] = useState(false);
-    const [spacecraftOrbits, setSpacecraftOrbits] = useState<OrbitalPosition[]>([]);
+    const [spacecraftOrbits, setSpacecraftOrbits] = useState<Map<Spacecraft, OrbitalPosition[]>>(
+      new Map<Spacecraft, OrbitalPosition[]>()
+    );
     const prevMousePositionRef = useRef<Coordinate | null>(null);
     const prevSelectedObject = usePrevious(selectedObject);
 
     useEffect(() => {
+      let startDate = new Date();
       let stopDate = add(startDate, { days: 30 });
 
-      getOrbitalData(jwst.horizonsId, jwst.parent.horizonsId, startDate, stopDate, "1d").then((data) =>
-        setSpacecraftOrbits(data)
-      );
+      const newSpacecraftOrbits = new Map(spacecraftOrbits);
+
+      const orbitPromises: Promise<void>[] = spacecraftList.map((spacecraft) => {
+        return getOrbitalData(
+          spacecraft.horizonsId,
+          spacecraft.parent.horizonsId,
+          startDate,
+          stopDate,
+          "1d"
+        ).then((positions) => {
+          newSpacecraftOrbits.set(spacecraft, positions);
+        });
+      });
+      Promise.all(orbitPromises).then(() => {
+        setSpacecraftOrbits(newSpacecraftOrbits);
+      });
     }, []);
 
     useEffect(() => {
@@ -171,10 +185,11 @@ export const Map = connector(
       objects.push(<OrbitalBody key={object.id} object={object} coords={objectCoords} />);
     });
 
-    if (spacecraftOrbits.length > 0) {
-      const coords = getSpacecraftCoords(spacecraftOrbits[0], startDate);
-      objects.push(<OrbitalSpacecraft key={"jwst"} spacecraft={jwst} coords={coords} />);
-    }
+    spacecraftOrbits.forEach((orbitalPositions, spacecraft) => {
+      const coords = getInterpolatedSpacecraftCoords(orbitalPositions, displayTime);
+
+      objects.push(<OrbitalSpacecraft key={spacecraft.id} spacecraft={spacecraft} coords={coords} />);
+    });
 
     return (
       <div

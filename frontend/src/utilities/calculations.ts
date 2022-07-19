@@ -4,6 +4,7 @@ import { auToKm, toDegrees, toRadians } from "./conversions";
 
 import moize from "moize";
 import solarSystem, { sun } from "../data/solarSystem";
+import { differenceInSeconds } from "date-fns";
 
 export const getSemiMinorAxis = (semiMajorAxis: number, eccentricity: number) =>
   semiMajorAxis * Math.sqrt(1 - Math.pow(eccentricity, 2));
@@ -34,12 +35,18 @@ export const getEccentricAnomaly = (meanAnomaly: number, eccentricity: number, i
 };
 
 export const getTrueAnomaly = (eccentricity: number, eccentricAnomaly: number) => {
+  // TODO: fix this for hyperbolic orbits (eccentricity > 1)
   let trueAnomaly = toDegrees(
     2 *
       Math.atan(
         Math.sqrt((1 + eccentricity) / (1 - eccentricity)) * Math.tan(toRadians(eccentricAnomaly / 2))
       )
   );
+
+  // Alternate equation:
+  // const beta = eccentricity / (1 + Math.sqrt(1 - Math.pow(eccentricity, 2)));
+  // let trueAnomaly = eccentricAnomaly +
+  // 2 * Math.atan((beta * Math.sin(eccentricAnomaly)) / (1 - beta * Math.cos(eccentricAnomaly)));
 
   if (trueAnomaly < 0) {
     trueAnomaly += 360;
@@ -246,4 +253,113 @@ export const getNextClosestApproach = (
   }
 
   return currentTime;
+};
+
+export const getInterpolatedSpacecraftCoords = (orbitalPositions: OrbitalPosition[], displayTime: Date) => {
+  // From all the orbital positions in the list, we want to find the ones directly before and
+  // directly after the current display time
+  let interpolatedPosition: OrbitalPosition;
+
+  let minTimeDiffBefore = Infinity;
+  let minTimeDiffAfter = -Infinity;
+  let orbitalPositionBefore: OrbitalPosition | null = null;
+  let orbitalPositionAfter: OrbitalPosition | null = null;
+
+  // TODO: find a more efficient way to do this.
+  // The array shouldTM be sorted so this can probably be simplified.
+  for (let i = 0; i < orbitalPositions.length; i++) {
+    const orbit = orbitalPositions[i];
+    if (orbit.time !== undefined) {
+      const timeDiff = differenceInSeconds(displayTime, orbit.time);
+      if (timeDiff >= 0) {
+        if (timeDiff < minTimeDiffBefore) {
+          minTimeDiffBefore = timeDiff;
+          orbitalPositionBefore = orbit;
+        }
+      } else {
+        if (timeDiff > minTimeDiffAfter) {
+          minTimeDiffAfter = timeDiff;
+          orbitalPositionAfter = orbit;
+        }
+      }
+    }
+  }
+
+  // TODO: return null or something in these first two cases
+  if (orbitalPositionBefore === null) {
+    // The current display time is before all positions in the array, so use the earliest one
+    interpolatedPosition = orbitalPositionAfter!;
+  } else if (orbitalPositionAfter === null) {
+    // The current display time is before all positions in the array, so use the latest one
+    interpolatedPosition = orbitalPositionBefore;
+  } else {
+    // Now that we've found the two positions, do the actual interpolation
+    // Both positions must have time defined or else they wouldn't have been picked in the for loop, hence the !
+    const beforeTimeDiff = differenceInSeconds(displayTime, orbitalPositionBefore.time!);
+    const afterTimeDiff = differenceInSeconds(orbitalPositionAfter.time!, displayTime);
+    const percent = beforeTimeDiff / (beforeTimeDiff + afterTimeDiff);
+
+    const eccentricity = interpolate(
+      orbitalPositionBefore.eccentricity,
+      orbitalPositionAfter.eccentricity,
+      percent
+    );
+    // Currently, getRelativeCoordinates doesn't use some of these attributes,
+    // so we can just leave them as 0, or any number really
+    const inclination = 0; /*interpolate(
+      orbitalPositionBefore.inclination,
+      orbitalPositionAfter.inclination,
+      percent
+    );*/
+    const longitudeOfAscendingNode = 0; /*interpolate(
+      orbitalPositionBefore.longitudeOfAscendingNode,
+      orbitalPositionAfter.longitudeOfAscendingNode,
+      percent
+    );*/
+    const longitudeOfPeriapsis = interpolate(
+      orbitalPositionBefore.longitudeOfPeriapsis,
+      orbitalPositionAfter.longitudeOfPeriapsis,
+      percent
+    );
+
+    const meanLongitude = interpolate(
+      orbitalPositionBefore.meanLongitude,
+      orbitalPositionAfter.meanLongitude,
+      percent
+    );
+    const semiMajorAxis = interpolate(
+      orbitalPositionBefore.semiMajorAxis,
+      orbitalPositionAfter.semiMajorAxis,
+      percent
+    );
+    const semiMinorAxis = getSemiMinorAxis(semiMajorAxis, eccentricity);
+    const distanceFromCenterToFocus = getDistanceFromCenterToFocus(semiMajorAxis, semiMinorAxis);
+    const argumentOfPeriapsis = 0; // getArgumentOfPeriapsis(longitudeOfPeriapsis, longitudeOfAscendingNode);
+    const meanAnomaly = getMeanAnomaly(meanLongitude, longitudeOfPeriapsis);
+    const eccentricAnomaly = getEccentricAnomaly(meanAnomaly, eccentricity);
+    const trueAnomaly = getTrueAnomaly(eccentricity, eccentricAnomaly);
+
+    interpolatedPosition = {
+      argumentOfPeriapsis,
+      distanceFromCenterToFocus,
+      eccentricAnomaly,
+      eccentricity,
+      inclination,
+      longitudeOfAscendingNode,
+      longitudeOfPeriapsis,
+      meanAnomaly,
+      meanLongitude,
+      semiMajorAxis,
+      semiMinorAxis,
+      trueAnomaly,
+    };
+  }
+
+  const coords = getSpacecraftCoords(interpolatedPosition, displayTime);
+  return coords;
+};
+
+const interpolate = (a: number, b: number, percent: number) => {
+  const [min, max] = [a, b].sort();
+  return min + (max - min) * percent;
 };

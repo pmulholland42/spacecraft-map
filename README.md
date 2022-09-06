@@ -9,10 +9,10 @@
 
 1. Navigate to the `backend` folder in the project root folder.
 1. Run `python3 -m venv env` to create a new python virtual environment.
-1. Run `source env/bin/activate` to start the new virtual environment.
+1. Run `source env/bin/activate` on Linux/Mac or `.\env\Scripts\activate.bat` on Windows to start the new virtual environment.
 1. Run `pip install -r requirements.txt` to install dependencies.
-1. Run `python manage.py migrate` to update the database.
 1. Create Django environment file: create a new file called `.env` under the `backend/backend` folder. The contents of this file should be `SECRET_KEY = 'secretkeyhere'`. See [this guide](https://humberto.io/blog/tldr-generate-django-secret-key/) for details on generating this key.
+1. Run `python manage.py migrate` to update the database.
 
 ### Frontend
 
@@ -25,7 +25,7 @@
 ### Backend
 
 1. Navigate to the `backend` folder in the project root folder.
-1. Run `source env/bin/activate` to start the virtual environment.
+1. Run `source env/bin/activate` on Linux/Mac or `.\env\Scripts\activate.bat` on Windows to start the virtual environment.
 1. Run `python manage.py runserver` to start the server.
 1. When done, run `deactivate` to stop using the virtual environment.
 

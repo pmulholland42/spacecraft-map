@@ -1,46 +1,41 @@
-# Getting Started with Create React App
+## Setup
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+### Dependencies
 
-## Available Scripts
+- Python 3
+- npm
 
-In the project directory, you can run:
+### Backend
 
-### `yarn start`
+1. Navigate to the `backend` folder in the project root folder.
+1. Run `python3 -m venv env` to create a new python virtual environment.
+1. Run `source env/bin/activate` to start the new virtual environment.
+1. Run `pip install -r requirements.txt` to install dependencies.
+1. Run `python manage.py migrate` to update the database.
+1. Create Django environment file: create a new file called `.env` under the `backend/backend` folder. The contents of this file should be `SECRET_KEY = 'secretkeyhere'`. See [this guide](https://humberto.io/blog/tldr-generate-django-secret-key/) for details on generating this key.
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+### Frontend
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+1. Navigate to the `frontend` folder.
+1. Run `npm install` to install dependencies.
+1. Optional: populate the `frontend/public/images/photos` folder with images of the planets. These photos are copyrighted so they're not checked into source control.
 
-### `yarn test`
+## Running the app
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+### Backend
 
-### `yarn build`
+1. Navigate to the `backend` folder in the project root folder.
+1. Run `source env/bin/activate` to start the virtual environment.
+1. Run `python manage.py runserver` to start the server.
+1. When done, run `deactivate` to stop using the virtual environment.
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+### Frontend
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+1. Navigate to the `frontend` folder.
+1. Run `npm run start` to start the app in development mode.
+1. Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+Alternatively, you can build the app in production mode:
 
-### `yarn eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
-
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
-
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
+1. Run `npm run build` to build the app into the `build` folder.
+2. To serve the app, you can use any server software. For example with the [npm serve package](https://www.npmjs.com/package/serve) package (`npm install -g serve`), you can run `serve -s build`.

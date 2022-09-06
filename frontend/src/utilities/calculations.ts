@@ -3,7 +3,7 @@ import { AstronomicalObject, Coordinate, OrbitalPosition, OrbitDefinition } from
 import { auToKm, toDegrees, toRadians } from "./conversions";
 
 import moize from "moize";
-import solarSystem, { sun } from "../data/solarSystem";
+import solarSystem from "../data/solarSystem";
 import { differenceInSeconds } from "date-fns";
 
 export const getSemiMinorAxis = (semiMajorAxis: number, eccentricity: number) =>
@@ -154,9 +154,10 @@ export const getRelativeCoordinates = (
 };
 
 /**
- * Gets the coords (in km) of an object in space via recursion
+ * Gets the coordinates of an object in space relative to the center of the Solar System
  * @param object
  * @param time
+ * @returns The object coordinates in space (km)
  */
 export const getObjectCoordinates = (object: AstronomicalObject | undefined, time: Date): Coordinate => {
   if (object?.parent === undefined) {
@@ -181,8 +182,18 @@ export const getObjectCoordinates = (object: AstronomicalObject | undefined, tim
   }
 };
 
-export const getSpacecraftCoords = (position: OrbitalPosition, time: Date) => {
-  const parentCoords = getObjectCoordinates(sun, time);
+/**
+ * Gets the coordinates of a spacecraft relative to the center of the Solar System
+ * @param position
+ * @param time
+ * @returns The spacecraft coordinates in space (km)
+ */
+export const getSpacecraftCoords = (
+  position: OrbitalPosition,
+  time: Date,
+  parent: AstronomicalObject
+): Coordinate => {
+  const parentCoords = getObjectCoordinates(parent, time);
 
   const { angle, distanceFromParent } = getRelativeCoordinates(
     position.semiMajorAxis,
@@ -255,7 +266,17 @@ export const getNextClosestApproach = (
   return currentTime;
 };
 
-export const getInterpolatedSpacecraftCoords = (orbitalPositions: OrbitalPosition[], displayTime: Date) => {
+/**
+ * Gets the coordinates of a spacecraft at the specified time
+ * @param orbitalPositions
+ * @param displayTime
+ * @returns The spacecraft coordinates in space (km)
+ */
+export const getInterpolatedSpacecraftCoords = (
+  orbitalPositions: OrbitalPosition[],
+  displayTime: Date,
+  parent: AstronomicalObject
+): Coordinate => {
   // From all the orbital positions in the list, we want to find the ones directly before and
   // directly after the current display time
   let interpolatedPosition: OrbitalPosition;
@@ -285,7 +306,6 @@ export const getInterpolatedSpacecraftCoords = (orbitalPositions: OrbitalPositio
     }
   }
 
-  // TODO: return null or something in these first two cases
   if (orbitalPositionBefore === null) {
     // The current display time is before all positions in the array, so use the earliest one
     interpolatedPosition = orbitalPositionAfter!;
@@ -306,27 +326,20 @@ export const getInterpolatedSpacecraftCoords = (orbitalPositions: OrbitalPositio
     );
     // Currently, getRelativeCoordinates doesn't use some of these attributes,
     // so we can just leave them as 0, or any number really
-    const inclination = 0; /*interpolate(
-      orbitalPositionBefore.inclination,
-      orbitalPositionAfter.inclination,
-      percent
-    );*/
-    const longitudeOfAscendingNode = 0; /*interpolate(
-      orbitalPositionBefore.longitudeOfAscendingNode,
-      orbitalPositionAfter.longitudeOfAscendingNode,
-      percent
-    );*/
+    const inclination = 0;
+    const longitudeOfAscendingNode = 0;
     const longitudeOfPeriapsis = interpolate(
       orbitalPositionBefore.longitudeOfPeriapsis,
       orbitalPositionAfter.longitudeOfPeriapsis,
       percent
     );
 
-    const meanLongitude = interpolate(
+    const meanLongitude = interpolateDegrees(
       orbitalPositionBefore.meanLongitude,
       orbitalPositionAfter.meanLongitude,
       percent
     );
+
     const semiMajorAxis = interpolate(
       orbitalPositionBefore.semiMajorAxis,
       orbitalPositionAfter.semiMajorAxis,
@@ -355,11 +368,33 @@ export const getInterpolatedSpacecraftCoords = (orbitalPositions: OrbitalPositio
     };
   }
 
-  const coords = getSpacecraftCoords(interpolatedPosition, displayTime);
+  // We could have instead called getSpacecraftCoords on the before and after positions,
+  // and then interpolated the resulting {x, y} coordinates. However when done this way, there
+  // is a slight "bouncing" effect on the object as it moves. Doing it this way
+  // (interpolating the individual orbital properties first) makes for a smoother animation.
+  const coords = getSpacecraftCoords(interpolatedPosition, displayTime, parent);
   return coords;
 };
 
 const interpolate = (a: number, b: number, percent: number) => {
-  const [min, max] = [a, b].sort();
-  return min + (max - min) * percent;
+  return a + (b - a) * percent;
+};
+
+const interpolateDegrees = (a: number, b: number, percent: number) => {
+  const diff = Math.abs(b - a);
+  if (diff > 180) {
+    if (b > a) {
+      a += 360;
+    } else {
+      b += 360;
+    }
+  }
+
+  const result = interpolate(a, b, percent);
+
+  if (result >= 0 && result <= 360) {
+    return result;
+  } else {
+    return result % 360;
+  }
 };

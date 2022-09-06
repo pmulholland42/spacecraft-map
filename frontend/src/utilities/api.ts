@@ -1,4 +1,6 @@
-import { format, parse } from "date-fns";
+import { addDays, format, isAfter, isBefore, parse } from "date-fns";
+import { oneDay, oneSecond } from "../constants";
+import { HorizonsTimeStep } from "../interfaces";
 import { OrbitalPosition } from "../interfaces/OrbitalPosition";
 import {
   getArgumentOfPeriapsis,
@@ -12,13 +14,27 @@ import {
 const dateFormat = "yyyy-MM-dd";
 const baseUrl = "http://127.0.0.1:8000";
 
-export const getOrbitalData = async (
-  orbitalBodyId: string,
-  center: string,
-  startTime: Date,
-  stopTime: Date,
-  step: string
-) => {
+// TODO: keep a rolling average of actual response times
+/** Time (ms) for the horizons api to respond */
+const apiResponseTime = 700;
+/** Extra time (ms) to make requests early */
+const bufferTime = 500;
+
+interface OrbitalDataRequestParams {
+  orbitalBodyId: string;
+  center: string;
+  startTime: Date;
+  stopTime: Date;
+  step: HorizonsTimeStep;
+}
+
+export const getOrbitalData = async ({
+  orbitalBodyId,
+  center,
+  startTime,
+  stopTime,
+  step,
+}: OrbitalDataRequestParams) => {
   const formattedStartTime = format(startTime, dateFormat);
   const formattedStopTime = format(stopTime, dateFormat);
   const url = `${baseUrl}/horizonsapi/orbital_position/?orbital_body_id=${orbitalBodyId}&center=${center}&start_time=${formattedStartTime}&stop_time=${formattedStopTime}&step=${step}`;
@@ -57,4 +73,34 @@ export const getOrbitalData = async (
   });
 
   return orbitalPositions;
+};
+
+/**
+ * Determines the number of days in advance for which we need to fetch orbital data.
+ * The faster the time warp speed, the more of a "buffer" of data is needed.
+ * @param displayTime
+ * @param timeWarpSpeed Milliseconds per second
+ * @param lastDateWithOrbitalData Earliest or latest depending on time warp direction
+ * @returns A number of days, or 0 if no buffering is necessary at the moment.
+ */
+export const getDaysNeededToFetch = (
+  displayTime: Date,
+  timeWarpSpeed: number,
+  lastDateWithOrbitalData: Date
+): number => {
+  const daysPerSecond = timeWarpSpeed / oneDay;
+  const secondsNeeded = (apiResponseTime + bufferTime) / oneSecond;
+  const daysNeeded = secondsNeeded * daysPerSecond;
+  const dateNeeded = addDays(displayTime, daysNeeded);
+
+  if (timeWarpSpeed > 0) {
+    if (isAfter(dateNeeded, lastDateWithOrbitalData)) {
+      return Math.ceil(daysNeeded);
+    }
+  } else if (timeWarpSpeed < 0) {
+    if (isBefore(dateNeeded, lastDateWithOrbitalData)) {
+      return Math.floor(daysNeeded);
+    }
+  }
+  return 0;
 };

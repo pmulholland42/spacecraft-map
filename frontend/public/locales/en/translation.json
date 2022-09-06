@@ -96,7 +96,9 @@
     "proteus": "Proteus",
     "pluto": "Pluto",
     "charon": "Charon",
-    "jwst": "James Webb Space Telescope"
+    "jwst": "James Webb Space Telescope",
+    "iss": "International Space Station",
+    "juno": "Juno"
   },
   "objectTypes": {
     "dwarfPlanet": "Dwarf planet",
@@ -110,7 +112,9 @@
     "negativeThirtyDays": "-30 days/s",
     "negativeTenDays": "-10 days/s",
     "negativeOneDay": "-1 day/s",
+    "negativeTenMinutes": "-10 minutes/s",
     "paused": "Paused",
+    "tenMinutes": "10 minutes/s",
     "oneDay": "1 day/s",
     "tenDays": "10 days/s",
     "thirtyDays": "30 days/s",

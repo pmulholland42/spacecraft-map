@@ -73,7 +73,7 @@ export const SearchBar = connector(
       return () => {
         window.removeEventListener("click", handleClick);
       };
-    }, [setShowSearchSuggestions]);
+    }, []);
 
     useEffect(() => {
       // When a new object is selected, put its name in the search bar

@@ -11,15 +11,13 @@ import {
   toScreenDistance,
   getInterpolatedSpacecraftCoords,
 } from "../../utilities";
-import { Coordinate, OrbitalPosition, Spacecraft } from "../../interfaces";
+import { Coordinate } from "../../interfaces";
 import solarSystem from "../../data/solarSystem";
 import { OrbitalBody } from "./orbital-body/OrbitalBody";
-import { usePrevious } from "../../hooks/usePrevious";
+import { usePrevious, useSpacecraftOrbits } from "../../hooks";
 import { maxZoomLevel, minZoomLevel } from "../../constants";
 import { TextBubble } from "./text-bubble/TextBubble";
-import { getOrbitalData } from "../../utilities/api";
-import { add } from "date-fns";
-import { spacecraftList } from "../../data/spacecraft";
+import { getSpacecraftById } from "../../data/spacecraft";
 import { OrbitalSpacecraft } from "./orbital-spacecraft/OrbitalSpacecraft";
 
 const mapStateToProps = (state: RootState) => ({
@@ -30,6 +28,7 @@ const mapStateToProps = (state: RootState) => ({
   zoom: state.map.zoom,
   screenCenter: state.map.screenCenter,
   textBubbles: state.ui.textBubbles,
+  timeStepIndex: state.time.timeStepIndex,
 });
 
 const mapDispatchToProps = {
@@ -51,6 +50,7 @@ export const SpaceMap = connector(
     keepCentered,
     selectedObject,
     displayTime,
+    timeStepIndex,
     zoom,
     screenCenter,
     textBubbles,
@@ -58,33 +58,11 @@ export const SpaceMap = connector(
     setScreenCenter,
   }: PropsFromRedux) => {
     const [isDragging, setIsDragging] = useState(false);
-    const [spacecraftOrbits, setSpacecraftOrbits] = useState<Map<Spacecraft, OrbitalPosition[]>>(
-      new Map<Spacecraft, OrbitalPosition[]>()
-    );
+
+    const spacecraftOrbits = useSpacecraftOrbits(displayTime, timeStepIndex);
+
     const prevMousePositionRef = useRef<Coordinate | null>(null);
     const prevSelectedObject = usePrevious(selectedObject);
-
-    useEffect(() => {
-      let startDate = new Date();
-      let stopDate = add(startDate, { days: 30 });
-
-      const newSpacecraftOrbits = new Map(spacecraftOrbits);
-
-      const orbitPromises: Promise<void>[] = spacecraftList.map((spacecraft) => {
-        return getOrbitalData(
-          spacecraft.horizonsId,
-          spacecraft.parent.horizonsId,
-          startDate,
-          stopDate,
-          "1d"
-        ).then((positions) => {
-          newSpacecraftOrbits.set(spacecraft, positions);
-        });
-      });
-      Promise.all(orbitPromises).then(() => {
-        setSpacecraftOrbits(newSpacecraftOrbits);
-      });
-    }, []);
 
     useEffect(() => {
       // Keep the selected object centered
@@ -185,10 +163,14 @@ export const SpaceMap = connector(
       objects.push(<OrbitalBody key={object.id} object={object} coords={objectCoords} />);
     });
 
-    spacecraftOrbits.forEach((orbitalPositions, spacecraft) => {
-      const coords = getInterpolatedSpacecraftCoords(orbitalPositions, displayTime);
+    spacecraftOrbits.forEach((orbitalPositions, spacecraftId) => {
+      const spacecraft = getSpacecraftById(spacecraftId)!;
 
-      objects.push(<OrbitalSpacecraft key={spacecraft.id} spacecraft={spacecraft} coords={coords} />);
+      if (spacecraft !== undefined) {
+        const coords = getInterpolatedSpacecraftCoords(orbitalPositions, displayTime, spacecraft.parent);
+
+        objects.push(<OrbitalSpacecraft key={spacecraft.id} spacecraft={spacecraft} coords={coords} />);
+      }
     });
 
     return (

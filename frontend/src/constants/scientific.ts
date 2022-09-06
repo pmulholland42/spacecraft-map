@@ -6,6 +6,8 @@ export const kmPerAU = 149597870;
 export const j2000Epoch = new Date(Date.UTC(2000, 0, 1, 12, 0, 0));
 /** Number of milliseconds in one second */
 export const oneSecond = 1000;
+/** Number of milliseconds in one minute */
+export const oneMinute = 60000;
 /** Number of milliseconds in one day */
 export const oneDay = 86400000;
 /** Number of milliseconds in one year */

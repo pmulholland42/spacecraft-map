@@ -57,7 +57,7 @@ export function useDraggable(initialPosition?: Coordinate) {
       window.removeEventListener("mouseup", stopDragging);
       window.removeEventListener("blur", stopDragging);
     };
-  }, [setIsBeingDragged]);
+  }, []);
 
   useEffect(() => {
     // Start dragging when the user clicks

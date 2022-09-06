@@ -110,7 +110,7 @@ export const venus: AstronomicalObject = {
 
 export const earth: AstronomicalObject = {
   id: "earth",
-  horizonsId: "",
+  horizonsId: "399",
   parent: sun,
   type: "planet",
   diameter: 12742,
@@ -283,7 +283,7 @@ export const deimos: AstronomicalObject = {
 
 export const jupiter: AstronomicalObject = {
   id: "jupiter",
-  horizonsId: "",
+  horizonsId: "599",
   type: "planet",
   parent: sun,
   diameter: 139822,

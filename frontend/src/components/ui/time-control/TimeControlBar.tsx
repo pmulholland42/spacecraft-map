@@ -50,7 +50,7 @@ export const TimeControlBar = connector(
 
     useEffect(() => {
       setTimeStep(timeSteps[timeStepIndex].value);
-    }, [timeStepIndex, setTimeStep]);
+    }, [timeStepIndex]);
 
     useEffect(() => {
       // When the user clicks the fast forward or backward button, the time step bubble is briefly displayed

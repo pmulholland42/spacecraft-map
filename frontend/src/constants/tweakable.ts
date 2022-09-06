@@ -1,5 +1,5 @@
 import { TimeStep } from "../interfaces";
-import { oneDay, oneYear } from "./scientific";
+import { oneDay, oneMinute, oneSecond, oneYear } from "./scientific";
 
 // Constants that can be tweaked to alter the behavior of the app
 
@@ -20,7 +20,9 @@ export const timeSteps: TimeStep[] = [
   { label: "timeSteps.negativeThirtyDays", value: -oneDay * 30 },
   { label: "timeSteps.negativeTenDays", value: -oneDay * 10 },
   { label: "timeSteps.negativeOneDay", value: -oneDay },
+  { label: "timeSteps.negativeTenMinutes", value: -oneMinute * 10 },
   { label: "timeSteps.paused", value: 0 },
+  { label: "timeSteps.tenMinutes", value: oneMinute * 10 },
   { label: "timeSteps.oneDay", value: oneDay },
   { label: "timeSteps.tenDays", value: oneDay * 10 },
   { label: "timeSteps.thirtyDays", value: oneDay * 30 },

@@ -1,4 +1,5 @@
 import { AstronomicalObject } from "./AstronomicalObject";
+import { HorizonsTimeStep } from "./HorizonsTimeStep";
 import { Photo } from "./Photo";
 
 export interface Spacecraft {
@@ -14,4 +15,6 @@ export interface Spacecraft {
   wikiURL: string;
   /** The photo to be displayed on the details pane */
   photo?: Photo;
+  /** Time step for horizons API - things with faster orbits need smaller time step */
+  timeStep: HorizonsTimeStep;
 }

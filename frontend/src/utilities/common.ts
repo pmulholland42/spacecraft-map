@@ -1,6 +1,5 @@
-import { daysInACentury, j2000Epoch } from "../constants";
 import solarSystem from "../data/solarSystem";
-import { AstronomicalObject, OrbitDefinition, TimeStep } from "../interfaces";
+import { AstronomicalObject, TimeStep } from "../interfaces";
 
 /**
  * Find an astronomical object by its id string
@@ -20,57 +19,6 @@ export const getPausedTimeStepIndex = (timeSteps: TimeStep[]) => {
   return index;
 };
 
-/**
- * Parses data from JPL's HORIZONS system into an OrbitDefinition
- * This is currently intended to be called manually from the browser console
- * Using the HORIZONS web interface, get elements data for the object you want to add
- * Set the output to CSV and paste the CSV data in as the argument of this function
- * @param csv
- */
-export const parseHorizonsData = (csv: string): OrbitDefinition => {
-  const data = csv.split(",");
-  const initialSemiMajorAxis = Number(data[11]);
-  const initialEccentricity = Number(data[2]);
-  const initialInclination = Number(data[4]);
-  const initialLongitudeOfAscendingNode = Number(data[5]);
-  const initialArgumentOfPeriapsis = Number(data[6]);
-  const initialMeanAnomaly = Number(data[9]);
-  const initialMeanLongitude =
-    initialLongitudeOfAscendingNode + initialArgumentOfPeriapsis + initialMeanAnomaly;
-  const initialLongitudeOfPeriapsis = initialLongitudeOfAscendingNode + initialArgumentOfPeriapsis;
-
-  const finalSemiMajorAxis = Number(data[11 + 14]);
-  const finalEccentricity = Number(data[2 + 14]);
-  const finalInclination = Number(data[4 + 14]);
-  const finalLongitudeOfAscendingNode = Number(data[5 + 14]);
-  const finalArgumentOfPeriapsis = Number(data[6 + 14]);
-  const finalLongitudeOfPeriapsis = finalLongitudeOfAscendingNode + finalArgumentOfPeriapsis;
-
-  const period = Number(data[13]);
-  const meanLongitudeRate = (daysInACentury / period) * 360;
-
-  const orbitDefinition: OrbitDefinition = {
-    epoch: j2000Epoch,
-    semiMajorAxis: initialSemiMajorAxis,
-    semiMajorAxisRate: finalSemiMajorAxis - initialSemiMajorAxis,
-    eccentricity: initialEccentricity,
-    eccentricityRate: finalEccentricity - initialEccentricity,
-    inclination: initialInclination,
-    inclinationRate: finalInclination - initialInclination,
-    meanLongitude: initialMeanLongitude,
-    meanLongitudeRate,
-    longitudeOfPeriapsis: initialLongitudeOfPeriapsis,
-    longitudeOfPeriapsisRate: finalLongitudeOfPeriapsis - initialLongitudeOfPeriapsis,
-    longitudeOfAscendingNode: initialLongitudeOfAscendingNode,
-    longitudeOfAscendingNodeRate: finalLongitudeOfAscendingNode - initialLongitudeOfAscendingNode,
-  };
-  console.log(JSON.stringify(orbitDefinition));
-  return orbitDefinition;
-};
-
-// eslint-disable-next-line
-(window as any).parseHorizonsData = parseHorizonsData;
-
 export const getImagePath = (path: string) => {
   if (process.env.NODE_ENV === "production") {
     return `images/${path}`;
@@ -81,7 +29,7 @@ export const getImagePath = (path: string) => {
 
 export const isMobile = () => {
   let check = false;
-  // eslint-disable
+  /* eslint-disable no-useless-escape */
   (function (a) {
     if (
       /(android|bb\d+|meego).+mobile|avantgo|bada\/|blackberry|blazer|compal|elaine|fennec|hiptop|iemobile|ip(hone|od)|iris|kindle|lge |maemo|midp|mmp|mobile.+firefox|netfront|opera m(ob|in)i|palm( os)?|phone|p(ixi|re)\/|plucker|pocket|psp|series(4|6)0|symbian|treo|up\.(browser|link)|vodafone|wap|windows ce|xda|xiino/i.test(

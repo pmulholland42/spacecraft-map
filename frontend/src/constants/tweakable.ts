@@ -1,5 +1,5 @@
 import { TimeStep } from "../interfaces";
-import { oneDay, oneMinute, oneSecond, oneYear } from "./scientific";
+import { oneDay, oneMinute, oneYear } from "./scientific";
 
 // Constants that can be tweaked to alter the behavior of the app
 

@@ -100,7 +100,7 @@ export const useSpacecraftOrbits = (
       }
     });
     // TODO: handle failed network requests gracefully
-    Promise.allSettled(orbitPromises).then(() => {
+    Promise.all(orbitPromises).then(() => {
       setSpacecraftOrbits(newSpacecraftOrbits);
     });
   }, [displayTime, timeStepIndex, bufferMultiplier, fetching, spacecraftOrbits]);

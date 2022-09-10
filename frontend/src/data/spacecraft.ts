@@ -37,7 +37,7 @@ export const iss: Spacecraft = {
   timeStep: "10min",
 };
 
-export const spacecraftList = [iss, jwst, juno];
+export const spacecraftList: Spacecraft[] = [iss, jwst, juno];
 
 export const getSpacecraftById = (id: string) => {
   return spacecraftList.find((s) => s.id === id);

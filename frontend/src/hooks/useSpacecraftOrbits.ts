@@ -26,21 +26,25 @@ export const useSpacecraftOrbits = (
     const initialStopDate = addDays(displayTime, 1);
 
     const newSpacecraftOrbits = new Map(spacecraftOrbits);
+    const orbitPromises: Promise<void>[] = [];
 
-    const orbitPromises: Promise<void>[] = spacecraftList.map((spacecraft) => {
+    for (let i = 0; i < spacecraftList.length; i++) {
+      const spacecraft = spacecraftList[i];
       if (!fetching.includes(spacecraft.id)) {
         if (!newSpacecraftOrbits.has(spacecraft.id) || newSpacecraftOrbits.get(spacecraft.id)?.length === 0) {
           setFetching((f) => f.concat([spacecraft.id]));
-          return getOrbitalData({
-            orbitalBodyId: spacecraft.horizonsId,
-            center: spacecraft.parent.horizonsId,
-            startTime: initialStartDate,
-            stopTime: initialStopDate,
-            step: spacecraft.timeStep,
-          }).then((positions) => {
-            newSpacecraftOrbits.set(spacecraft.id, positions);
-            setFetching((f) => f.filter((a) => a !== spacecraft.id));
-          });
+          orbitPromises.push(
+            getOrbitalData({
+              orbitalBodyId: spacecraft.horizonsId,
+              center: spacecraft.parent.horizonsId,
+              startTime: initialStartDate,
+              stopTime: initialStopDate,
+              step: spacecraft.timeStep,
+            }).then((positions) => {
+              newSpacecraftOrbits.set(spacecraft.id, positions);
+              setFetching((f) => f.filter((a) => a !== spacecraft.id));
+            })
+          );
         } else {
           const orbitalPositions = newSpacecraftOrbits.get(spacecraft.id)!;
           const timeWarpSpeed = timeSteps[timeStepIndex].value;
@@ -75,34 +79,35 @@ export const useSpacecraftOrbits = (
 
             setFetching((f) => f.concat([spacecraft.id]));
 
-            return getOrbitalData({
-              orbitalBodyId: spacecraft.horizonsId,
-              center: spacecraft.parent.horizonsId,
-              startTime: startDate,
-              stopTime: stopDate,
-              step: spacecraft.timeStep,
-            }).then((fetchedPositions) => {
-              let newOrbitalPositions = newSpacecraftOrbits.get(spacecraft.id)!;
-              if (timeWarpSpeed > 0) {
-                newOrbitalPositions = newOrbitalPositions.concat(fetchedPositions);
-              } else {
-                newOrbitalPositions = fetchedPositions.concat(newOrbitalPositions);
-              }
-              newSpacecraftOrbits.set(spacecraft.id, newOrbitalPositions);
-              setFetching((f) => f.filter((a) => a !== spacecraft.id));
-            });
-          } else {
-            return Promise.resolve();
+            orbitPromises.push(
+              getOrbitalData({
+                orbitalBodyId: spacecraft.horizonsId,
+                center: spacecraft.parent.horizonsId,
+                startTime: startDate,
+                stopTime: stopDate,
+                step: spacecraft.timeStep,
+              }).then((fetchedPositions) => {
+                let newOrbitalPositions = newSpacecraftOrbits.get(spacecraft.id)!;
+                if (timeWarpSpeed > 0) {
+                  newOrbitalPositions = newOrbitalPositions.concat(fetchedPositions);
+                } else {
+                  newOrbitalPositions = fetchedPositions.concat(newOrbitalPositions);
+                }
+                newSpacecraftOrbits.set(spacecraft.id, newOrbitalPositions);
+                setFetching((f) => f.filter((a) => a !== spacecraft.id));
+              })
+            );
           }
         }
-      } else {
-        return Promise.resolve();
       }
-    });
+    }
+
     // TODO: handle failed network requests gracefully
-    Promise.all(orbitPromises).then(() => {
-      setSpacecraftOrbits(newSpacecraftOrbits);
-    });
+    if (orbitPromises.length > 0) {
+      Promise.all(orbitPromises).then(() => {
+        setSpacecraftOrbits(newSpacecraftOrbits);
+      });
+    }
   }, [displayTime, timeStepIndex, bufferMultiplier, fetching, spacecraftOrbits]);
 
   return spacecraftOrbits;

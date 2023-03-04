@@ -1,4 +1,6 @@
 from django.db import models
+from django.core.serializers.json import DjangoJSONEncoder
+import decimal
 
 # Create your models here.
 
@@ -41,3 +43,10 @@ mean longitude = {self.mean_longitude} degrees
 longitude of periapsis = {self.longitude_of_periapsis} degrees
 longitude of ascending node = {self.longitude_of_ascending_node} degrees
         """
+
+
+class OrbitalPositionEncoder(DjangoJSONEncoder):
+    def default(self, obj):
+        if isinstance(obj, decimal.Decimal):
+            return float(obj)
+        return super().default(obj)

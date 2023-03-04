@@ -16,7 +16,7 @@ from .date_utils import (
     generate_date_range,
 )
 
-from .models import OrbitalPosition, OrbitalBody
+from .models import OrbitalPosition, OrbitalPositionEncoder, OrbitalBody
 
 
 DATE_FORMAT = "%Y-%m-%dT%H:%M:%S"
@@ -84,13 +84,15 @@ def orbital_position(request):
         if orbital_body is None:
             create_orbital_body(orbital_body_id, result)
 
-        orbital_positions = parse_elements_data(result, orbital_body_id)
+        orbital_positions = parse_elements_data(result, orbital_body_id, center)
 
     def response_callback():
         if cache_miss:
             cache_orbital_positions(orbital_positions)
 
-    serialized_data = serializers.serialize("json", orbital_positions)
+    serialized_data = serializers.serialize(
+        "json", orbital_positions, cls=OrbitalPositionEncoder
+    )
     return HttpResponseThen(serialized_data, response_callback)
 
 
@@ -166,7 +168,7 @@ def fetch_elements_data(orbital_body_id, center, start_time, stop_time, step):
         return response.read()
 
 
-def parse_elements_data(response, orbital_body_id):
+def parse_elements_data(response, orbital_body_id, center):
     lines = response.split(b"\n")
     reading_elements = False
     orbital_positions = list()
@@ -197,6 +199,7 @@ def parse_elements_data(response, orbital_body_id):
             orbital_position.longitude_of_periapsis = (
                 orbital_position.longitude_of_ascending_node + argument_of_periapsis
             )
+            orbital_position.center = center
             orbital_positions.append(orbital_position)
 
         elif b"$$SOE" in line:

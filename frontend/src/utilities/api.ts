@@ -11,7 +11,7 @@ import {
   getTrueAnomaly,
 } from "./calculations";
 
-const dateFormat = "yyyy-MM-dd";
+const dateFormat = "yyyy-MM-dd'T'HH:mm:ss";
 const baseUrl = "http://127.0.0.1:8000";
 
 // TODO: keep a rolling average of actual response times

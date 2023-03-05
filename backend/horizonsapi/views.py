@@ -3,9 +3,12 @@ from django.shortcuts import render
 from django.http import HttpResponse
 from django.core import serializers
 from django.db import IntegrityError
+from django.db.models.query import QuerySet
 
-from datetime import datetime
+from datetime import datetime, timedelta
 import pytz
+from typing import Generator, List, Tuple
+
 
 import urllib.request
 
@@ -36,7 +39,7 @@ def index(request):
     return HttpResponse("Hello world!")
 
 
-def orbital_position(request):
+def orbital_position(request) -> HttpResponseThen:
     orbital_body_id = request.GET.get("orbital_body_id", "")
     center = request.GET.get("center", "")
     start_time = request.GET.get("start_time", "")
@@ -96,7 +99,7 @@ def orbital_position(request):
     return HttpResponseThen(serialized_data, response_callback)
 
 
-def cache_orbital_positions(orbital_positions):
+def cache_orbital_positions(orbital_positions: List[OrbitalPosition]) -> None:
     insert_count = 0
     update_count = 0
     for new_position in orbital_positions:
@@ -122,7 +125,10 @@ def cache_orbital_positions(orbital_positions):
     print(f"Updated {update_count} and inserted {insert_count}")
 
 
-def check_cached_positions(requested_time_range, cached_orbital_positions):
+def check_cached_positions(
+    requested_time_range: Generator[datetime, None, None],
+    cached_orbital_positions: QuerySet[OrbitalPosition],
+) -> List[OrbitalPosition] | None:
     requested_orbital_positions = list()
     cache_index = 0
     for requested_date in requested_time_range:
@@ -150,7 +156,13 @@ def check_cached_positions(requested_time_range, cached_orbital_positions):
     return requested_orbital_positions
 
 
-def fetch_elements_data(orbital_body_id, center, start_time, stop_time, step):
+def fetch_elements_data(
+    orbital_body_id: str,
+    center: str,
+    start_time: datetime,
+    stop_time: datetime,
+    step: str,
+) -> str:
     url = (
         "https://ssd.jpl.nasa.gov/api/horizons.api?format=text&COMMAND="
         + orbital_body_id
@@ -165,25 +177,25 @@ def fetch_elements_data(orbital_body_id, center, start_time, stop_time, step):
         + "&QUANTITIES='1,9,20,23,24,29'&CSV_FORMAT=YES&OUT_UNITS=AU-D"
     )
     with urllib.request.urlopen(url) as response:
-        return response.read()
+        return response.read().decode("utf-8")
 
 
-def parse_elements_data(response, orbital_body_id, center):
-    lines = response.split(b"\n")
+def parse_elements_data(
+    response: str, orbital_body_id: str, center: str
+) -> list[OrbitalPosition]:
+    lines = response.split("\n")
     reading_elements = False
     orbital_positions = list()
     for line in lines:
-        if b"$$EOE" in line:
+        if "$$EOE" in line:
             break
 
         elif reading_elements:
-            elements = line.split(b",")
+            elements = line.split(",")
             orbital_position = OrbitalPosition()
             orbital_position.orbital_body_id = orbital_body_id
             orbital_position.time = pytz.utc.localize(
-                datetime.strptime(
-                    elements[1].decode("utf-8").strip(), "A.D. %Y-%b-%d %H:%M:%S.0000"
-                )
+                datetime.strptime(elements[1].strip(), "A.D. %Y-%b-%d %H:%M:%S.0000")
             )
             orbital_position.semimajor_axis = float(elements[11])
             orbital_position.eccentricity = float(elements[2])
@@ -202,25 +214,62 @@ def parse_elements_data(response, orbital_body_id, center):
             orbital_position.center = center
             orbital_positions.append(orbital_position)
 
-        elif b"$$SOE" in line:
+        elif "$$SOE" in line:
             reading_elements = True
 
     return orbital_positions
 
 
-def parse_name(response, orbital_body_id):
-    lines = response.split(b"\n")
+def parse_name(response: str, orbital_body_id: str) -> str:
+    lines = response.split("\n")
     for line in lines:
-        if b"Target body name: " in line:
-            line_info = line.decode("utf-8").split("Target body name: ", 1)[1].strip()
+        if "Target body name: " in line:
+            line_info = line.split("Target body name: ", 1)[1].strip()
             name = line_info.split(" (" + orbital_body_id + ") ")[0].strip()
             if name.endswith(")"):
                 name = name.rpartition("(")[0].strip()
             return name
 
 
-def create_orbital_body(orbital_body_id, horizons_result):
+def get_ephemeris_date_range(orbital_body_id: str) -> Tuple[datetime, datetime]:
+    first_result = fetch_elements_data(
+        orbital_body_id,
+        "500@10",
+        datetime.min,
+        datetime.min + timedelta(seconds=1),
+        "1d",
+    )
+    first_date = parse_ephemeris_date(first_result, False)
+    last_result = fetch_elements_data(
+        orbital_body_id,
+        "500@10",
+        datetime.max - timedelta(seconds=1),
+        datetime.max,
+        "1d",
+    )
+    last_date = parse_ephemeris_date(last_result, True)
+    return (first_date, last_date)
+
+
+def parse_ephemeris_date(response: str, last: bool) -> datetime:
+    separator = "prior to A.D. "
+    if last:
+        separator = "after A.D. "
+
+    lines = response.split("\n")
+    for line in lines:
+        if "No ephemeris for target" in line:
+            line_info = line.split(separator, 1)[1].strip()
+            date = line_info.split(" TDB")[0].strip()
+            date = pytz.utc.localize(datetime.strptime(date, "%Y-%b-%d %H:%M:%S.%f"))
+            return date
+
+
+def create_orbital_body(orbital_body_id: str, horizons_result: str) -> None:
     orbital_body = OrbitalBody()
     orbital_body.id = int(orbital_body_id)
     orbital_body.name = parse_name(horizons_result, orbital_body_id)
+    (first_date, last_date) = get_ephemeris_date_range(orbital_body_id)
+    orbital_body.first_ephemeris_date = first_date
+    orbital_body.last_ephemeris_date = last_date
     orbital_body.save()

@@ -1,6 +1,9 @@
 from django.db import models
 from django.core.serializers.json import DjangoJSONEncoder
 import decimal
+from datetime import datetime
+import pytz
+
 
 # Create your models here.
 
@@ -8,6 +11,8 @@ import decimal
 class OrbitalBody(models.Model):
     name = models.CharField(max_length=100)
     id = models.IntegerField(primary_key=True)
+    first_ephemeris_date = models.DateTimeField(default=pytz.utc.localize(datetime.min))
+    last_ephemeris_date = models.DateTimeField(default=pytz.utc.localize(datetime.max))
 
     def __str__(self) -> str:
         return f"{self.name} ({self.id})"

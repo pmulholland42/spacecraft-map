@@ -1,14 +1,15 @@
-from datetime import timedelta
+from datetime import datetime, timedelta
 import re
+from typing import Generator, Tuple
 
 
-def parse_step(step):
+def parse_step(step: str) -> Tuple[int, str]:
     skip = int(re.findall(r"\d+", step)[0])
     interval = re.findall(r"[a-zA-Z]*$", step)[0]
     return (skip, interval)
 
 
-def round_datetime_down(date, interval):
+def round_datetime_down(date: datetime, interval: str) -> datetime:
     delta_hours = date.hour
     delta_minutes = date.minute
 
@@ -28,7 +29,7 @@ def round_datetime_down(date, interval):
     return date - rounding_delta
 
 
-def round_datetime_up(date, interval):
+def round_datetime_up(date: datetime, interval: str) -> datetime:
     date_rounded_down = round_datetime_down(date, interval)
     td = timedelta()
     if interval == "d":
@@ -44,7 +45,9 @@ def round_datetime_up(date, interval):
         return date_rounded_down + td
 
 
-def generate_date_range(start_date, end_date, interval, skip):
+def generate_date_range(
+    start_date: datetime, end_date: datetime, interval: str, skip: int
+) -> Generator[datetime, None, None]:
     delta = end_date - start_date
     num_intervals = 0
     if interval == "d":

@@ -1,4 +1,4 @@
-@import "../common.scss";
+@use "../common.scss" as *;
 
 .tour-button {
   z-index: $tour-button-z-index;

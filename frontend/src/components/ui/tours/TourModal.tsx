@@ -3,7 +3,7 @@ import React from "react";
 import { setTourModalOpen, setCurrentTour } from "../../../redux/actionCreators";
 import { RootState } from "../../../redux/store";
 import { connect, ConnectedProps } from "react-redux";
-import { animated, useTransition } from "react-spring";
+import { animated, useTransition } from "@react-spring/web";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTimes } from "@fortawesome/free-solid-svg-icons";
 import { useTranslation } from "react-i18next";
@@ -28,7 +28,7 @@ type PropsFromRedux = ConnectedProps<typeof connector>;
 
 export const TourModal = connector(
   ({ tourModalOpen, setTourModalOpen, setCurrentTour, removeAnimations, timeStepIndex }: PropsFromRedux) => {
-    const transitions = useTransition(tourModalOpen, null, {
+    const transitions = useTransition(tourModalOpen, {
       from: { opacity: 0 },
       enter: { opacity: 1 },
       leave: { opacity: 0 },
@@ -37,10 +37,10 @@ export const TourModal = connector(
     const { t } = useTranslation();
     return (
       <div>
-        {transitions.map(
-          ({ item, key, props }) =>
+        {transitions(
+          (props, item) =>
             item && (
-              <animated.div key={key} style={props} className="modal-container">
+              <animated.div style={props} className="modal-container">
                 <div className="modal">
                   <div className="modal-header">
                     <h3>{t("tours")}</h3>

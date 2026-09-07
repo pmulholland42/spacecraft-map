@@ -20,19 +20,13 @@ i18n
   // for all options read: https://www.i18next.com/overview/configuration-options
   .init({
     fallbackLng: "en",
-    debug: true,
+    debug: import.meta.env.DEV,
 
     interpolation: {
       escapeValue: false, // not needed for react as it escapes by default
     },
     backend: {
-      loadPath: () => {
-        if (process.env.NODE_ENV === "production") {
-          return "locales/{{lng}}/{{ns}}.json";
-        } else {
-          return "solarsystemmap/locales/{{lng}}/{{ns}}.json";
-        }
-      },
+      loadPath: `${import.meta.env.BASE_URL}locales/{{lng}}/{{ns}}.json`,
     },
   });
 

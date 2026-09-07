@@ -1,4 +1,4 @@
-@import "../common.scss";
+@use "../common.scss" as *;
 
 .info-section {
   padding-top: 7px;

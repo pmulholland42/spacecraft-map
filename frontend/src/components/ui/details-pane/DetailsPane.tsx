@@ -1,6 +1,6 @@
 import "./DetailsPane.scss";
 import React from "react";
-import { animated, useTransition } from "react-spring";
+import { animated, useTransition } from "@react-spring/web";
 import { connect, ConnectedProps } from "react-redux";
 import { RootState } from "../../../redux/store";
 import { useTranslation } from "react-i18next";
@@ -22,7 +22,7 @@ type PropsFromRedux = ConnectedProps<typeof connector>;
 
 export const DetailsPane = connector(
   ({ open, selectedObject, removeAnimations, timeStepIndex }: PropsFromRedux) => {
-    const transitions = useTransition(open, null, {
+    const transitions = useTransition(open, {
       from: { opacity: 0 },
       enter: { opacity: 1 },
       leave: { opacity: 0 },
@@ -33,10 +33,10 @@ export const DetailsPane = connector(
 
     return (
       <div>
-        {transitions.map(
-          ({ item, key, props }) =>
+        {transitions(
+          (props, item) =>
             item && (
-              <animated.div key={key} className="details-pane" style={props}>
+              <animated.div className="details-pane" style={props}>
                 {selectedObject !== null ? (
                   <ObjectDetails object={selectedObject} />
                 ) : (

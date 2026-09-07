@@ -2,7 +2,7 @@ import { oneCentury, oneDay } from "../constants";
 import { AstronomicalObject, Coordinate, OrbitalPosition, OrbitDefinition } from "../interfaces";
 import { auToKm, toDegrees, toRadians } from "./conversions";
 
-import moize from "moize";
+import { memoize } from "micro-memoize";
 import solarSystem from "../data/solarSystem";
 import { differenceInSeconds } from "date-fns";
 
@@ -55,7 +55,7 @@ export const getTrueAnomaly = (eccentricity: number, eccentricAnomaly: number) =
   return trueAnomaly;
 };
 
-export const getOrbitalPosition = moize.deep(
+export const getOrbitalPosition = memoize(
   /**
    * Gets the orbital parameters for a given time
    * @param orbit The orbit definition
@@ -118,6 +118,7 @@ export const getOrbitalPosition = moize.deep(
     // When time warping, the positions are changing so fast that we never get the same one twice, so the memoization cache is useless.
     // So we only need one cache entry per object, to remember each of their positions while zooming/panning. Hence this maxSize:
     maxSize: solarSystem.length,
+    isKeyItemEqual: "deep",
   }
 );
 

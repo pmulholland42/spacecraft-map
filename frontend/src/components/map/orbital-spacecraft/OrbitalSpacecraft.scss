@@ -1,4 +1,4 @@
-@import "../../ui/common.scss";
+@use "../../ui/common.scss" as *;
 
 .orbital-spacecraft-container {
   @include map-object-container();

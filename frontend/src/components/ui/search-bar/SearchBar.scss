@@ -1,4 +1,4 @@
-@import "../common.scss";
+@use "../common.scss" as *;
 
 $search-bar-border-radius: 10px;
 

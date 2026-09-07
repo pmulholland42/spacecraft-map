@@ -13,7 +13,7 @@ import { connect, ConnectedProps } from "react-redux";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faAngleDoubleLeft } from "@fortawesome/free-solid-svg-icons";
 import { useTranslation } from "react-i18next";
-import { animated, useTransition } from "react-spring";
+import { animated, useTransition } from "@react-spring/web";
 import Switch from "react-switch";
 import { timeSteps } from "../../../constants";
 import { getPausedTimeStepIndex } from "../../../utilities";
@@ -59,7 +59,7 @@ export const OptionsPane = connector(
   }: PropsFromRedux) => {
     const { t } = useTranslation();
 
-    const transitions = useTransition(open, null, {
+    const transitions = useTransition(open, {
       from: { left: -322 },
       enter: { left: 0 },
       leave: { left: -322 },
@@ -69,10 +69,10 @@ export const OptionsPane = connector(
 
     return (
       <div>
-        {transitions.map(
-          ({ item, key, props }) =>
+        {transitions(
+          (props, item) =>
             item && (
-              <animated.div key={key} className="options-pane" style={props}>
+              <animated.div className="options-pane" style={props}>
                 <span className="options-pane-titlebar">
                   <h3>{t("options")}</h3>
                   <button

@@ -19,13 +19,7 @@ export const getPausedTimeStepIndex = (timeSteps: TimeStep[]) => {
   return index;
 };
 
-export const getImagePath = (path: string) => {
-  if (process.env.NODE_ENV === "production") {
-    return `images/${path}`;
-  } else {
-    return `solarsystemmap/images/${path}`;
-  }
-};
+export const getImagePath = (path: string) => `${import.meta.env.BASE_URL}images/${path}`;
 
 export const isMobile = () => {
   let check = false;

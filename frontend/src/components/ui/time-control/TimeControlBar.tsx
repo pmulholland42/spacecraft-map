@@ -129,7 +129,9 @@ export const TimeControlBar = connector(
           <div className="time-picker" title={t("pickTime")}>
             <DatePicker
               selected={displayTime}
-              onChange={setDisplayTime}
+              onChange={(date: Date | null) => {
+                if (date !== null) setDisplayTime(date);
+              }}
               showTimeInput
               dateFormat="M/dd/yyyy h:mm a"
             />

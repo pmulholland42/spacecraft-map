@@ -1,4 +1,4 @@
-import { combineReducers, createStore } from "redux";
+import { combineReducers, legacy_createStore } from "redux";
 import {
   ADD_TEXT_BUBBLE,
   ADD_TO_DISPLAY_TIME,
@@ -200,6 +200,6 @@ const rootReducer = combineReducers({
   ui: uiReducer,
 });
 
-export const store = createStore(rootReducer);
+export const store = legacy_createStore(rootReducer);
 
 export type RootState = ReturnType<typeof rootReducer>;
